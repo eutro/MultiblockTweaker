@@ -51,6 +51,21 @@ public class MultiblockShapeInfoBuilder {
     }
 
     /**
+     * Add a repeated aisle.
+     *
+     * @param count How many times to repeat the aisle.
+     * @param data The aisle pattern. Each unique character in any string must be defined in {@link #where(String, IBlockInfo)} or its equivalents.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockShapeInfoBuilder aisleRepeated(int count, String... data) {
+        for(int i = 0; i < count; i++) {
+            inner = inner.aisle(data);
+        }
+        return this;
+    }
+
+    /**
      * Define a symbol.
      *
      * @param symbol The character that will represent this value in {@link #aisle(String...)}.

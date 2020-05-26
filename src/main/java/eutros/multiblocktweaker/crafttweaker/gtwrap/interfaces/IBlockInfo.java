@@ -32,13 +32,13 @@ public interface IBlockInfo {
     }
 
     @ZenMethod
-    static IBlockInfo controller(int id, @NotNull IFacing facing) {
+    static IBlockInfo controller(String id, @NotNull IFacing facing) {
         return new MCBlockInfo(new MCBlockInfo.ControllerInfo((EnumFacing) facing.getInternal(), id));
     }
 
     @NotNull
     @ZenMethod
-    static IBlockInfo controller(int id) {
+    static IBlockInfo controller(String id) {
         return controller(id, new MCFacing(EnumFacing.NORTH));
     }
 

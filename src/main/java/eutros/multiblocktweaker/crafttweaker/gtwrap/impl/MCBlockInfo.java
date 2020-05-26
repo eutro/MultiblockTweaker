@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
+import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
@@ -30,10 +31,10 @@ public class MCBlockInfo implements IBlockInfo {
     public static class ControllerInfo extends BlockInfo {
 
         private final EnumFacing facing;
-        private final int id;
+        private final String id;
         private MetaTileEntityHolder te = null;
 
-        public ControllerInfo(EnumFacing facing, int id) {
+        public ControllerInfo(EnumFacing facing, String id) {
             super(MetaBlocks.MACHINE.getDefaultState());
             this.facing = facing;
             this.id = id;
@@ -43,8 +44,13 @@ public class MCBlockInfo implements IBlockInfo {
         public TileEntity getTileEntity() {
             if(te == null) {
                 te = new MetaTileEntityHolder();
-                te.setMetaTileEntity(new TileControllerCustom(MultiblockRegistry.get(id)));
-                te.getMetaTileEntity().setFrontFacing(facing);
+                CustomMultiblock mb = MultiblockRegistry.get(id);
+                if(mb != null) {
+                    te.setMetaTileEntity(new TileControllerCustom(mb));
+                    te.getMetaTileEntity().setFrontFacing(facing);
+                } else {
+                    te = null;
+                }
             }
             return te;
         }
