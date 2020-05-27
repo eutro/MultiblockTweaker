@@ -3,6 +3,7 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMoveType;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
+import eutros.multiblocktweaker.gregtech.recipes.RecipeMapMultiblock;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
 import gregtech.api.gui.resources.TextureArea;
@@ -30,7 +31,7 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
-    public CTRecipeBuilder defaultRecipe = new CTRecipeBuilder(new SimpleRecipeBuilder());
+    public CTRecipeBuilder defaultRecipe = new CTRecipeBuilder(new SimpleRecipeBuilder().hidden());
     private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
@@ -42,7 +43,7 @@ public class RecipeMapBuilder {
      */
     @ZenMethod
     public static CTRecipeBuilder startBuilder() {
-        return new CTRecipeBuilder(new SimpleRecipeBuilder());
+        return new CTRecipeBuilder(new SimpleRecipeBuilder().hidden());
     }
 
     public RecipeMapBuilder(String name) {
@@ -244,7 +245,7 @@ public class RecipeMapBuilder {
      */
     @ZenMethod
     public RecipeMap<?> build() {
-        RecipeMap<SimpleRecipeBuilder> map = new RecipeMap<>(name,
+        RecipeMapMultiblock map = new RecipeMapMultiblock(name,
                 minInputs,
                 maxInputs,
                 minOutputs,

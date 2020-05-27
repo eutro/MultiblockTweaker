@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
@@ -62,6 +63,7 @@ public class CustomMultiblock {
     @ZenMethod
     public void register() {
         MultiblockRegistry.registerMultiblock(this);
+        CraftTweakerAPI.logInfo(String.format("Registered multiblock: %s, with meta %s", loc, metaId));
     }
 
 }

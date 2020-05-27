@@ -1,9 +1,10 @@
-package eutros.multiblocktweaker.crafttweaker;
+package eutros.multiblocktweaker.crafttweaker.brackethandler;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.BracketHandler;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.zenscript.IBracketHandler;
+import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import stanhebben.zenscript.ZenTokener;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
@@ -45,6 +46,7 @@ public class CustomMultiblockBracketHandler implements IBracketHandler {
                 return position -> new ExpressionCallStatic(position, environment, stringGet, new ExpressionString(position, locToken.getValue()));
             }
         }
+
         return null;
     }
 
@@ -56,6 +58,16 @@ public class CustomMultiblockBracketHandler implements IBracketHandler {
     @SuppressWarnings("unused")
     public CustomMultiblock get(int metaId) {
         return MultiblockRegistry.get(metaId);
+    }
+
+    @Override
+    public Class<CustomMultiblock> getReturnedClass() {
+        return CustomMultiblock.class;
+    }
+
+    @Override
+    public String getRegexMatchingString() {
+        return "multiblock:.+";
     }
 
 }

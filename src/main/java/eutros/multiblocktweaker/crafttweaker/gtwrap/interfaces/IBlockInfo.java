@@ -39,7 +39,7 @@ public interface IBlockInfo {
     @NotNull
     @ZenMethod
     static IBlockInfo controller(String id) {
-        return controller(id, new MCFacing(EnumFacing.NORTH));
+        return controller(id, new MCFacing(EnumFacing.WEST));
     }
 
     @ZenProperty IBlockInfo EMPTY = new MCBlockInfo(BlockInfo.EMPTY);

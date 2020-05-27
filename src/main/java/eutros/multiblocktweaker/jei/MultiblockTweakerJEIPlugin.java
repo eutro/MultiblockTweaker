@@ -1,11 +1,13 @@
 package eutros.multiblocktweaker.jei;
 
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import gregtech.api.recipes.Recipe;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @JEIPlugin
@@ -19,6 +21,16 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
                         .map(MultiblockInfoRecipeWrapper::new)
                         .collect(Collectors.toList()),
                 "gregtech:multiblock_info");
+
+        MultiblockRegistry.getAll().stream() // sorry, no hidden recipes for you
+                .map(c -> c.recipeMap)
+                .forEach(m -> {
+                            List<CustomRecipeWrapper> recipes = m.getRecipeList().stream()
+                                    .filter(Recipe::hasValidInputsForDisplay)
+                                    .map(recipe -> new CustomRecipeWrapper(m, recipe))
+                                    .collect(Collectors.toList());
+                            registry.addRecipes(recipes, "gregtech:" + m.getUnlocalizedName());
+                        });
     }
 
 }
