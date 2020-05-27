@@ -2,7 +2,9 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
+import crafttweaker.api.item.IItemStack;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantRelativeDirection;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -214,7 +216,7 @@ public class BlockPatternBuilder {
      * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.statePredicate(state))}
      */
     @ZenMethod
-    public BlockPatternBuilder where(String symbol, IBlockState... state) {
+    public BlockPatternBuilder where(String symbol, IBlockState state) {
         return where(symbol, IBlockMatcher.statePredicate(state));
     }
 
@@ -222,8 +224,16 @@ public class BlockPatternBuilder {
      * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.blockPredicate(block))}
      */
     @ZenMethod
-    public BlockPatternBuilder where(String symbol, crafttweaker.api.block.IBlockPattern... block) {
+    public BlockPatternBuilder where(String symbol, IBlock block) {
         return where(symbol, IBlockMatcher.blockPredicate(block));
+    }
+
+    /**
+     * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.blockPredicate(stack))}
+     */
+    @ZenMethod
+    public BlockPatternBuilder where(String symbol, IItemStack stack) {
+        return where(symbol, IBlockMatcher.blockPredicate(stack));
     }
 
     /**
