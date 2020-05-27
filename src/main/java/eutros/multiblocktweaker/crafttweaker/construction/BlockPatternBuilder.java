@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.block.IBlockState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantRelativeDirection;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -10,6 +11,8 @@ import eutros.multiblocktweaker.crafttweaker.predicate.IMatchValidator;
 import gregtech.api.multiblock.FactoryBlockPattern;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.Arrays;
 
 /**
  * An interface to GTCE's own {@link FactoryBlockPattern}.
@@ -136,7 +139,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder setAmountAtMost(String symbol, int maxValue) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -153,12 +156,74 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IBlockMatcher blockMatcher) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
         delegate = delegate.where(symbol.charAt(0), IBlockMatcher.toInternal(blockMatcher));
         return this;
+    }
+
+    /**
+     * Define a symbol. All given predicates must be satisfied.
+     *
+     * @param symbol   The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param first    The first matcher.
+     * @param matchers The rest of the matchers.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public BlockPatternBuilder whereAnd(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
+        if (symbol.length() != 1) {
+            CraftTweakerAPI.logError("Symbol given is not a single character!");
+            return this;
+        }
+        delegate = delegate.where(symbol.charAt(0),
+                IBlockMatcher.toInternal(
+                        Arrays.stream(matchers)
+                                .reduce(first, IBlockMatcher::and)
+                )
+        );
+        return this;
+    }
+
+    /**
+     * Define a symbol. Any of the given predicates may be satisfied.
+     *
+     * @param symbol   The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param first    The first matcher.
+     * @param matchers The rest of the matchers.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public BlockPatternBuilder whereOr(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
+        if (symbol.length() != 1) {
+            CraftTweakerAPI.logError("Symbol given is not a single character!");
+            return this;
+        }
+        delegate = delegate.where(symbol.charAt(0),
+                IBlockMatcher.toInternal(
+                        Arrays.stream(matchers)
+                                .reduce(first, IBlockMatcher::or)
+                )
+        );
+        return this;
+    }
+
+    /**
+     * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.statePredicate(state))}
+     */
+    @ZenMethod
+    public BlockPatternBuilder where(String symbol, IBlockState... state) {
+        return where(symbol, IBlockMatcher.statePredicate(state));
+    }
+
+    /**
+     * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.blockPredicate(block))}
+     */
+    @ZenMethod
+    public BlockPatternBuilder where(String symbol, crafttweaker.api.block.IBlockPattern... block) {
+        return where(symbol, IBlockMatcher.blockPredicate(block));
     }
 
     /**
