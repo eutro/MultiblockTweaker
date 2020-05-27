@@ -31,7 +31,7 @@ public class CustomInfoPage extends MultiblockInfoPage {
     @Override
     public String[] getDescription() {
         List<String> ret = new ArrayList<>();
-        String s = "multiblock." + multiblock.loc.getNamespace() + '.' + multiblock.loc.getPath() + ".desc";
+        String s = "multiblock." + multiblock.loc.getResourceDomain() + '.' + multiblock.loc.getResourcePath() + ".desc";
         ret.add(I18n.format(s));
 
         for(int i = 0; !I18n.format(s + i).equals(s + i); i++) {

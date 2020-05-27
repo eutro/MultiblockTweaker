@@ -4,6 +4,7 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
+import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.world.IFacing;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockShapeInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
@@ -54,7 +55,7 @@ public class MultiblockShapeInfoBuilder {
      * Add a repeated aisle.
      *
      * @param count How many times to repeat the aisle.
-     * @param data The aisle pattern. Each unique character in any string must be defined in {@link #where(String, IBlockInfo)} or its equivalents.
+     * @param data  The aisle pattern. Each unique character in any string must be defined in {@link #where(String, IBlockInfo)} or its equivalents.
      * @return This builder, for convenience.
      */
     @ZenMethod
@@ -94,6 +95,18 @@ public class MultiblockShapeInfoBuilder {
         if(c != '\0')
             inner = inner.where(c, blocc.getDefaultState());
         return this;
+    }
+
+    /**
+     * Define a symbol.
+     *
+     * @param symbol The character that will represent this value in {@link #aisle(String...)}.
+     * @param stack The item whose block to show in the preview.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockShapeInfoBuilder where(String symbol, IItemStack stack) {
+        return where(symbol, stack.asBlock());
     }
 
     /**

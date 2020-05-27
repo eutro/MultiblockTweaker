@@ -21,8 +21,8 @@ public interface IMetaTileEntity {
     public static IMetaTileEntity byId(@NotNull String id) {
         ResourceLocation loc = new ResourceLocation(id);
 
-        if(loc.getNamespace().equals("minecraft")) {
-            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getPath());
+        if(loc.getResourceDomain().equals("minecraft")) {
+            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
         }
 
         MetaTileEntity te = GregTechAPI.META_TILE_ENTITY_REGISTRY.getObject(loc);
