@@ -22,7 +22,7 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
                         .collect(Collectors.toList()),
                 "gregtech:multiblock_info");
 
-        MultiblockRegistry.getAll().stream() // sorry, no hidden recipes for you
+        MultiblockRegistry.getAll().stream() // TODO hide old recipes from JEI only
                 .map(c -> c.recipeMap)
                 .forEach(m -> {
                             List<CustomRecipeWrapper> recipes = m.getRecipeList().stream()

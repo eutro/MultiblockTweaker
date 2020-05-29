@@ -61,9 +61,10 @@ public class CustomMultiblock {
     }
 
     @ZenMethod
-    public void register() {
+    public CustomMultiblock register() {
         MultiblockRegistry.registerMultiblock(this);
         CraftTweakerAPI.logInfo(String.format("Registered multiblock: %s, with meta %s", loc, metaId));
+        return this;
     }
 
 }

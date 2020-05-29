@@ -155,9 +155,10 @@ public class MultiblockBuilder {
         return new CustomMultiblock(this);
     }
 
+    @Nullable
     @ZenMethod
-    public void buildAndRegister() {
-        Optional.ofNullable(build()).ifPresent(CustomMultiblock::register);
+    public CustomMultiblock buildAndRegister() {
+        return Optional.ofNullable(build()).map(CustomMultiblock::register).orElse(null);
     }
 
 }
