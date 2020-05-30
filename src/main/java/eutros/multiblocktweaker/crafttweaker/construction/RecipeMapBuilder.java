@@ -31,7 +31,7 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
-    public CTRecipeBuilder defaultRecipe = new CTRecipeBuilder(new SimpleRecipeBuilder().hidden());
+    public CTRecipeBuilder defaultRecipe = new CTRecipeBuilder(new SimpleRecipeBuilder());
     private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
@@ -43,7 +43,7 @@ public class RecipeMapBuilder {
      */
     @ZenMethod
     public static CTRecipeBuilder startBuilder() {
-        return new CTRecipeBuilder(new SimpleRecipeBuilder().hidden());
+        return new CTRecipeBuilder(new SimpleRecipeBuilder());
     }
 
     public RecipeMapBuilder(String name) {

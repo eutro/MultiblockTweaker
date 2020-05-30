@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.gregtech.tile;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import gregtech.api.GTValues;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -11,6 +12,11 @@ import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.render.ICubeRenderer;
+import gregtech.api.util.GTUtility;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -25,6 +31,37 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
         this.multiblock = multiblock;
+    }
+
+    @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        if(isStructureFormed()) {
+            if(energyContainer != null && energyContainer.getEnergyCapacity() > 0L) {
+                long maxVoltage = Math.max(energyContainer.getInputVoltage(), energyContainer.getOutputVoltage());
+                String voltageName = GTValues.VN[GTUtility.getTierByVoltage(maxVoltage)];
+                textList.add(new TextComponentTranslation("gregtech.multiblock.max_energy_per_tick", maxVoltage, voltageName));
+            }
+
+            if(!recipeMapWorkable.isWorkingEnabled()) {
+                textList.add(new TextComponentTranslation("gregtech.multiblock.work_paused"));
+            } else if(recipeMapWorkable.isActive()) {
+                textList.add(new TextComponentTranslation("gregtech.multiblock.running"));
+                int currentProgress = (int) (recipeMapWorkable.getProgressPercent() * 100.0D);
+                textList.add(new TextComponentTranslation("gregtech.multiblock.progress", currentProgress));
+                int eut = recipeMapWorkable.getRecipeEUt();
+                if(eut < 0) {
+                    textList.add(new TextComponentTranslation("gregtech.multiblock.generation_eu", Math.min(-eut, energyContainer.getOutputVoltage())));
+                }
+            } else {
+                textList.add(new TextComponentTranslation("gregtech.multiblock.idling"));
+            }
+
+            if(recipeMapWorkable.isHasNotEnoughEnergy()) {
+                textList.add((new TextComponentTranslation("gregtech.multiblock.not_enough_energy")).setStyle((new Style()).setColor(TextFormatting.RED)));
+            }
+        } else {
+            textList.add((new TextComponentTranslation("gregtech.multiblock.invalid_structure")).setStyle((new Style()).setColor(TextFormatting.RED)));
+        }
     }
 
     @Override
