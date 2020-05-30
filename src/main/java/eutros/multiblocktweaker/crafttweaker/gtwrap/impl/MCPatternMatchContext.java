@@ -4,8 +4,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchCont
 import gregtech.api.multiblock.PatternMatchContext;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
-
 public class MCPatternMatchContext implements IPatternMatchContext {
 
     @NotNull
@@ -27,7 +25,7 @@ public class MCPatternMatchContext implements IPatternMatchContext {
     }
 
     @Override
-    public void set(String key, Object value) {
+    public void set(String key, String value) {
         inner.set(key, value);
     }
 
@@ -42,22 +40,17 @@ public class MCPatternMatchContext implements IPatternMatchContext {
     }
 
     @Override
-    public <T> T getOrDefault(String key, T defaultValue) {
+    public String getOrDefault(String key, String defaultValue) {
         return inner.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public <T> T get(String key) {
+    public String get(String key) {
         return inner.get(key);
     }
 
     @Override
-    public <T> T getOrCreate(String key, Supplier<T> creator) {
-        return inner.getOrCreate(key, creator);
-    }
-
-    @Override
-    public <T> T getOrPut(String key, T initialValue) {
+    public String getOrPut(String key, String initialValue) {
         return inner.getOrPut(key, initialValue);
     }
 

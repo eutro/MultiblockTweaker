@@ -5,6 +5,7 @@ import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
 import eutros.multiblocktweaker.gregtech.cuberenderer.BasicCubeRenderer;
 import eutros.multiblocktweaker.gregtech.cuberenderer.SidedCubeRenderer;
+import gregtech.api.render.ICubeRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -16,23 +17,23 @@ import javax.annotation.Nullable;
 
 @ZenClass("mods.gregtech.render.ICubeRenderer")
 @ZenRegister
-public interface ICubeRenderer {
+public interface IICubeRenderer {
 
     @NotNull
-    gregtech.api.render.ICubeRenderer getInternal();
+    ICubeRenderer getInternal();
 
     @ZenMethod
-    static ICubeRenderer nonSided(String loc) {
+    static IICubeRenderer nonSided(String loc) {
         return new MCCubeRenderer(new BasicCubeRenderer(new ResourceLocation(loc)));
     }
 
     @ZenMethod
-    static ICubeRenderer sided(@Nonnull String top,
-                               @Nonnull String front,
-                               @Nullable String left,
-                               @Nullable String right,
-                               @Nullable String back,
-                               @Nullable String bottom) {
+    static IICubeRenderer sided(@Nonnull String top,
+                                @Nonnull String front,
+                                @Nullable String left,
+                                @Nullable String right,
+                                @Nullable String back,
+                                @Nullable String bottom) {
         if(bottom == null) {
             bottom = top;
         }

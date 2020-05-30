@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.function.Supplier;
-
 @ZenClass("mods.gregtech.multiblock.IPatternMatchContext")
 @ZenRegister
 public interface IPatternMatchContext {
@@ -19,7 +17,7 @@ public interface IPatternMatchContext {
     void reset();
 
     @ZenMethod
-    void set(String key, Object value);
+    void set(String key, String value);
 
     @ZenMethod
     int getInt(String key);
@@ -28,15 +26,12 @@ public interface IPatternMatchContext {
     void increment(String key, int value);
 
     @ZenMethod
-    <T> T getOrDefault(String key, T defaultValue);
+    String getOrDefault(String key, String defaultValue);
 
     @ZenMethod
-    <T> T get(String key);
+    String get(String key);
 
     @ZenMethod
-    <T> T getOrCreate(String key, Supplier<T> creator);
-
-    @ZenMethod
-    <T> T getOrPut(String key, T initialValue);
+    String getOrPut(String key, String initialValue);
 
 }

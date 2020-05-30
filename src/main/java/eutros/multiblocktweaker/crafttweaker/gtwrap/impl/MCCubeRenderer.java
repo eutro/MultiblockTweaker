@@ -1,9 +1,9 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ICubeRenderer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import org.jetbrains.annotations.NotNull;
 
-public class MCCubeRenderer implements ICubeRenderer {
+public class MCCubeRenderer implements IICubeRenderer {
 
     @NotNull
     private final gregtech.api.render.ICubeRenderer inner;

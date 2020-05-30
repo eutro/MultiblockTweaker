@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.gregtech.tile;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
 import gregtech.api.GTValues;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -31,6 +32,11 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
         this.multiblock = multiblock;
+        this.recipeMapWorkable = new CustomMultiblockRecipeLogic(this,
+                multiblock.update,
+                multiblock.updateWorktable,
+                multiblock.setupRecipe,
+                multiblock.completeRecipe);
     }
 
     @Override

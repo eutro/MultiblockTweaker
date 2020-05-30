@@ -5,7 +5,7 @@ import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ICubeRenderer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
 import eutros.multiblocktweaker.gregtech.cuberenderer.BasicCubeRenderer;
 import gregtech.api.multiblock.BlockPattern;
@@ -87,7 +87,7 @@ public class MultiblockBuilder {
      * @return This builder, for convenience.
      */
     @ZenMethod
-    public MultiblockBuilder withTexture(@NotNull ICubeRenderer texture) {
+    public MultiblockBuilder withTexture(@NotNull IICubeRenderer texture) {
         this.texture = texture.getInternal();
         return this;
     }

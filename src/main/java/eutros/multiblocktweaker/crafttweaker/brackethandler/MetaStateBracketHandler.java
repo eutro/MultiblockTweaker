@@ -4,7 +4,7 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.BracketHandler;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlockState;
-import crafttweaker.mc1120.block.MCBlockState;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.zenscript.IBracketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -49,7 +49,7 @@ public class MetaStateBracketHandler implements IBracketHandler {
     public static IBlockState getBlockState(String name, int meta) {
         if (!ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(name))) {
             CraftTweakerAPI.logError("No block found with name '" + name + "'. Air block used instead.");
-            return new MCBlockState(Blocks.AIR.getDefaultState());
+            return CraftTweakerMC.getBlockState(Blocks.AIR.getDefaultState());
         }
 
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
@@ -65,7 +65,7 @@ public class MetaStateBracketHandler implements IBracketHandler {
             }
         }
 
-        return new MCBlockState(mcState);
+        return CraftTweakerMC.getBlockState(mcState);
     }
 
     @Override

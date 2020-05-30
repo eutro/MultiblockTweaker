@@ -4,7 +4,6 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import gregtech.api.multiblock.BlockPattern;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -29,6 +28,6 @@ public interface IBlockPattern {
 
     @NotNull
     @ZenMethod
-    MCPatternMatchContext checkPatternAt(IWorld world, IBlockPos centerPos, IFacing facing);
+    IPatternMatchContext checkPatternAt(IWorld world, IBlockPos centerPos, IFacing facing);
 
 }

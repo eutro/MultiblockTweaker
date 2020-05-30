@@ -18,7 +18,7 @@ public interface IMetaTileEntity {
     MetaTileEntity getInternal();
 
     @ZenMethod
-    public static IMetaTileEntity byId(@NotNull String id) {
+    static IMetaTileEntity byId(@NotNull String id) {
         ResourceLocation loc = new ResourceLocation(id);
 
         if(loc.getResourceDomain().equals("minecraft")) {

@@ -3,10 +3,14 @@ package eutros.multiblocktweaker.crafttweaker;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
+import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ICubeRenderer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
@@ -18,7 +22,7 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
 
-import java.util.*;
+import java.util.List;
 
 @ZenClass("mods.gregtech.multiblock.Multiblock")
 @ZenRegister
@@ -32,6 +36,11 @@ public class CustomMultiblock {
     public final BlockPattern pattern;
     public final gregtech.api.render.ICubeRenderer texture;
     public final List<MultiblockShapeInfo> designs;
+
+    @ZenProperty public IUpdateFunction update;
+    @ZenProperty public IUpdateWorktableFunction updateWorktable;
+    @ZenProperty public ISetupRecipeFunction setupRecipe;
+    @ZenProperty public ICompleteRecipeFunction completeRecipe;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
@@ -56,7 +65,7 @@ public class CustomMultiblock {
 
     @NotNull
     @ZenGetter("texture")
-    public ICubeRenderer getTexture() {
+    public IICubeRenderer getTexture() {
         return new MCCubeRenderer(texture);
     }
 

@@ -6,13 +6,12 @@ import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleSupplier;
 
-public class RecipeMapMultiblock extends RecipeMap<SimpleRecipeBuilder> {
+public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
 
     public static final int DEFAULT_HEIGHT = 166;
     public static final int BASE_UI_HEIGHT = 144;
@@ -21,7 +20,7 @@ public class RecipeMapMultiblock extends RecipeMap<SimpleRecipeBuilder> {
     public static final int BASE_SLOT_Y_BOTTOM = 134;
     private final int UI_HEIGHT;
 
-    public RecipeMapMultiblock(String unlocalizedName, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs, SimpleRecipeBuilder defaultRecipe) {
+    public RecipeMapMultiblock(String unlocalizedName, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs, CustomRecipeBuilder defaultRecipe) {
         super(unlocalizedName, minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultRecipe);
         UI_HEIGHT = MathHelper.max(
                 DEFAULT_HEIGHT,
