@@ -68,6 +68,18 @@ public class BlockPatternBuilder {
     }
 
     /**
+     * Add a repeatable aisle.
+     *
+     * @param repeats How many times this aisle must be repeated.
+     * @param aisle   The aisle pattern. {@link #aisle(String...)}
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public BlockPatternBuilder aisleRepeatable(int repeats, String... aisle) {
+        return this.aisleRepeatable(repeats, repeats, aisle);
+    }
+
+    /**
      * Add a single aisle.
      *
      * @param aisle The aisle pattern. Each unique character in any string must be defined in {@link #where(String, IBlockMatcher)}.
@@ -141,7 +153,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder setAmountAtMost(String symbol, int maxValue) {
-        if (symbol.length() != 1) {
+        if(symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -158,7 +170,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IBlockMatcher blockMatcher) {
-        if (symbol.length() != 1) {
+        if(symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -176,7 +188,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder whereAnd(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
-        if (symbol.length() != 1) {
+        if(symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -199,7 +211,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder whereOr(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
-        if (symbol.length() != 1) {
+        if(symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
