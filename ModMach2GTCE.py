@@ -60,7 +60,7 @@ for buildCall in buildCallRegex.finditer(textIn):
         if params != "":
             build += "    .{0}({1})\n".format(function, params)
 
-    build += "    .buildAndRegister()\n"
+    build += "    .buildAndRegister();\n"
 
     ourBuilds.append(build)
 
