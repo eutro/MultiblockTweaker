@@ -81,12 +81,15 @@ public class PreviewRenderer {
     private static WorldSceneRenderer getRenderer(ItemStack stack) {
         IRecipeRegistry rr = MultiblockTweakerJEIPlugin.runtime.getRecipeRegistry();
 
-        @SuppressWarnings("unchecked")
-        IRecipeCategory<IRecipeWrapper> cat = rr.getRecipeCategory("gregtech:multiblock_info");
-        List<IRecipeWrapper> recipes = rr.getRecipeWrappers(cat,
-                rr.createFocus(IFocus.Mode.INPUT, stack));
+        IFocus<ItemStack> focus = rr.createFocus(IFocus.Mode.INPUT, stack);
 
-        return recipes.stream().filter(MultiblockInfoRecipeWrapper.class::isInstance)
+        //noinspection unchecked
+        return rr.getRecipeCategories(focus)
+                .stream()
+                .map(c -> (IRecipeCategory<IRecipeWrapper>) c)
+                .map(c -> rr.getRecipeWrappers(c, focus))
+                .flatMap(List::stream)
+                .filter(MultiblockInfoRecipeWrapper.class::isInstance)
                 .findFirst()
                 .map(MultiblockInfoRecipeWrapper.class::cast)
                 .map(MultiblockInfoRecipeWrapper::getCurrentRenderer)
