@@ -28,10 +28,10 @@ buildCallRegex = re.compile("\n(?P<comment>//.+\\W+)?" +
                             "(?P<duration>\\d+)\\)(?P<extraCalls>(.|\\n)+?)\\.build\\(\\);")
 
 regexes = (
-    (re.compile("\\.addItemInput\\((?P<stack>.+?)\\)"), "addItemInput"),
-    (re.compile("\\.addFluidInput\\((?P<stack>.+?)\\)"), "addFluidInput"),
-    (re.compile("\\.addItemOutput\\((?P<stack>.+?)\\)"), "addItemOutput"),
-    (re.compile("\\.addFluidOutput\\((?P<stack>.+?)\\)"), "addFluidOutput")
+    (re.compile("\\.addItemInput\\((?P<stack>.+?)\\)"), "inputs"),
+    (re.compile("\\.addFluidInput\\((?P<stack>.+?)\\)"), "fluidInputs"),
+    (re.compile("\\.addItemOutput\\((?P<stack>.+?)\\)"), "outputs"),
+    (re.compile("\\.addFluidOutput\\((?P<stack>.+?)\\)"), "fluidOutputs")
 )
 
 energyRegex = re.compile("\\.addEnergyPerTick(?P<direction>Input|Output)\\((?P<val>\\d+)\\)")
@@ -60,7 +60,7 @@ for buildCall in buildCallRegex.finditer(textIn):
         if params != "":
             build += "    .{0}({1})\n".format(function, params)
 
-    build += "    .buildAndRegister()\n"
+    build += "    .buildAndRegister();\n"
 
     ourBuilds.append(build)
 
