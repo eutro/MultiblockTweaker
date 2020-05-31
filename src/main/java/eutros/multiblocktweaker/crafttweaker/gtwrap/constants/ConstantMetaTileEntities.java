@@ -56,15 +56,12 @@ public class ConstantMetaTileEntities {
     @ZenProperty public static final IMetaTileEntity STAINLESS_STEEL_CHEST = new MCMetaTileEntity(MetaTileEntities.STAINLESS_STEEL_CHEST);
     @ZenProperty public static final IMetaTileEntity TITANIUM_CHEST = new MCMetaTileEntity(MetaTileEntities.TITANIUM_CHEST);
     @ZenProperty public static final IMetaTileEntity TUNGSTENSTEEL_CHEST = new MCMetaTileEntity(MetaTileEntities.TUNGSTENSTEEL_CHEST);
-    @ZenProperty public static final IMetaTileEntity LOCKED_SAFE = new MCMetaTileEntity(MetaTileEntities.LOCKED_SAFE);
     @ZenProperty public static final IMetaTileEntity WOODEN_TANK = new MCMetaTileEntity(MetaTileEntities.WOODEN_TANK);
     @ZenProperty public static final IMetaTileEntity BRONZE_TANK = new MCMetaTileEntity(MetaTileEntities.BRONZE_TANK);
     @ZenProperty public static final IMetaTileEntity STEEL_TANK = new MCMetaTileEntity(MetaTileEntities.STEEL_TANK);
     @ZenProperty public static final IMetaTileEntity STAINLESS_STEEL_TANK = new MCMetaTileEntity(MetaTileEntities.STAINLESS_STEEL_TANK);
     @ZenProperty public static final IMetaTileEntity TITANIUM_TANK = new MCMetaTileEntity(MetaTileEntities.TITANIUM_TANK);
     @ZenProperty public static final IMetaTileEntity TUNGSTENSTEEL_TANK = new MCMetaTileEntity(MetaTileEntities.TUNGSTENSTEEL_TANK);
-    @ZenProperty public static final IMetaTileEntity WORKBENCH = new MCMetaTileEntity(MetaTileEntities.WORKBENCH);
-    @ZenProperty public static final IMetaTileEntity TESLA_COIL = new MCMetaTileEntity(MetaTileEntities.TESLA_COIL);
 
     @ZenProperty public static final IMetaTileEntity[] HULL = Arrays.stream(MetaTileEntities.HULL).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     @ZenProperty public static final IMetaTileEntity[] TRANSFORMER = Arrays.stream(MetaTileEntities.TRANSFORMER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
