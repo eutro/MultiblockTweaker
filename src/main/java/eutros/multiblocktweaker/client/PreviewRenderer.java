@@ -45,8 +45,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static eutros.multiblocktweaker.client.ClientTickHandler.partialTicks;
 
 @SideOnly(Side.CLIENT)
 public class PreviewRenderer {
@@ -55,17 +60,20 @@ public class PreviewRenderer {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private int opList = -1;
+    private int baseY = 0;
     private int frame = 0;
+    private int opList = -1;
 
     @Nullable
     private WorldSceneRenderer renderer = null;
     @Nullable
-    private AxisAlignedBB errorHighlight;
+    private BlockPos errorHighlight;
+    private List<BlockPos> renderedBlocks;
 
     public BlockPos targetPos = BlockPos.ORIGIN;
     public BlockPos controllerPos = BlockPos.ORIGIN;
     public Rotation rotatePreviewBy = Rotation.NONE;
+    private int layerIndex = -1;
 
     public static final PreviewRenderer INSTANCE = new PreviewRenderer();
 
@@ -92,14 +100,11 @@ public class PreviewRenderer {
         if(renderer == null || opList == -1) return;
 
         if(BlockMachine.getMetaTileEntity(mc.world, targetPos) == null) {
-            renderer = null;
-            targetPos = BlockPos.ORIGIN;
+            reset();
             return;
         }
 
         frame++;
-
-        float partialTicks = mc.getRenderPartialTicks();
 
         Entity entity = mc.getRenderViewEntity();
         if(entity == null) entity = mc.player;
@@ -116,14 +121,37 @@ public class PreviewRenderer {
         GlStateManager.popMatrix();
     }
 
-    private void refreshOpList() {
-        if(opList != -1) {
-            GlStateManager.glDeleteLists(opList, 1);
-            opList = -1;
+    private void reset() {
+        renderer = null;
+        targetPos = BlockPos.ORIGIN;
+        layerIndex = -1;
+        removeOpList();
+    }
+
+    private List<BlockPos> filterLayer(List<BlockPos> blocks) {
+        if(layerIndex == -1)
+            return blocks;
+
+        List<BlockPos> list = new ArrayList<>();
+        for(BlockPos pos : blocks) {
+            if(pos.getY() == baseY + layerIndex) {
+                list.add(pos);
+            }
         }
 
-        List<BlockPos> renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
-        if(renderedBlocks == null) return;
+        if(list.isEmpty()) {
+            layerIndex = -1;
+            setErroneousBlockPos();
+            return blocks;
+        }
+
+        return list;
+    }
+
+    private void refreshOpList() {
+        removeOpList();
+
+        List<BlockPos> renderedBlocks = filterLayer(this.renderedBlocks);
 
         opList = GLAllocation.generateDisplayLists(1);
         GlStateManager.glNewList(opList, GL11.GL_COMPILE);
@@ -184,6 +212,13 @@ public class PreviewRenderer {
         GlStateManager.glEndList();
     }
 
+    private void removeOpList() {
+        if(opList != -1) {
+            GlStateManager.glDeleteLists(opList, 1);
+            opList = -1;
+        }
+    }
+
     private void drawModel(Tessellator tes, BufferBuilder buff, IBlockState state, Runnable drawer) {
         for(BlockRenderLayer brl : BlockRenderLayer.values()) {
             if(state.getBlock().canRenderInLayer(state, brl)) {
@@ -195,12 +230,19 @@ public class PreviewRenderer {
         }
     }
 
-    public boolean onUse(World world, BlockPos pos) {
+    public boolean onUse(World world, BlockPos pos, boolean isRightClick) {
         if(pos.equals(targetPos)) {
-            renderer = null;
-            targetPos = BlockPos.ORIGIN;
+            layerIndex += isRightClick ? 1 : -1;
+            if(layerIndex < -1) {
+                reset();
+            } else {
+                setErroneousBlockPos();
+                refreshOpList();
+            }
             return true;
         }
+
+        if(!isRightClick) return false;
 
         IBlockState state = world.getBlockState(pos);
 
@@ -221,10 +263,11 @@ public class PreviewRenderer {
         EnumFacing facing, previewFacing;
         previewFacing = facing = mte.getFrontFacing();
 
-        List<BlockPos> renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
+        renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
 
         controllerPos = BlockPos.ORIGIN;
         if(renderedBlocks != null) {
+            baseY = Collections.min(renderedBlocks, Comparator.comparing(BlockPos::getY)).getY();
             for(BlockPos blockPos : renderedBlocks) {
                 MetaTileEntity metaTE = BlockMachine.getMetaTileEntity(renderer.world, blockPos);
                 if(metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
@@ -237,46 +280,53 @@ public class PreviewRenderer {
 
         rotatePreviewBy = Rotation.values()[(4 + facing.getHorizontalIndex() - previewFacing.getHorizontalIndex()) % 4];
         refreshOpList();
-        BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
-        if(pattern != null)
-            errorHighlight = getErroneousAABB(pattern);
+
+        setErroneousBlockPos();
 
         return true;
     }
 
     private void highlightErrors() {
-        Minecraft mc = Minecraft.getMinecraft();
-        MetaTileEntity mte = BlockMachine.getMetaTileEntity(mc.world, targetPos);
-
-        if(!(mte instanceof MultiblockControllerBase)) {
-            return;
-        }
-
-        MultiblockControllerBase te = (MultiblockControllerBase) mte;
-
-        BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
-        if(pattern == null) return;
-
         if(frame % 20 == 0)
-            errorHighlight = getErroneousAABB(pattern);
+            setErroneousBlockPos();
 
         if(errorHighlight == null) return;
 
         GlStateManager.pushMatrix();
 
         GlStateManager.disableDepth();
-        RenderHelper.drawColouredAABB(errorHighlight, 1, 0, 0, 0.5F);
+        RenderHelper.drawColouredAABB(new AxisAlignedBB(errorHighlight), 1, 0, 0, 0.5F);
         GlStateManager.enableDepth();
 
         GlStateManager.popMatrix();
     }
 
+    private void setErroneousBlockPos() {
+        Minecraft mc = Minecraft.getMinecraft();
+        MetaTileEntity mte = BlockMachine.getMetaTileEntity(mc.world, targetPos);
+        if(!(mte instanceof MultiblockControllerBase)) {
+            return;
+        }
+        MultiblockControllerBase te = (MultiblockControllerBase) mte;
+        BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
+        if(pattern == null) return;
+
+        errorHighlight = getErroneousAABB(pattern);
+
+        if(errorHighlight != null && errorHighlight != null &&
+                !(layerIndex == -1 ||
+                        baseY + layerIndex == errorHighlight.getY())) {
+            errorHighlight = null;
+        }
+    }
+
     @Nullable
-    private AxisAlignedBB getErroneousAABB(BlockPattern pattern) {
+    private BlockPos getErroneousAABB(BlockPattern pattern) {
         WorldClient world = Minecraft.getMinecraft().world;
         MetaTileEntity te = BlockMachine.getMetaTileEntity(world, targetPos);
 
         if(((MultiblockControllerBase) te).isStructureFormed()) {
+            reset();
             return null;
         }
 
@@ -357,16 +407,16 @@ public class PreviewRenderer {
                     //Check layer-local matcher predicate
                     Predicate<PatternMatchContext> layerPredicate = layerMatchers.get(c);
                     if(layerPredicate != null && !layerPredicate.test(layerContext)) {
-                        return new AxisAlignedBB(BlockPos.ORIGIN); // Highlight the controller.
+                        return BlockPos.ORIGIN; // Highlight the controller.
                     }
                 }
                 //Repetitions out of range
                 if(r < aisleRepetitions[c][0]) {
-                    return new AxisAlignedBB(blockPos.subtract(targetPos)); // Highlight last tested block.
+                    return blockPos.subtract(targetPos); // Highlight last tested block.
                 }
             }
 
-            return new AxisAlignedBB(BlockPos.ORIGIN); // Highlight the controller.
+            return BlockPos.ORIGIN; // Highlight the controller.
         }
     }
 

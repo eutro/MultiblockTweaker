@@ -19,11 +19,14 @@ public class PreviewHandler {
     }
 
     @SubscribeEvent
-    public void onRightClick(PlayerInteractEvent.RightClickBlock evt) {
+    public void onClick(PlayerInteractEvent evt) {
+        if(!(evt instanceof PlayerInteractEvent.LeftClickBlock || evt instanceof PlayerInteractEvent.RightClickBlock))
+            return;
+
         EntityPlayer player = evt.getEntityPlayer();
         if(evt.getSide().isServer() || !evt.getItemStack().isEmpty() || evt.getHand() == EnumHand.OFF_HAND || !player.isSneaking()) return;
 
-        if(PreviewRenderer.INSTANCE.onUse(evt.getWorld(), evt.getPos())) {
+        if(PreviewRenderer.INSTANCE.onUse(evt.getWorld(), evt.getPos(), evt instanceof PlayerInteractEvent.RightClickBlock)) {
             player.swingArm(EnumHand.MAIN_HAND);
         }
     }
