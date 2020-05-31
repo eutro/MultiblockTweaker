@@ -9,8 +9,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
 @ZenRegister
 public enum ConstantMoveType {
     @ZenProperty VERTICAL(ProgressWidget.MoveType.VERTICAL),
-    @ZenProperty HORIZONTAL(ProgressWidget.MoveType.HORIZONTAL),
-    @ZenProperty VERTICAL_INVERTED(ProgressWidget.MoveType.VERTICAL_INVERTED);
+    @ZenProperty HORIZONTAL(ProgressWidget.MoveType.HORIZONTAL);
 
     public final ProgressWidget.MoveType delegate;
 

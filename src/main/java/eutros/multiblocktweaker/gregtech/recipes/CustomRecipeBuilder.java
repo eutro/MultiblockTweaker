@@ -43,7 +43,8 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
                         ImmutableMap.copyOf(propertyMap),
                         this.duration,
                         this.EUt,
-                        this.hidden));
+                        this.hidden,
+                        this.needsEmptyOutput));
     }
 
 }

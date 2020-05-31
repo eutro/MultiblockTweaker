@@ -63,9 +63,9 @@ dependencies {
     deobfProvided "mezz.jei:jei_1.12.2:4.15.0.293:api"
     runtime "mezz.jei:jei_1.12.2:4.15.0.293"
 
-    deobfCompile "gregtechce:gregtech:1.12.2:1.8.13.465"
+    deobfCompile "gregtechce:gregtech:1.12.2:1.8.4.419"
 
-    deobfCompile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.357:universal"
+    deobfCompile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal"
 
     implementation 'org.jetbrains:annotations:15.0'
 

@@ -62,6 +62,7 @@ public class ConstantMetaTileEntities {
     @ZenProperty public static final IMetaTileEntity STAINLESS_STEEL_TANK = new MCMetaTileEntity(MetaTileEntities.STAINLESS_STEEL_TANK);
     @ZenProperty public static final IMetaTileEntity TITANIUM_TANK = new MCMetaTileEntity(MetaTileEntities.TITANIUM_TANK);
     @ZenProperty public static final IMetaTileEntity TUNGSTENSTEEL_TANK = new MCMetaTileEntity(MetaTileEntities.TUNGSTENSTEEL_TANK);
+    @ZenProperty public static final IMetaTileEntity TESLA_COIL = new MCMetaTileEntity(MetaTileEntities.TESLA_COIL);
 
     @ZenProperty public static final IMetaTileEntity[] HULL = Arrays.stream(MetaTileEntities.HULL).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     @ZenProperty public static final IMetaTileEntity[] TRANSFORMER = Arrays.stream(MetaTileEntities.TRANSFORMER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);

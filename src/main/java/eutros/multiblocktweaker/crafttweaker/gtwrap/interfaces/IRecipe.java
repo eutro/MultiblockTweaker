@@ -21,9 +21,6 @@ public interface IRecipe {
     IItemStack[] getOutputs();
 
     @ZenMethod
-    IItemStack[] getAllItemOutputs(int maxOutputSlots);
-
-    @ZenMethod
     ILiquidStack[] getFluidInputs();
 
     @ZenMethod

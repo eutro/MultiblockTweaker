@@ -39,11 +39,6 @@ public class MCRecipe implements IRecipe {
     }
 
     @Override
-    public IItemStack[] getAllItemOutputs(int maxOutputSlots) {
-        return CraftTweakerMC.getIItemStacks(inner.getAllItemOutputs(maxOutputSlots));
-    }
-
-    @Override
     public ILiquidStack[] getFluidInputs() {
         return inner.getFluidInputs().stream().map(CraftTweakerMC::getILiquidStack).toArray(ILiquidStack[]::new);
     }

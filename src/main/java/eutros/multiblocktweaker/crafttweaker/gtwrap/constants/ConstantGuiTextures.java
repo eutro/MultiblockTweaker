@@ -15,9 +15,7 @@ public class ConstantGuiTextures {
     @ZenProperty public static final ITextureArea BACKGROUND_SMALL = new MCTextureArea(GuiTextures.BACKGROUND_SMALL);
     @ZenProperty public static final ITextureArea BACKGROUND_EXTENDED = new MCTextureArea(GuiTextures.BACKGROUND_EXTENDED);
     @ZenProperty public static final ITextureArea BORDERED_BACKGROUND = new MCTextureArea(GuiTextures.BORDERED_BACKGROUND);
-    @ZenProperty public static final ITextureArea BORDERED_BACKGROUND_EXTENDED = new MCTextureArea(GuiTextures.BORDERED_BACKGROUND_EXTENDED);
     @ZenProperty public static final ITextureArea SLOT = new MCTextureArea(GuiTextures.SLOT);
-    @ZenProperty public static final ITextureArea SLOT_BIG = new MCTextureArea(GuiTextures.SLOT_BIG);
     @ZenProperty public static final ITextureArea FLUID_SLOT = new MCTextureArea(GuiTextures.FLUID_SLOT);
     @ZenProperty public static final ITextureArea DISPLAY = new MCTextureArea(GuiTextures.DISPLAY);
     @ZenProperty public static final ITextureArea FLUID_TANK_BACKGROUND = new MCTextureArea(GuiTextures.FLUID_TANK_BACKGROUND);
@@ -33,7 +31,6 @@ public class ConstantGuiTextures {
     @ZenProperty public static final ITextureArea BUTTON_FILTER_NBT = new MCTextureArea(GuiTextures.BUTTON_FILTER_NBT);
     @ZenProperty public static final ITextureArea BUTTON_BLACKLIST = new MCTextureArea(GuiTextures.BUTTON_BLACKLIST);
     @ZenProperty public static final ITextureArea BUTTON_SWITCH_VIEW = new MCTextureArea(GuiTextures.BUTTON_SWITCH_VIEW);
-    @ZenProperty public static final ITextureArea BUTTON_ALLOW_IMPORT_EXPORT = new MCTextureArea(GuiTextures.BUTTON_ALLOW_IMPORT_EXPORT);
     @ZenProperty public static final ITextureArea INDICATOR_NO_ENERGY = new MCTextureArea(GuiTextures.INDICATOR_NO_ENERGY);
     @ZenProperty public static final ITextureArea TANK_ICON = new MCTextureArea(GuiTextures.TANK_ICON);
     @ZenProperty public static final ITextureArea SLIDER_BACKGROUND = new MCTextureArea(GuiTextures.SLIDER_BACKGROUND);
@@ -87,7 +84,6 @@ public class ConstantGuiTextures {
     @ZenProperty public static final ITextureArea OUT_SLOT_OVERLAY = new MCTextureArea(GuiTextures.OUT_SLOT_OVERLAY);
     @ZenProperty public static final ITextureArea FILTER_SLOT_OVERLAY = new MCTextureArea(GuiTextures.FILTER_SLOT_OVERLAY);
     @ZenProperty public static final ITextureArea STRING_SLOT_OVERLAY = new MCTextureArea(GuiTextures.STRING_SLOT_OVERLAY);
-    @ZenProperty public static final ITextureArea PROGRESS_BAR_UNLOCK = new MCTextureArea(GuiTextures.PROGRESS_BAR_UNLOCK);
     @ZenProperty public static final ITextureArea PROGRESS_BAR_ARROW = new MCTextureArea(GuiTextures.PROGRESS_BAR_ARROW);
     @ZenProperty public static final ITextureArea PROGRESS_BAR_ARROW_MULTIPLE = new MCTextureArea(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE);
     @ZenProperty public static final ITextureArea PROGRESS_BAR_BATH = new MCTextureArea(GuiTextures.PROGRESS_BAR_BATH);
