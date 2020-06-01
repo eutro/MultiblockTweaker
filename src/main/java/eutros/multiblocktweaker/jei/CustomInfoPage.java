@@ -7,7 +7,6 @@ import gregtech.integration.jei.multiblock.MultiblockInfoPage;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import net.minecraft.client.resources.I18n;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomInfoPage extends MultiblockInfoPage {
@@ -30,15 +29,8 @@ public class CustomInfoPage extends MultiblockInfoPage {
 
     @Override
     public String[] getDescription() {
-        List<String> ret = new ArrayList<>();
-        String s = "multiblock." + multiblock.loc.getResourceDomain() + '.' + multiblock.loc.getResourcePath() + ".desc";
-        ret.add(I18n.format(s));
-
-        for(int i = 0; !I18n.format(s + i).equals(s + i); i++) {
-            ret.add(I18n.format(s));
-        }
-
-        return ret.toArray(new String[0]);
+        String s = multiblock.loc.getResourceDomain() + ".multiblock." + multiblock.loc.getResourcePath() + ".description";
+        return new String[] {I18n.format(s)};
     }
 
 }
