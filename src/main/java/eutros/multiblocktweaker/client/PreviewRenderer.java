@@ -22,6 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -113,12 +114,18 @@ public class PreviewRenderer {
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
         double tz = entity.lastTickPosZ + ((entity.posZ - entity.lastTickPosZ) * partialTicks);
 
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(-tx, -ty, -tz);
         GlStateManager.translate(targetPos.getX(), targetPos.getY(), targetPos.getZ());
         GlStateManager.callList(opList);
         highlightErrors();
         GlStateManager.popMatrix();
+
+        GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
     private void reset() {
@@ -229,19 +236,17 @@ public class PreviewRenderer {
         if(!isRightClick) return false;
 
         IBlockState state = world.getBlockState(pos);
-
         if(state.getBlock() != MetaBlocks.MACHINE) return false;
 
         MetaTileEntity mte = BlockMachine.getMetaTileEntity(world, pos);
-
         if(!(mte instanceof MultiblockControllerBase)) return false;
 
         MultiblockControllerBase te = (MultiblockControllerBase) mte;
+        WorldSceneRenderer tempRenderer = getRenderer(te.getStackForm());
+        if(tempRenderer == null) return false;
 
-        renderer = null;
-        renderer = getRenderer(te.getStackForm());
-
-        if(renderer == null) return false;
+        reset();
+        renderer = tempRenderer;
 
         targetPos = pos;
         EnumFacing facing, previewFacing;
@@ -296,12 +301,6 @@ public class PreviewRenderer {
         if(pattern == null) return;
 
         errorHighlight = getErroneousAABB(pattern);
-
-        if(errorHighlight != null && errorHighlight != null &&
-                !(layerIndex == -1 ||
-                        baseY + layerIndex == errorHighlight.getY())) {
-            errorHighlight = null;
-        }
     }
 
     @Nullable
