@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.client;
 
+import com.google.common.collect.ImmutableList;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import eutros.multiblocktweaker.jei.MultiblockTweakerJEIPlugin;
 import gnu.trove.map.TIntObjectMap;
@@ -21,19 +22,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -175,22 +172,10 @@ public class PreviewRenderer {
         GlStateManager.rotate(rotatePreviewBy.ordinal() * 90, 0, -1, 0);
         GlStateManager.translate(-0.5, 0, -0.5);
 
-        IBakedModel missingNo = brd.getBlockModelShapes().getModelManager().getMissingModel();
+        TargetBlockAccess targetBA = new TargetBlockAccess(world, BlockPos.ORIGIN);
 
         for(BlockPos pos : renderedBlocks) {
-            IBlockState exState, state;
-            exState = state = world.getBlockState(pos);
-
-            EnumBlockRenderType renderType = state.getRenderType();
-            if(renderType == EnumBlockRenderType.INVISIBLE) continue;
-
-            try {
-                if(world.getWorldType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
-                    state = state.getActualState(world, pos);
-                }
-                exState = state.getBlock().getExtendedState(state, world, pos);
-            } catch(Throwable ignored) {
-            }
+            targetBA.setPos(pos);
 
             GlStateManager.pushMatrix();
 
@@ -198,13 +183,9 @@ public class PreviewRenderer {
             GlStateManager.translate(tPos.getX(), tPos.getY(), tPos.getZ());
             GlStateManager.translate(0.125, 0.125, 0.125);
             GlStateManager.scale(0.75, 0.75, 0.75);
-            GlStateManager.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 
-            IBakedModel model = brd.getModelForState(state);
-            IBlockState finalState = exState;
-            drawModel(tes, buff, state, (model == missingNo) ?
-                                        () -> brd.renderBlock(world.getBlockState(pos), pos, world, buff) :
-                                        () -> mr.renderModel(world, model, finalState, pos, buff, false, MathHelper.getPositionRandom(pos)));
+            IBlockState state = world.getBlockState(pos);
+            drawModel(tes, buff, state, () -> brd.renderBlock(state, BlockPos.ORIGIN, targetBA, buff));
 
             GlStateManager.popMatrix();
         }
@@ -266,7 +247,7 @@ public class PreviewRenderer {
         EnumFacing facing, previewFacing;
         previewFacing = facing = mte.getFrontFacing();
 
-        renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
+        renderedBlocks = ImmutableList.copyOf(ReflectionHelper.<List<BlockPos>, WorldSceneRenderer>getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer));
 
         controllerPos = BlockPos.ORIGIN;
         if(renderedBlocks != null) {
