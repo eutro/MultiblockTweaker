@@ -36,7 +36,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 multiblock.update,
                 multiblock.updateWorktable,
                 multiblock.setupRecipe,
-                multiblock.completeRecipe);
+                multiblock.completeRecipe,
+                multiblock.recipePredicate);
     }
 
     @Override

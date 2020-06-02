@@ -3,10 +3,7 @@ package eutros.multiblocktweaker.crafttweaker;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
-import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -41,6 +38,7 @@ public class CustomMultiblock {
     @ZenProperty public IUpdateWorktableFunction updateWorktable;
     @ZenProperty public ISetupRecipeFunction setupRecipe;
     @ZenProperty public ICompleteRecipeFunction completeRecipe;
+    @ZenProperty public IRecipePredicate recipePredicate;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
