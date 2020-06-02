@@ -4,6 +4,7 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.*;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
@@ -124,8 +125,9 @@ public interface IBlockMatcher {
 
     @ZenMethod
     static IBlockMatcher statePredicate(IBlockState... allowedStates) {
-        Set<net.minecraft.block.state.IBlockState> states = Arrays.stream(allowedStates).map(IBlockProperties::getInternal)
-                .map(net.minecraft.block.state.IBlockState.class::cast).collect(Collectors.toSet());
+        Set<net.minecraft.block.state.IBlockState> states = Arrays.stream(allowedStates)
+                .map(CraftTweakerMC::getBlockState)
+                .collect(Collectors.toSet());
 
         return toCT(blockWorldState -> states.contains(blockWorldState.getBlockState()));
     }
@@ -133,7 +135,7 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher blockPredicate(IBlockPattern... block) {
         Set<Block> blocks = Arrays.stream(block).map(IBlockPattern::getBlocks).flatMap(List::stream)
-                .map(IBlock::getDefinition).map(IBlockDefinition::getInternal).map(Block.class::cast)
+                .map(IBlock::getDefinition).map(CraftTweakerMC::getBlock)
                 .collect(Collectors.toSet());
 
         return toCT(blockWorldState -> blocks.contains(blockWorldState.getBlockState().getBlock()));

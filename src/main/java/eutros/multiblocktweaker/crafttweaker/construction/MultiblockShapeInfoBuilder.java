@@ -5,6 +5,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IFacing;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockShapeInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
@@ -90,7 +91,7 @@ public class MultiblockShapeInfoBuilder {
      */
     @ZenMethod
     public MultiblockShapeInfoBuilder where(String symbol, IBlock block) {
-        Block blocc = (Block) block.getDefinition().getInternal();
+        Block blocc = CraftTweakerMC.getBlock(block.getDefinition());
         char c = getSymbol(symbol);
         if(c != '\0')
             inner = inner.where(c, blocc.getDefaultState());
@@ -120,7 +121,7 @@ public class MultiblockShapeInfoBuilder {
     public MultiblockShapeInfoBuilder where(String symbol, IBlockState blockState) {
         char c = getSymbol(symbol);
         if(c != '\0')
-            inner = inner.where(c, (net.minecraft.block.state.IBlockState) blockState.getInternal());
+            inner = inner.where(c, CraftTweakerMC.getBlockState(blockState));
         return this;
     }
 
