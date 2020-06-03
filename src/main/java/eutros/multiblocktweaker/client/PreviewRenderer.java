@@ -12,7 +12,6 @@ import gregtech.api.multiblock.BlockWorldState;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.render.scene.WorldSceneRenderer;
 import gregtech.api.util.IntRange;
-import gregtech.common.blocks.MetaBlocks;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.recipe.IFocus;
@@ -100,7 +99,7 @@ public class PreviewRenderer {
 
         if(renderer == null || opList == -1) return;
 
-        if(BlockMachine.getMetaTileEntity(mc.world, targetPos) == null) {
+        if(PreviewHandler.getMetaController(mc.world, targetPos) == null) {
             reset();
             return;
         }
@@ -147,9 +146,8 @@ public class PreviewRenderer {
         }
 
         if(list.isEmpty()) {
-            layerIndex = -1;
-            setErroneousBlockPos();
-            return blocks;
+            reset();
+            return list;
         }
 
         return list;
@@ -160,6 +158,8 @@ public class PreviewRenderer {
 
         List<BlockPos> renderedBlocks = filterLayer(this.renderedBlocks);
 
+        if(renderedBlocks.isEmpty()) return;
+
         opList = GLAllocation.generateDisplayLists(1);
         GlStateManager.glNewList(opList, GL11.GL_COMPILE);
 
@@ -167,7 +167,6 @@ public class PreviewRenderer {
 
         BlockRenderLayer oldLayer = MinecraftForgeClient.getRenderLayer();
         BlockRendererDispatcher brd = mc.blockRenderDispatcher;
-        BlockModelRenderer mr = brd.getBlockModelRenderer();
         WorldSceneRenderer.TrackedDummyWorld world = renderer.world;
 
         Tessellator tes = Tessellator.getInstance();
@@ -191,8 +190,15 @@ public class PreviewRenderer {
             GlStateManager.translate(0.125, 0.125, 0.125);
             GlStateManager.scale(0.75, 0.75, 0.75);
 
+            buff.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             IBlockState state = world.getBlockState(pos);
-            drawModel(tes, buff, state, () -> brd.renderBlock(state, BlockPos.ORIGIN, targetBA, buff));
+            for(BlockRenderLayer brl : BlockRenderLayer.values()) {
+                if(state.getBlock().canRenderInLayer(state, brl)) {
+                    ForgeHooksClient.setRenderLayer(brl);
+                    brd.renderBlock(state, BlockPos.ORIGIN, targetBA, buff);
+                }
+            }
+            tes.draw();
 
             GlStateManager.popMatrix();
         }
@@ -210,17 +216,6 @@ public class PreviewRenderer {
         }
     }
 
-    private void drawModel(Tessellator tes, BufferBuilder buff, IBlockState state, Runnable drawer) {
-        for(BlockRenderLayer brl : BlockRenderLayer.values()) {
-            if(state.getBlock().canRenderInLayer(state, brl)) {
-                ForgeHooksClient.setRenderLayer(brl);
-                buff.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                drawer.run();
-                tes.draw();
-            }
-        }
-    }
-
     public boolean onUse(World world, BlockPos pos, boolean isRightClick) {
         if(pos.equals(targetPos)) {
             layerIndex += isRightClick ? 1 : -1;
@@ -235,13 +230,9 @@ public class PreviewRenderer {
 
         if(!isRightClick) return false;
 
-        IBlockState state = world.getBlockState(pos);
-        if(state.getBlock() != MetaBlocks.MACHINE) return false;
+        MultiblockControllerBase te = (MultiblockControllerBase) PreviewHandler.getMetaController(world, pos);
+        if(te == null) return false;
 
-        MetaTileEntity mte = BlockMachine.getMetaTileEntity(world, pos);
-        if(!(mte instanceof MultiblockControllerBase)) return false;
-
-        MultiblockControllerBase te = (MultiblockControllerBase) mte;
         WorldSceneRenderer tempRenderer = getRenderer(te.getStackForm());
         if(tempRenderer == null) return false;
 
@@ -250,7 +241,7 @@ public class PreviewRenderer {
 
         targetPos = pos;
         EnumFacing facing, previewFacing;
-        previewFacing = facing = mte.getFrontFacing();
+        previewFacing = facing = te.getFrontFacing();
 
         renderedBlocks = ImmutableList.copyOf(ReflectionHelper.<List<BlockPos>, WorldSceneRenderer>getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer));
 
@@ -292,11 +283,8 @@ public class PreviewRenderer {
 
     private void setErroneousBlockPos() {
         Minecraft mc = Minecraft.getMinecraft();
-        MetaTileEntity mte = BlockMachine.getMetaTileEntity(mc.world, targetPos);
-        if(!(mte instanceof MultiblockControllerBase)) {
-            return;
-        }
-        MultiblockControllerBase te = (MultiblockControllerBase) mte;
+        MultiblockControllerBase te = PreviewHandler.getMetaController(mc.world, targetPos);
+        if(te == null) return;
         BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
         if(pattern == null) return;
 

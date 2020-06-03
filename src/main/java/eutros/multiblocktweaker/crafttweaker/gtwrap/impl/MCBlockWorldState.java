@@ -9,8 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
 import gregtech.api.multiblock.BlockWorldState;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 public class MCBlockWorldState implements IBlockWorldState {
@@ -30,7 +28,7 @@ public class MCBlockWorldState implements IBlockWorldState {
 
     @Override
     public void update(@NotNull IWorld worldIn, @NotNull IBlockPos posIn, @NotNull IPatternMatchContext matchContext, @NotNull IPatternMatchContext layerContext) {
-        inner.update((World) worldIn.getInternal(), (BlockPos) posIn.getInternal(), matchContext.getInternal(), layerContext.getInternal());
+        inner.update(CraftTweakerMC.getWorld(worldIn), CraftTweakerMC.getBlockPos(posIn), matchContext.getInternal(), layerContext.getInternal());
     }
 
     @Override
@@ -55,7 +53,7 @@ public class MCBlockWorldState implements IBlockWorldState {
 
     @Override
     public IBlockState getOffsetState(IFacing face) {
-        return CraftTweakerMC.getBlockState(inner.getOffsetState((EnumFacing) face.getInternal()));
+        return CraftTweakerMC.getBlockState(inner.getOffsetState((EnumFacing) face.getInternal())); // no helper method for this it seems
     }
 
     @Override

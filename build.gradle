@@ -36,7 +36,16 @@ minecraft {
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     useDepAts = true
 
+    accessTransformer 'src/main/resources/META-INF/mbtweaker_at.cfg'
+
     replace "@GRADLE:VERSION@", project.version
+}
+
+jar {
+    from sourceSets.main.output
+    manifest {
+        attributes 'FMLAT': 'mbtweaker_at.cfg'
+    }
 }
 
 repositories {

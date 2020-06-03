@@ -19,69 +19,56 @@ public class RenderHelper {
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
-        // NORTH
-
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+
+        // NORTH
 
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
 
-        tes.draw();
 
         // SOUTH
 
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
 
-        tes.draw();
 
         // WEST
 
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
 
-        tes.draw();
 
         // EAST
 
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
 
-        tes.draw();
 
         // TOP
-
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
 
-        tes.draw();
 
         // BOTTOM
-
-        buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
+
 
         tes.draw();
 
