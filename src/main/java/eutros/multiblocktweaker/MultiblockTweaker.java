@@ -1,6 +1,6 @@
 package eutros.multiblocktweaker;
 
-import eutros.multiblocktweaker.common.PreviewHandler;
+import eutros.multiblocktweaker.client.PreviewHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
@@ -16,7 +16,8 @@ public class MultiblockTweaker {
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent evt) {
-        PreviewHandler.init();
+        if(evt.getSide().isClient())
+            PreviewHandler.init();
     }
 
 }
