@@ -67,6 +67,11 @@ public class CustomMultiblock {
         return new MCCubeRenderer(texture);
     }
 
+    /**
+     * Register this multiblock. Calling this more than once will error.
+     *
+     * @return This multiblock, for convenience.
+     */
     @ZenMethod
     public CustomMultiblock register() {
         MultiblockRegistry.registerMultiblock(this);

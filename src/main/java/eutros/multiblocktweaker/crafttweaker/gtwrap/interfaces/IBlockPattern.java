@@ -17,12 +17,15 @@ public interface IBlockPattern {
     @NotNull
     BlockPattern getInternal();
 
+    @ZenMethod
     @ZenGetter("fingerLength")
     int getFingerLength();
 
+    @ZenMethod
     @ZenGetter("thumbLength")
     int getThumbLength();
 
+    @ZenMethod
     @ZenGetter("palmLength")
     int getPalmLength();
 

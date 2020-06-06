@@ -7,15 +7,15 @@ import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
-import eutros.multiblocktweaker.gregtech.cuberenderer.BasicCubeRenderer;
+import eutros.multiblocktweaker.gregtech.cuberenderer.SidedCubeRenderer;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -28,6 +28,13 @@ import java.util.stream.Collectors;
 
 @ZenClass("mods.gregtech.multiblock.Builder")
 @ZenRegister
+/**
+ * The Builder, or Multiblock Builder, is used to define a custom [Multiblock](../Multiblock.md).
+ *
+ * To do this, the [pattern](#Builder#withPattern), [recipe map](#Builder#withRecipeMap), [texture](#Builder#withTexture) and [designs](#Builder#addDesign) need to be set.
+ *
+ * To get started, call {@code Builder.start()}.
+ */
 public class MultiblockBuilder {
 
     public ResourceLocation loc;
@@ -48,7 +55,7 @@ public class MultiblockBuilder {
      * Create a multiblock builder from a resource location.
      *
      * @param location The resource location of the multiblock.
-     *                 Used for resolving textures or getting the recipe map again.
+     *                 Used for getting the recipe map again.
      *                 If no namespace is defined, it defaults to this mod's mod id.
      * @param metaId   The metadata the resulting multiblock will be registered as.
      * @return A multiblock builder instance, that should be used to set the properties of the multiblock.
@@ -65,30 +72,12 @@ public class MultiblockBuilder {
     /**
      * Compulsory, set the pattern for the multiblock.
      *
-     * @param pattern A BlockPattern defining the multiblock's construction.
+     * @param pattern An {@link IBlockPattern} defining the multiblock's construction.
      * @return This builder, for convenience.
      */
     @ZenMethod
     public MultiblockBuilder withPattern(@NotNull IBlockPattern pattern) {
         this.pattern = pattern.getInternal();
-        return this;
-    }
-
-    @ZenMethod
-    public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo shapeInfo) {
-        this.designs.add(shapeInfo.getInternal());
-        return this;
-    }
-
-    /**
-     * Compulsory, set the texture for the multiblock. This will be used when the multiblock forms, texturing all the inputs and outputs.
-     *
-     * @param texture The texture to use.
-     * @return This builder, for convenience.
-     */
-    @ZenMethod
-    public MultiblockBuilder withTexture(@NotNull IICubeRenderer texture) {
-        this.texture = texture.getInternal();
         return this;
     }
 
@@ -101,6 +90,36 @@ public class MultiblockBuilder {
     @ZenMethod
     public MultiblockBuilder withRecipeMap(@NotNull RecipeMap<?> map) {
         this.recipeMap = map;
+        return this;
+    }
+
+    /**
+     * Set the texture for the multiblock.
+     * This will be used for the controller, and all the inputs/outputs when the structure forms.
+     * <p>
+     * If this is not defined, it will be defined as the most common block out of all designs.
+     * If there are no designs defined either, {@link #build()} will fail.
+     *
+     * @param texture The texture to use.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder withTexture(@NotNull IICubeRenderer texture) {
+        this.texture = texture.getInternal();
+        return this;
+    }
+
+    /**
+     * Add a design to be shown in JEI or structure previews.
+     * <p>
+     * If none are defined, the multiblock won't show in JEI.
+     *
+     * @param shapeInfo A design to add and show in JEI.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo shapeInfo) {
+        this.designs.add(shapeInfo.getInternal());
         return this;
     }
 
@@ -122,8 +141,8 @@ public class MultiblockBuilder {
             } else {
                 if(Minecraft.getMinecraft() != null) { // i.e. we are on the client
                     BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
-                    @SuppressWarnings("Convert2MethodRef") // blah blah different semantics
-                    Optional<BasicCubeRenderer> tex = designs.parallelStream() // get the mode block's particle texture
+                    //noinspection Convert2MethodRef blah blah different semantics
+                    Optional<ICubeRenderer> tex = designs.parallelStream() // get the mode block's particle texture
                             .map(design -> design.getBlocks())
                             .flatMap(Arrays::stream)
                             .flatMap(Arrays::stream)
@@ -135,12 +154,10 @@ public class MultiblockBuilder {
                             .stream()
                             .max(Map.Entry.comparingByValue()) // get the mode
                             .map(Map.Entry::getKey)
-                            .map(brd::getModelForState)
-                            .map(IBakedModel::getParticleTexture) // use the particle texture
-                            .map(BasicCubeRenderer::new);
+                            .map(SidedCubeRenderer::new);
 
                     if(!tex.isPresent()) {
-                        CraftTweakerAPI.logWarning(String.format("No texture defined for multiblock \"%s\", and couldn't resolve texture through JEI previews.", loc));
+                        CraftTweakerAPI.logWarning(String.format("No texture defined for multiblock \"%s\", and couldn't resolve texture from defined designs.", loc));
                         return null;
                     }
 

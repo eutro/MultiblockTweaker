@@ -2,11 +2,19 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenClass("mods.gregtech.recipe.IRecipeLogic")
 @ZenRegister
 public interface IRecipeLogic {
+
+    @ZenMethod
+    @ZenGetter("previousRecipe")
+    IRecipe getPreviousRecipe();
+
+    @ZenMethod("getMetaTileEntity")
+    IMetaTileEntity getMetaTile();
 
     @ZenMethod
     boolean isWorkingEnabled();
