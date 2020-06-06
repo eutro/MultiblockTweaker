@@ -139,8 +139,12 @@ public class BlockPatternBuilder {
      * @return This builder, for convenience.
      */
     @ZenMethod
-    public BlockPatternBuilder setAmountAtLeast(char symbol, int minValue) {
-        delegate = delegate.setAmountAtLeast(symbol, minValue);
+    public BlockPatternBuilder setAmountAtLeast(String symbol, int minValue) {
+        if(symbol.length() != 1) {
+            CraftTweakerAPI.logError("Symbol given is not a single character!");
+            return this;
+        }
+        delegate = delegate.setAmountAtLeast(symbol.charAt(0), minValue);
         return this;
     }
 

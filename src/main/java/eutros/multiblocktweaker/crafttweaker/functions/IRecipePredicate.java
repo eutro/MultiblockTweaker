@@ -11,11 +11,10 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IRecipePredicate")
 @ZenRegister
-public interface IRecipePredicate
-{
+public interface IRecipePredicate {
 
-	@ZenMethod
-	boolean test( IRecipeLogic logic, IRecipe recipe );
+    @ZenMethod
+    boolean test(IRecipeLogic logic, IRecipe recipe);
 
 }
 

@@ -4,10 +4,9 @@ package eutros.multiblocktweaker.gregtech.recipes;
 import eutros.multiblocktweaker.crafttweaker.functions.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIItemHandlerModifiable;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultipleTankHandler;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultipleTankHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -115,6 +114,16 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     // CT EXPOSED
+
+    @Override
+    public IRecipe getPreviousRecipe() {
+        return new MCRecipe(previousRecipe);
+    }
+
+    @Override
+    public IMetaTileEntity getMetaTile() {
+        return new MCMetaTileEntity(metaTileEntity);
+    }
 
     @Override
     public long getEnergyStored() {

@@ -1,6 +1,9 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.world.IBlockPos;
+import crafttweaker.api.world.IFacing;
+import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import gregtech.api.GregTechAPI;
@@ -32,5 +35,23 @@ public interface IMetaTileEntity {
 
         return null;
     }
+
+    @ZenMethod
+    IWorld getWorld();
+
+    @ZenMethod
+    IBlockPos getPos();
+
+    @ZenMethod
+    long getTimer();
+
+    @ZenMethod
+    String getMetaName();
+
+    @ZenMethod
+    String getMetaFullName();
+
+    @ZenMethod
+    IFacing getFrontFacing();
 
 }
