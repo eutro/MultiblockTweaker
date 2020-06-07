@@ -4,7 +4,6 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
-import gregtech.api.recipes.crafttweaker.ChancedEntry;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -37,21 +36,6 @@ public interface IRecipe {
      */
     @ZenMethod
     IItemStack[] getOutputs();
-
-    /**
-     * @return The defined chanced output items.
-     */
-    @ZenMethod
-    ChancedEntry[] getChancedOutputs();
-
-    /**
-     * Get all the outputs of a recipe, limited to {@code maxOutputSlots}, including all chanced outputs possible.
-     *
-     * @param maxOutputSlots The max outputs.
-     * @return All the item outputs of the recipe.
-     */
-    @ZenMethod
-    IItemStack[] getAllItemOutputs(int maxOutputSlots);
 
     /**
      * @return The defined input fluids.
