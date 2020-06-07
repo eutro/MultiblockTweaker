@@ -88,6 +88,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
+    public void trySearchNewRecipe() {
+        super.trySearchNewRecipe();
+    }
+
+    @Override
     public void updateWorkable() {
         if(getUpdateWorktable().map(u -> u.run(this)).orElse(true))
             super.updateWorkable();

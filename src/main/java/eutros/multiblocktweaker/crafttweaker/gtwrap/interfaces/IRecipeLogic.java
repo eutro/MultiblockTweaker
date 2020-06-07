@@ -75,12 +75,6 @@ public interface IRecipeLogic {
      *
      */
     @ZenMethod
-    void setActive(boolean active);
-
-    /**
-     *
-     */
-    @ZenMethod
     void setAllowOverclocking(boolean val);
 
     /**
