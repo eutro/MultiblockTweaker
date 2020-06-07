@@ -30,6 +30,11 @@ public class MCPatternMatchContext implements IPatternMatchContext {
     }
 
     @Override
+    public void setInt(String key, int value) {
+        inner.set(key, value);
+    }
+
+    @Override
     public int getInt(String key) {
         return inner.getInt(key);
     }

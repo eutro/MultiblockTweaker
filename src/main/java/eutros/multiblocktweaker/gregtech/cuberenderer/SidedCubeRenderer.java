@@ -4,6 +4,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
 import codechicken.lib.vec.Matrix4;
+import com.google.common.base.Preconditions;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.render.Textures;
 import net.minecraft.block.state.IBlockState;
@@ -42,12 +43,19 @@ public class SidedCubeRenderer implements ICubeRenderer {
     }
 
     public static <T> EnumMap<EnumFacing, T> fillBlanks(Map<EnumFacing, T> map) {
+        Preconditions.checkNotNull(map.get(EnumFacing.UP));
         EnumMap<EnumFacing, T> retMap = new EnumMap<>(map);
+
         retMap.computeIfAbsent(EnumFacing.DOWN, k -> retMap.get(EnumFacing.UP));
-        retMap.computeIfAbsent(EnumFacing.NORTH, k -> retMap.get(EnumFacing.UP));
+
+        retMap.computeIfAbsent(EnumFacing.NORTH,
+                a -> retMap.computeIfAbsent(EnumFacing.EAST,
+                        b -> retMap.computeIfAbsent(EnumFacing.SOUTH,
+                                c -> retMap.computeIfAbsent(EnumFacing.WEST, k -> retMap.get(EnumFacing.UP)))));
+
+        retMap.computeIfAbsent(EnumFacing.WEST, k -> retMap.get(EnumFacing.NORTH));
         retMap.computeIfAbsent(EnumFacing.SOUTH, k -> retMap.get(EnumFacing.NORTH));
-        retMap.computeIfAbsent(EnumFacing.EAST, k -> retMap.computeIfAbsent(EnumFacing.WEST, l -> retMap.get(EnumFacing.SOUTH)));
-        retMap.computeIfAbsent(EnumFacing.WEST, k -> retMap.get(EnumFacing.EAST));
+        retMap.computeIfAbsent(EnumFacing.EAST, k -> retMap.get(EnumFacing.NORTH));
         return retMap;
     }
 

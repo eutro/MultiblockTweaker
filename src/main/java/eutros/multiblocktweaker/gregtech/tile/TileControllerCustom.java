@@ -1,6 +1,8 @@
 package eutros.multiblocktweaker.gregtech.tile;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
 import gregtech.api.GTValues;
@@ -12,6 +14,7 @@ import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.multiblock.PatternMatchContext;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.GTUtility;
 import net.minecraft.util.text.ITextComponent;
@@ -36,8 +39,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 multiblock.update,
                 multiblock.updateWorktable,
                 multiblock.setupRecipe,
-                multiblock.completeRecipe,
-                multiblock.recipePredicate);
+                multiblock.completeRecipe
+        );
     }
 
     @Override
@@ -80,6 +83,17 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                         .map(this::getAbilities)
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
+        if(multiblock.recipePredicate == null) return true;
+
+        return multiblock.recipePredicate.test(
+                new MCMetaTileEntity(this),
+                new MCRecipe(recipe),
+                consumeIfSuccess
         );
     }
 

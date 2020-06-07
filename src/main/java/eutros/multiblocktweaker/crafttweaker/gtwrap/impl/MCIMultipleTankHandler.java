@@ -32,20 +32,20 @@ public class MCIMultipleTankHandler implements IIMultipleTankHandler {
     }
 
     @Override
-    public int fill(ILiquidStack fluidStack, boolean b) {
-        return inner.fill(CraftTweakerMC.getLiquidStack(fluidStack), b);
+    public int fill(ILiquidStack fluidStack, boolean doFill) {
+        return inner.fill(CraftTweakerMC.getLiquidStack(fluidStack), doFill);
     }
 
     @Override
     @Nullable
-    public ILiquidStack drain(ILiquidStack fluidStack, boolean b) {
-        return CraftTweakerMC.getILiquidStack(inner.drain(CraftTweakerMC.getLiquidStack(fluidStack), b));
+    public ILiquidStack drain(ILiquidStack fluidStack, boolean doDrain) {
+        return CraftTweakerMC.getILiquidStack(inner.drain(CraftTweakerMC.getLiquidStack(fluidStack), doDrain));
     }
 
     @Override
     @Nullable
-    public ILiquidStack drain(int i, boolean b) {
-        return CraftTweakerMC.getILiquidStack(inner.drain(i, b));
+    public ILiquidStack drain(int maxDrain, boolean doDrain) {
+        return CraftTweakerMC.getILiquidStack(inner.drain(maxDrain, doDrain));
     }
 
 }

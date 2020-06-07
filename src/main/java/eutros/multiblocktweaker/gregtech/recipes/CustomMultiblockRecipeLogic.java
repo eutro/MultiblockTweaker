@@ -29,20 +29,17 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Nullable private final IUpdateWorktableFunction updateWorktable;
     @Nullable private final ISetupRecipeFunction setupRecipe;
     @Nullable private final ICompleteRecipeFunction completeRecipe;
-    @Nullable private final IRecipePredicate recipePredicate;
 
     public CustomMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity,
                                        @Nullable IUpdateFunction update,
                                        @Nullable IUpdateWorktableFunction updateWorktable,
                                        @Nullable ISetupRecipeFunction setupRecipe,
-                                       @Nullable ICompleteRecipeFunction completeRecipe,
-                                       @Nullable IRecipePredicate recipePredicate) {
+                                       @Nullable ICompleteRecipeFunction completeRecipe) {
         super(tileEntity);
         this.update = update;
         this.updateWorktable = updateWorktable;
         this.setupRecipe = setupRecipe;
         this.completeRecipe = completeRecipe;
-        this.recipePredicate = recipePredicate;
     }
 
     @Override
@@ -58,7 +55,6 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
                 (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
                 MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
                 MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
-                getRecipePredicate().map(p -> p.test(this, new MCRecipe(recipe))).orElse(true) &&
                 recipe.matches(new Random().nextInt(100) <=
                                 (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
                                  recipe.getIntegerProperty(CONSUME_CHANCE) :
@@ -82,10 +78,6 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     public Optional<ICompleteRecipeFunction> getCompleteRecipe() {
         return Optional.ofNullable(completeRecipe);
-    }
-
-    public Optional<IRecipePredicate> getRecipePredicate() {
-        return Optional.ofNullable(recipePredicate);
     }
 
     // FUNCTIONS
@@ -123,6 +115,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     public IMetaTileEntity getMetaTile() {
         return new MCMetaTileEntity(metaTileEntity);
+    }
+
+    @Override
+    public void setProgress(int val) {
+        progressTime = val;
     }
 
     @Override

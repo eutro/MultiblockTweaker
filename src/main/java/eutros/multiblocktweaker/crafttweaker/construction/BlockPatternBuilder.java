@@ -126,8 +126,12 @@ public class BlockPatternBuilder {
      * @return This builder, for convenience.
      */
     @ZenMethod
-    public BlockPatternBuilder setAmountLimit(char symbol, int minAmount, int maxLimit) {
-        delegate = delegate.setAmountLimit(symbol, minAmount, maxLimit);
+    public BlockPatternBuilder setAmountLimit(String symbol, int minAmount, int maxLimit) {
+        if(symbol.length() != 1) {
+            CraftTweakerAPI.logError("Symbol given is not a single character!");
+            return this;
+        }
+        delegate = delegate.setAmountLimit(symbol.charAt(0), minAmount, maxLimit);
         return this;
     }
 

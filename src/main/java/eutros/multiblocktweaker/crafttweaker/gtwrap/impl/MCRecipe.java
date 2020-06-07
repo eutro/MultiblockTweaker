@@ -7,6 +7,7 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.CountableIngredient;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.crafttweaker.ChancedEntry;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -36,6 +37,14 @@ public class MCRecipe implements IRecipe {
     @Override
     public IItemStack[] getOutputs() {
         return CraftTweakerMC.getIItemStacks(inner.getOutputs());
+    }
+
+    @Override
+    public ChancedEntry[] getChancedOutputs() {
+        return inner.getChancedOutputs()
+                .stream()
+                .map(c -> new ChancedEntry(CraftTweakerMC.getIItemStack(c.getItemStack()), c.getChance(), c.getBoostPerTier()))
+                .toArray(ChancedEntry[]::new);
     }
 
     @Override
@@ -71,11 +80,6 @@ public class MCRecipe implements IRecipe {
     @Override
     public boolean isHidden() {
         return inner.isHidden();
-    }
-
-    @Override
-    public boolean hasValidInputsForDisplay() {
-        return inner.hasValidInputsForDisplay();
     }
 
     @Override

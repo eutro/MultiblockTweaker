@@ -32,14 +32,14 @@ public class MCFluidTank implements IIFluidTank {
     }
 
     @Override
-    public int fill(ILiquidStack fluidStack, boolean b) {
-        return inner.fill(CraftTweakerMC.getLiquidStack(fluidStack), b);
+    public int fill(ILiquidStack fluidStack, boolean doFill) {
+        return inner.fill(CraftTweakerMC.getLiquidStack(fluidStack), doFill);
     }
 
     @Override
     @Nullable
-    public ILiquidStack drain(int i, boolean b) {
-        return CraftTweakerMC.getILiquidStack(inner.drain(i, b));
+    public ILiquidStack drain(int maxDrain, boolean doDrain) {
+        return CraftTweakerMC.getILiquidStack(inner.drain(maxDrain, doDrain));
     }
 
 }

@@ -27,11 +27,6 @@ public class MCBlockWorldState implements IBlockWorldState {
     }
 
     @Override
-    public void update(@NotNull IWorld worldIn, @NotNull IBlockPos posIn, @NotNull IPatternMatchContext matchContext, @NotNull IPatternMatchContext layerContext) {
-        inner.update(CraftTweakerMC.getWorld(worldIn), CraftTweakerMC.getBlockPos(posIn), matchContext.getInternal(), layerContext.getInternal());
-    }
-
-    @Override
     public IPatternMatchContext getMatchContext() {
         return new MCPatternMatchContext(inner.getMatchContext());
     }
