@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+/**
+ * Similar to an {@link IBlockState}, but bound to a position and world,
+ * and holding extra information about the match taking place.
+ */
 @ZenClass("mods.gregtech.multiblock.IBlockWorldState")
 @ZenRegister
 public interface IBlockWorldState {
@@ -17,25 +21,40 @@ public interface IBlockWorldState {
     @NotNull
     BlockWorldState getInternal();
 
-    @ZenMethod
-    void update(@NotNull IWorld worldIn, @NotNull IBlockPos posIn, @NotNull IPatternMatchContext matchContext, @NotNull IPatternMatchContext layerContext);
-
-    @ZenMethod
-    IPatternMatchContext getMatchContext();
-
+    /**
+     * @return The match context of the current layer as opposed to that of the entire structure.
+     */
     @ZenMethod
     IPatternMatchContext getLayerContext();
 
+    /**
+     * @return The match context of the entire structure as opposed to that of a single layer.
+     */
+    @ZenMethod
+    IPatternMatchContext getMatchContext();
+
+    /**
+     * @return The block state at the position referenced by this {@link IBlockWorldState}.
+     */
     @ZenMethod
     IBlockState getBlockState();
 
+    /**
+     * @return The position referenced by this {@link IBlockWorldState}.
+     */
     @ZenMethod
     IBlockPos getPos();
 
-    @ZenMethod
-    IBlockState getOffsetState(IFacing face);
-    
+    /**
+     * @return The world referenced by this {@link IBlockWorldState}.
+     */
     @ZenMethod
     IWorld getWorld();
+
+    /**
+     * @return The block state at the position offset from this.
+     */
+    @ZenMethod
+    IBlockState getOffsetState(IFacing face);
 
 }

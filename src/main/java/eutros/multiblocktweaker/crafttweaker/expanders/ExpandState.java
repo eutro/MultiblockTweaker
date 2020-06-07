@@ -3,6 +3,7 @@ package eutros.multiblocktweaker.crafttweaker.expanders;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlockState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.predicate.IBlockMatcher;
 import stanhebben.zenscript.annotations.ZenCaster;
 import stanhebben.zenscript.annotations.ZenExpansion;
@@ -19,6 +20,11 @@ public class ExpandState {
     @ZenCaster
     public static IBlockInfo asIBlockInfo(IBlockState self) {
         return IBlockInfo.fromState(self);
+    }
+
+    @ZenCaster
+    public static IICubeRenderer asIICubeRenderer(IBlockState self) {
+        return IICubeRenderer.fromState(self);
     }
 
 }

@@ -16,8 +16,8 @@ public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
     }
 
     @Override
-    public void setStackInSlot(int i, IItemStack itemStack) {
-        inner.setStackInSlot(i, CraftTweakerMC.getItemStack(itemStack));
+    public void setStackInSlot(int slot, IItemStack itemStack) {
+        inner.setStackInSlot(slot, CraftTweakerMC.getItemStack(itemStack));
     }
 
     @Override
@@ -27,14 +27,14 @@ public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
 
     @Override
     @Nonnull
-    public IItemStack getStackInSlot(int i) {
-        return CraftTweakerMC.getIItemStack(inner.getStackInSlot(i));
+    public IItemStack getStackInSlot(int slot) {
+        return CraftTweakerMC.getIItemStack(inner.getStackInSlot(slot));
     }
 
     @Override
     @Nonnull
-    public IItemStack insertItem(int i, IItemStack itemStack, boolean b) {
-        return CraftTweakerMC.getIItemStack(inner.insertItem(i, CraftTweakerMC.getItemStack(itemStack), b));
+    public IItemStack insertItem(int slot, IItemStack itemStack, boolean simulate) {
+        return CraftTweakerMC.getIItemStack(inner.insertItem(slot, CraftTweakerMC.getItemStack(itemStack), simulate));
     }
 
     @Override
@@ -44,8 +44,8 @@ public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
     }
 
     @Override
-    public int getSlotLimit(int i) {
-        return inner.getSlotLimit(i);
+    public int getSlotLimit(int slot) {
+        return inner.getSlotLimit(slot);
     }
 
     @Override
