@@ -8,8 +8,8 @@ import stanhebben.zenscript.annotations.ZenProperty;
 @ZenClass("mods.gregtech.render.MoveType")
 @ZenRegister
 public enum ConstantMoveType {
-    @ZenProperty VERTICAL(ProgressWidget.MoveType.VERTICAL),
-    @ZenProperty HORIZONTAL(ProgressWidget.MoveType.HORIZONTAL);
+    /** */ @ZenProperty VERTICAL(ProgressWidget.MoveType.VERTICAL),
+    /** */ @ZenProperty HORIZONTAL(ProgressWidget.MoveType.HORIZONTAL);
 
     public final ProgressWidget.MoveType delegate;
 
