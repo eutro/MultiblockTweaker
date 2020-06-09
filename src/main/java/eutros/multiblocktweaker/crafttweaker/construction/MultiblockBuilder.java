@@ -14,8 +14,6 @@ import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -26,15 +24,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * The Builder, or Multiblock Builder, is used to define a custom {@link CustomMultiblock}.
+ *
+ * To get started, call {@link #start(String, int)}.
+ */
 @ZenClass("mods.gregtech.multiblock.Builder")
 @ZenRegister
-/**
- * The Builder, or Multiblock Builder, is used to define a custom [Multiblock](../Multiblock.md).
- *
- * To do this, the [pattern](#Builder#withPattern), [recipe map](#Builder#withRecipeMap), [texture](#Builder#withTexture) and [designs](#Builder#addDesign) need to be set.
- *
- * To get started, call {@code Builder.start()}.
- */
 public class MultiblockBuilder {
 
     public ResourceLocation loc;
@@ -110,19 +106,29 @@ public class MultiblockBuilder {
     }
 
     /**
-     * Add a design to be shown in JEI or structure previews.
+     * Add a design to be shown in JEI or structure previews. Can be called multiple times.
      * <p>
      * If none are defined, the multiblock won't show in JEI.
      *
-     * @param shapeInfo A design to add and show in JEI.
+     * @param designs The designs to add and show in JEI.
      * @return This builder, for convenience.
      */
     @ZenMethod
-    public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo shapeInfo) {
-        this.designs.add(shapeInfo.getInternal());
+    public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo... designs) {
+        for(IMultiblockShapeInfo info : designs) {
+            this.designs.add(info.getInternal());
+        }
         return this;
     }
 
+    /**
+     * Construct the {@link CustomMultiblock} using the defined features.
+     *
+     * Will fail if {@link #withPattern(IBlockPattern)} or {@link #withRecipeMap(RecipeMap)} wasn't called,
+     * or if neither {@link #withTexture(IICubeRenderer)} nor {@link #addDesign(IMultiblockShapeInfo...)} was called.
+     *
+     * @return The built {@link CustomMultiblock}.
+     */
     @ZenMethod
     @Nullable
     public CustomMultiblock build() {
@@ -139,30 +145,27 @@ public class MultiblockBuilder {
                 CraftTweakerAPI.logError(String.format("No texture defined for multiblock \"%s\", and there are no defined designs.", loc));
                 return null;
             } else {
-                if(Minecraft.getMinecraft() != null) { // i.e. we are on the client
-                    BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
-                    //noinspection Convert2MethodRef blah blah different semantics
-                    Optional<ICubeRenderer> tex = designs.parallelStream() // get the mode block's particle texture
-                            .map(design -> design.getBlocks())
-                            .flatMap(Arrays::stream)
-                            .flatMap(Arrays::stream)
-                            .flatMap(Arrays::stream) // flatten the 3D array
-                            .map(BlockInfo::getBlockState)
-                            .filter(IBlockState::isOpaqueCube) // solid block gang
-                            .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                            .entrySet()
-                            .stream()
-                            .max(Map.Entry.comparingByValue()) // get the mode
-                            .map(Map.Entry::getKey)
-                            .map(SidedCubeRenderer::new);
+                //noinspection Convert2MethodRef blah blah different semantics
+                Optional<ICubeRenderer> tex = designs.stream() // get the mode block and turn it into an ICubeRenderer
+                        .map(design -> design.getBlocks())
+                        .flatMap(Arrays::stream)
+                        .flatMap(Arrays::stream)
+                        .flatMap(Arrays::stream) // flatten the 3D array
+                        .map(BlockInfo::getBlockState)
+                        .filter(IBlockState::isOpaqueCube) // solid block gang
+                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                        .entrySet()
+                        .stream()
+                        .max(Map.Entry.comparingByValue()) // get the mode
+                        .map(Map.Entry::getKey)
+                        .map(SidedCubeRenderer::new);
 
-                    if(!tex.isPresent()) {
-                        CraftTweakerAPI.logWarning(String.format("No texture defined for multiblock \"%s\", and couldn't resolve texture from defined designs.", loc));
-                        return null;
-                    }
-
-                    texture = tex.get();
+                if(!tex.isPresent()) {
+                    CraftTweakerAPI.logWarning(String.format("No texture defined for multiblock \"%s\", and couldn't resolve texture from defined designs.", loc));
+                    return null;
                 }
+
+                texture = tex.get();
             }
         }
         if(designs.isEmpty()) {
@@ -172,6 +175,11 @@ public class MultiblockBuilder {
         return new CustomMultiblock(this);
     }
 
+    /**
+     * Convenience method, equivalent to {@code build().register()}
+     *
+     * {@link #build()}, {@link CustomMultiblock#register()}
+     */
     @Nullable
     @ZenMethod
     public CustomMultiblock buildAndRegister() {

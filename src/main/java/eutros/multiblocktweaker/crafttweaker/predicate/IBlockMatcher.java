@@ -2,10 +2,12 @@ package eutros.multiblocktweaker.crafttweaker.predicate;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.block.*;
+import crafttweaker.api.block.IBlock;
+import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
+import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
@@ -28,17 +30,43 @@ import java.util.stream.Collectors;
 
 import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.tilePredicate;
 
+/**
+ * Used by an {@link IBlockPattern} to decide whether the placement of a block is valid.
+ *
+ * @see BlockPatternBuilder
+ */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.IBlockMatcher")
 @ZenRegister
 public interface IBlockMatcher {
 
+    /**
+     * The method that is implemented when you use this as a function.
+     *
+     * @param state The {@link IBlockWorldState} to test.
+     * @return Whether the given state is valid for this predicate.
+     */
     @ZenMethod
     @ZenOperator(OperatorType.CONTAINS)
     boolean test(IBlockWorldState state);
 
+    /**
+     * Matches anything.
+     * <p>
+     * Equivalent to
+     * {@code function (state as IBlockWorldState) as boolean { return true; } as IBlockMatcher}
+     */
     @ZenProperty IBlockMatcher ANY = a -> true;
+    /**
+     * Matches any air blocks.
+     */
     @ZenProperty IBlockMatcher AIR = a -> MultiblockControllerBase.isAirPredicate().test(a.getInternal());
+    /**
+     * Matches anything while inside the JEI preview.
+     *
+     * Equivalent to
+     * {@code function (state as IBlockWorldState) as boolean { return state.getWorld().getDimension() == 2147483647; } as IBlockMatcher }
+     */
     @ZenProperty IBlockMatcher IN_PREVIEW = a -> a.getWorld().getDimension() == Integer.MAX_VALUE;
 
     static Predicate<BlockWorldState> toInternal(IBlockMatcher blockMatcher) {
@@ -52,6 +80,17 @@ public interface IBlockMatcher {
         return new MCBlockMatcher(blockMatcher);
     }
 
+    /**
+     * Get an {@link IBlockMatcher} that combines two predicates such that a block must pass both to be valid.
+     *
+     * Can be applied by just {@code &&}.
+     *
+     * {@code (matcher_a as IBlockMatcher).and(matcher_b as IBlockMatcher)}
+     * is equivalent to
+     * {@code matcher_a as IBlockMatcher && matcher_b as IBlockMatcher}
+     * which is equivalent to
+     * {@code function (state as IBlockWorldState) as boolean { return (matcher_a as IBlockMatcher).test(state) && (matcher_b as IBlockMatcher).test(state); } as IBlockMatcher}
+     */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.AND)
@@ -64,6 +103,17 @@ public interface IBlockMatcher {
         return t -> test(t) && other.test(t);
     }
 
+    /**
+     * Get an {@link IBlockMatcher} that inverts a predicate such that blocks that fail the original pass the new one.
+     *
+     * Can be applied by just {@code !}.
+     *
+     * {@code (matcher as IBlockMatcher).negate()}
+     * is equivalent to
+     * {@code !(matcher as IBlockMatcher)}
+     * which is equivalent to
+     * {@code function (state as IBlockWorldState) as boolean { return !(matcher as IBlockMatcher).test(state); } as IBlockMatcher}
+     */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.NEG)
@@ -76,6 +126,17 @@ public interface IBlockMatcher {
         return t -> !test(t);
     }
 
+    /**
+     * Get an {@link IBlockMatcher} that combines two predicates such that a block may pass either to be valid.
+     *
+     * Can be applied by just {@code ||}.
+     *
+     * {@code (matcher_a as IBlockMatcher).or(matcher_b as IBlockMatcher)}
+     * is equivalent to
+     * {@code matcher_a as IBlockMatcher || matcher_b as IBlockMatcher}
+     * which is equivalent to
+     * {@code function (state as IBlockWorldState) as boolean { return (matcher_a as IBlockMatcher).test(state) || (matcher_b as IBlockMatcher).test(state); } as IBlockMatcher}
+     */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.OR)
@@ -95,7 +156,7 @@ public interface IBlockMatcher {
 
     /**
      * Match the controller, with the given resource location.
-     *
+     * <p>
      * If there isn't exactly one of these present in an {@link IBlockPattern}, it will be considered invalid.
      *
      * @param resourceLocation The location, or "Meta Tile Entity ID", of the controller to match.
@@ -129,7 +190,7 @@ public interface IBlockMatcher {
      * Match any meta tile entity that is an instance of the class,
      * as defined by {@link java.lang.Class#isAssignableFrom(java.lang.Class)},
      * given the fully qualified class name.
-     *
+     * <p>
      * If you don't know what that means, this likely isn't for you, and even then, you probably have other options.
      *
      * @param className A fully qualified class name.
@@ -151,7 +212,7 @@ public interface IBlockMatcher {
 
     /**
      * Match any of the given {@link IBlockState}s.
-     *
+     * <p>
      * When called with a single parameter, it is equivalent to {@code IBlockState as IBlockMatcher}.
      *
      * @param allowedStates The list of {@link IBlockState}s to match.
@@ -169,7 +230,7 @@ public interface IBlockMatcher {
 
     /**
      * Match any blockstate with one of the given {@link IBlock}s.
-     *
+     * <p>
      * When called with a single parameter, it is equivalent to {@code IBlock as IBlockMatcher}`
      *
      * @param blocks The list of {@link IBlock}s to match.
@@ -187,7 +248,7 @@ public interface IBlockMatcher {
 
     /**
      * Match any blockstate with one of the given {@link IItemStack}s.
-     *
+     * <p>
      * When called with a single parameter, it is equivalent to {@code IItemStack as IBlock as IBlockMatcher}`
      *
      * @param stacks The list of {@link IItemStack}s to match.
@@ -206,10 +267,10 @@ public interface IBlockMatcher {
 
     /**
      * An {@link IBlockMatcher} that counts the number of blocks that end up matching this predicate.
-     *
+     * <p>
      * This can be accessed from {@link IPatternMatchContext#getInt(String)}.
      *
-     * @param key The key whose value will be incremented when a match occurs.
+     * @param key      The key whose value will be incremented when a match occurs.
      * @param original The {@link IBlockMatcher} to count matches for.
      * @return An {@link IBlockMatcher} that returns true the same as {@param original}, but also counts the matches.
      */

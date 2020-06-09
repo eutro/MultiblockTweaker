@@ -16,7 +16,9 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
- * An interface for {@link RecipeMap} creation.
+ * Used for {@link RecipeMap} creation.
+ *
+ * Used for {@link MultiblockBuilder#withRecipeMap(RecipeMap)}.
  */
 @ZenClass("mods.gregtech.recipe.FactoryRecipeMap")
 @ZenRegister
