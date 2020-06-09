@@ -18,7 +18,11 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
- * An interface to GTCE's own {@link MultiblockShapeInfo.Builder}.
+ * Used to create a design to show in JEI or as an in-world preview.
+ *
+ * @see IMultiblockShapeInfo
+ * <p>
+ * Used for {@link MultiblockBuilder#addDesign(IMultiblockShapeInfo)}.
  */
 @ZenClass("mods.gregtech.multiblock.FactoryMultiblockShapeInfo")
 @ZenRegister
@@ -32,6 +36,8 @@ public class MultiblockShapeInfoBuilder {
 
     /**
      * Start an empty builder.
+     *
+     * Unlike {@link MultiblockShapeInfoBuilder}, this cannot be rotated.
      *
      * @return An empty builder.
      */
@@ -102,7 +108,7 @@ public class MultiblockShapeInfoBuilder {
      * Define a symbol.
      *
      * @param symbol The character that will represent this value in {@link #aisle(String...)}.
-     * @param stack The item whose block to show in the preview.
+     * @param stack  The item whose block to show in the preview.
      * @return This builder, for convenience.
      */
     @ZenMethod

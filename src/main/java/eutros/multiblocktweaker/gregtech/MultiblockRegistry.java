@@ -13,10 +13,11 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+/**
+ * An alternative way to get a {@link CustomMultiblock} from its metadata or ID.
+ */
 @ZenClass("mods.gregtech.multiblock.MultiblockRegistry")
 @ZenRegister
 public class MultiblockRegistry {
@@ -30,12 +31,24 @@ public class MultiblockRegistry {
         GregTechAPI.registerMetaTileEntity(multiblock.metaId, new TileControllerCustom(multiblock));
     }
 
+    /**
+     * Get a {@link CustomMultiblock} by its metadata.
+     *
+     * @param metaId The metadata of the multiblock controller.
+     * @return The controller, if it was registered, or null.
+     */
     @Nullable
     @ZenMethod
     public static CustomMultiblock get(int metaId) {
         return metaIdMap.get(metaId);
     }
 
+    /**
+     * Get a {@link CustomMultiblock} by its meta tile entity ID.
+     *
+     * @param location The ID of the multiblock controller.
+     * @return The controller, if it was registered, or null.
+     */
     @Nullable
     @ZenMethod
     public static CustomMultiblock get(@NotNull String location) {
@@ -45,6 +58,15 @@ public class MultiblockRegistry {
         }
         return get(loc);
     }
+
+    /**
+     * @return All the registered {@link CustomMultiblock}s.
+     */
+    @ZenMethod
+    public static List<CustomMultiblock> all() {
+        return new ArrayList<>(getAll());
+    }
+
 
     @Nullable
     public static CustomMultiblock get(@NotNull ResourceLocation resourceLocation) {

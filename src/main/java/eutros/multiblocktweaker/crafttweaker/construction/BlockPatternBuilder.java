@@ -17,7 +17,11 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import java.util.Arrays;
 
 /**
- * An interface to GTCE's own {@link FactoryBlockPattern}.
+ * Used to construct an {@link IBlockPattern}.
+ *
+ * @see IBlockPattern
+ *
+ * Used for {@link MultiblockBuilder#withPattern(IBlockPattern)}.
  */
 @ZenClass("mods.gregtech.multiblock.FactoryBlockPattern")
 @ZenRegister
@@ -41,7 +45,7 @@ public class BlockPatternBuilder {
 
     /**
      * Start an empty builder, defining the directions of the aisle, the strings and the characters used when setting aisles.
-     * <img src="https://raw.githubusercontent.com/eutropius225/MultiblockTweaker/master/src/main/resources/FactoryBuilderDiagram.png">direction diagram</img>
+     * ![]("https://raw.githubusercontent.com/eutropius225/MultiblockTweaker/master/src/main/resources/FactoryBuilderDiagram.png")
      *
      * @param charDir   The position of each character in a string relative to the one before.
      * @param stringDir The position of each string in an {@link #aisle(String...)} call relative to the one before.
