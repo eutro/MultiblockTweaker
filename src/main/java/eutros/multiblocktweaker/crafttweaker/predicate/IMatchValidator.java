@@ -55,9 +55,13 @@ public interface IMatchValidator {
      * Can be applied by just {@code !}.
      *
      * {@code (validator as IMatchValidator).negate()}
+     *
      * is equivalent to
+     *
      * {@code !(validator as IMatchValidator)}
+     *
      * which is equivalent to
+     *
      * {@code function (context as IPatternMatchContext) as boolean { return !(validator as IMatchValidator).test(context); } as IMatchValidator}
      */
     @Nonnull
@@ -73,9 +77,13 @@ public interface IMatchValidator {
      * Can be applied by just {@code ||}.
      *
      * {@code (validator_a as IMatchValidator).or(validator_b as IMatchValidator)}
+     *
      * is equivalent to
+     *
      * {@code validator_a as IMatchValidator || validator_b as IMatchValidator}
+     *
      * which is equivalent to
+     *
      * {@code function (context as IPatternMatchContext) as boolean { return (validator_a as IMatchValidator).test(context) || (validator_b as IMatchValidator).test(context); } as IMatchValidator}
      */
     @Nonnull

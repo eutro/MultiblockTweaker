@@ -34,7 +34,7 @@ public class BlockPatternBuilder {
     }
 
     /**
-     * Start an empty builder. Equivalent to {@code FactoryBlockPatternWrapper.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)}
+     * Start an empty builder. Equivalent to {@code FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)}
      *
      * @return An empty builder.
      */
@@ -110,9 +110,9 @@ public class BlockPatternBuilder {
 
     /**
      * Makes the previous aisle entered be repeatable. {@link #aisleRepeatable(int, int, String...)}.
-     * Equivalent to {@code FactoryBlockPattern.setRepeatable(repeatCount, repeatCount)}
+     * Equivalent to {@code FactoryBlockPattern.setRepeatable(repeatCount, repeatCount)}.
      *
-     * @param repeatCount How many times the aisle must be repeated, exactly..
+     * @param repeatCount How many times the aisle must be repeated, exactly.
      * @return This builder, for convenience.
      */
     @ZenMethod
@@ -125,7 +125,7 @@ public class BlockPatternBuilder {
      * Set requirements for a given symbol.
      *
      * @param symbol    The symbol defined in {@link #where(String, IBlockMatcher)}
-     * @param minAmount How many of the symbol-represented blocks can appear at maximum in a valid multiblock.
+     * @param minAmount How many of the symbol-represented blocks must appear at minimum in a valid multiblock.
      * @param maxLimit  How many of the symbol-represented blocks can appear at maximum in a valid multiblock.
      * @return This builder, for convenience.
      */
@@ -143,7 +143,7 @@ public class BlockPatternBuilder {
      * Set requirements for a given symbol.
      *
      * @param symbol   The symbol defined in {@link #where(String, IBlockMatcher)}
-     * @param minValue How many of the symbol-represented blocks can appear at maximum in a valid multiblock.
+     * @param minValue How many of the symbol-represented blocks must appear at minimum in a valid multiblock.
      * @return This builder, for convenience.
      */
     @ZenMethod

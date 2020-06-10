@@ -26,9 +26,10 @@ import java.util.List;
  *
  * This is best used for easy access to the recipe map.
  *
+ * Use this to set any custom working functions.
+ *
  * @see MultiblockBuilder
  *
- * Use this to set any custom working functions:
  * @see IUpdateFunction
  * @see IUpdateWorktableFunction
  * @see ISetupRecipeFunction
