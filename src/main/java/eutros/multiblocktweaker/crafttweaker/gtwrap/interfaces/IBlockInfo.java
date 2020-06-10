@@ -58,9 +58,7 @@ public interface IBlockInfo {
     }
 
     /**
-     * Get an {@link IBlockInfo} from a block state.
-     *
-     * Equivalent to {@code state as IBlockInfo}.
+     * Get an {@link IBlockInfo} from a controller's string ID.
      *
      * @param id The id of the meta tile entity to display.
      * @param facing (Optional) The direction this should face. {@code IFacing.west()} by default.
