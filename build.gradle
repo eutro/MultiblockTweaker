@@ -98,3 +98,16 @@ processResources {
         exclude "mcmod.info"
     }
 }
+
+task copyExamples {
+    def scripts = new File(minecraft.runDir, "scripts")
+    scripts.mkdirs()
+    scripts.eachFile {
+        file -> file.delete()
+    }
+    new File("examples").eachFileRecurse {
+        file -> if(file.isFile()) new File(scripts, file.getName()) << file.text
+    }
+}
+
+runClient.dependsOn(tasks.copyExamples);
