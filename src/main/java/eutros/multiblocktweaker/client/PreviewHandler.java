@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
@@ -26,7 +27,8 @@ public class PreviewHandler {
     }
 
     @Nullable
-    public static MultiblockControllerBase getMetaController(World world, BlockPos targetPos) {
+    public static MultiblockControllerBase getMetaController(World world, @Nullable BlockPos targetPos) {
+        if(targetPos == null) return null;
         MetaTileEntity mte = BlockMachine.getMetaTileEntity(world, targetPos);
         if(!(mte instanceof MultiblockControllerBase)) {
             return null;
@@ -48,12 +50,13 @@ public class PreviewHandler {
             right = true;
         } else return;
 
-        if(mc.world == null || mc.player == null) return;
-
-        BlockPos pos = mc.objectMouseOver.getBlockPos();
-        if(getMetaController(mc.world, pos) == null
+        if(mc.world == null
+                || mc.player == null
+                || mc.objectMouseOver == null
+                || mc.objectMouseOver.typeOfHit != RayTraceResult.Type.BLOCK
+                || getMetaController(mc.world, mc.objectMouseOver.getBlockPos()) == null
                 || (!mc.player.getHeldItemMainhand().isEmpty() || !mc.player.isSneaking())
-                || !PreviewRenderer.INSTANCE.onUse(mc.world, pos, right)) return;
+                || !PreviewRenderer.INSTANCE.onUse(mc.world, mc.objectMouseOver.getBlockPos(), right)) return;
 
         mc.player.swingArm(EnumHand.MAIN_HAND);
 
