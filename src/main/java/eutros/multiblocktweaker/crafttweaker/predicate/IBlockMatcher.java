@@ -188,7 +188,7 @@ public interface IBlockMatcher {
 
     /**
      * Match any meta tile entity that is an instance of the class,
-     * as defined by {@link java.lang.Class#isAssignableFrom(java.lang.Class)},
+     * as defined by {@code java.lang.Class#isAssignableFrom(java.lang.Class)},
      * given the fully qualified class name.
      * <p>
      * If you don't know what that means, this likely isn't for you, and even then, you probably have other options.
