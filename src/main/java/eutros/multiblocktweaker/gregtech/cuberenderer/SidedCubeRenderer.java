@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import java.util.function.Function;
@@ -74,6 +76,7 @@ public class SidedCubeRenderer implements ICubeRenderer {
         );
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void preStitch(TextureStitchEvent.Pre evt) {
         sprites = sides.keySet().stream()
@@ -83,11 +86,13 @@ public class SidedCubeRenderer implements ICubeRenderer {
         particles = sprites.get(EnumFacing.UP);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public TextureAtlasSprite getParticleSprite() {
         return particles;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void render(CCRenderState state, Matrix4 translate, IVertexOperation[] ops, Cuboid6 cuboid) {
         for(EnumFacing side : EnumFacing.values()) {
