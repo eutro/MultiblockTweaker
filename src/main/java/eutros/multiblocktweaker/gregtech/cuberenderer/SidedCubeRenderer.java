@@ -17,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,6 +34,8 @@ public class SidedCubeRenderer implements ICubeRenderer {
     private TextureAtlasSprite particles;
 
     public SidedCubeRenderer(Map<EnumFacing, ResourceLocation> sides) {
+        if(FMLCommonHandler.instance().getSide().isServer())
+            return;
         this.sides = sides;
         if(MapHolder.map != null) {
             sprites = sides.keySet().stream()
@@ -62,6 +65,8 @@ public class SidedCubeRenderer implements ICubeRenderer {
     }
 
     public SidedCubeRenderer(IBlockState state) {
+        if(FMLCommonHandler.instance().getSide().isServer())
+            return;
         BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBakedModel model = brd.getModelForState(state);
         long rand = new Random().nextLong();
