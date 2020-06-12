@@ -70,6 +70,7 @@ public class SidedCubeRenderer implements ICubeRenderer {
         BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBakedModel model = brd.getModelForState(state);
         long rand = new Random().nextLong();
+        particles = model.getParticleTexture();
         sprites = fillBlanks(
                 Arrays.stream(EnumFacing.values())
                         .map(f -> model.getQuads(state, f, rand))
