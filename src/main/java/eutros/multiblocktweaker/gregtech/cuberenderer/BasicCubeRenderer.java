@@ -11,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,6 +22,8 @@ public class BasicCubeRenderer implements ICubeRenderer {
     private TextureAtlasSprite sprite = null;
 
     public BasicCubeRenderer(ResourceLocation loc) {
+        if(FMLCommonHandler.instance().getSide().isServer())
+            return;
         this.loc = loc;
         if(MapHolder.map != null) {
             sprite = MapHolder.map.getAtlasSprite(loc.toString());
