@@ -1,17 +1,13 @@
 package eutros.multiblocktweaker.client;
 
-import com.google.common.collect.ImmutableList;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import eutros.multiblocktweaker.jei.MultiblockTweakerJEIPlugin;
-import gnu.trove.map.TIntObjectMap;
 import gregtech.api.block.machines.BlockMachine;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.multiblock.BlockPattern;
-import gregtech.api.multiblock.BlockWorldState;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.render.scene.WorldSceneRenderer;
-import gregtech.api.util.IntRange;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.recipe.IFocus;
@@ -38,15 +34,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static eutros.multiblocktweaker.client.ClientTickHandler.partialTicks;
 
@@ -58,6 +51,7 @@ public class PreviewRenderer {
     }
 
     private int baseY = 0;
+    private int maxIndex = -1;
     private int frame = 0;
     private int opList = -1;
 
@@ -138,6 +132,11 @@ public class PreviewRenderer {
         if(layerIndex == -1)
             return blocks;
 
+        if(layerIndex > maxIndex) {
+            reset();
+            return Collections.emptyList();
+        }
+
         List<BlockPos> list = new ArrayList<>();
         for(BlockPos pos : blocks) {
             if(pos.getY() == baseY + layerIndex) {
@@ -145,16 +144,13 @@ public class PreviewRenderer {
             }
         }
 
-        if(list.isEmpty()) {
-            reset();
-            return list;
-        }
-
         return list;
     }
 
     private void refreshOpList() {
         removeOpList();
+
+        if(renderer == null) return;
 
         List<BlockPos> renderedBlocks = filterLayer(this.renderedBlocks);
 
@@ -230,7 +226,7 @@ public class PreviewRenderer {
 
         if(!isRightClick) return false;
 
-        MultiblockControllerBase te = (MultiblockControllerBase) PreviewHandler.getMetaController(world, pos);
+        MultiblockControllerBase te = PreviewHandler.getMetaController(world, pos);
         if(te == null) return false;
 
         WorldSceneRenderer tempRenderer = getRenderer(te.getStackForm());
@@ -243,11 +239,12 @@ public class PreviewRenderer {
         EnumFacing facing, previewFacing;
         previewFacing = facing = te.getFrontFacing();
 
-        renderedBlocks = ImmutableList.copyOf(ReflectionHelper.<List<BlockPos>, WorldSceneRenderer>getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer));
+        renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
 
         controllerPos = BlockPos.ORIGIN;
         if(renderedBlocks != null) {
-            baseY = Collections.min(renderedBlocks, Comparator.comparing(BlockPos::getY)).getY();
+            baseY = Integer.MAX_VALUE;
+            maxIndex = Integer.MIN_VALUE;
             for(BlockPos blockPos : renderedBlocks) {
                 MetaTileEntity metaTE = BlockMachine.getMetaTileEntity(renderer.world, blockPos);
                 if(metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
@@ -256,6 +253,17 @@ public class PreviewRenderer {
                     break;
                 }
             }
+
+            for(BlockPos blockPos : renderedBlocks) {
+                int y = blockPos.getY();
+                if(y < baseY) {
+                    baseY = y;
+                }
+                if(y > maxIndex) {
+                    maxIndex = y;
+                }
+            }
+            maxIndex -= baseY;
         }
 
         rotatePreviewBy = Rotation.values()[(4 + facing.getHorizontalIndex() - previewFacing.getHorizontalIndex()) % 4];
@@ -288,11 +296,11 @@ public class PreviewRenderer {
         BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
         if(pattern == null) return;
 
-        errorHighlight = getErroneousAABB(pattern);
+        errorHighlight = getErroneousPos(pattern);
     }
 
     @Nullable
-    private BlockPos getErroneousAABB(BlockPattern pattern) {
+    private BlockPos getErroneousPos(BlockPattern pattern) {
         WorldClient world = Minecraft.getMinecraft().world;
         MetaTileEntity te = BlockMachine.getMetaTileEntity(world, targetPos);
 
@@ -301,94 +309,15 @@ public class PreviewRenderer {
             return null;
         }
 
-        Pair<Predicate<BlockWorldState>, IntRange>[] countMatches = ReflectionHelper.getPrivate(BlockPattern.class, "countMatches", pattern);
-        int[] centerOffset = ReflectionHelper.getPrivate(BlockPattern.class, "centerOffset", pattern);
-        int[][] aisleRepetitions = ReflectionHelper.getPrivate(BlockPattern.class, "aisleRepetitions", pattern);
-        Predicate<BlockWorldState>[][][] blockMatches = ReflectionHelper.getPrivate(BlockPattern.class, "blockMatches", pattern);
-        TIntObjectMap<Predicate<PatternMatchContext>> layerMatchers = ReflectionHelper.getPrivate(BlockPattern.class, "layerMatchers", pattern);
-        Predicate<PatternMatchContext>[] validators = ReflectionHelper.getPrivate(BlockPattern.class, "validators", pattern);
-
-        if(countMatches == null ||
-                centerOffset == null ||
-                aisleRepetitions == null ||
-                blockMatches == null ||
-                layerMatchers == null ||
-                validators == null) return null;
-
-        BlockWorldState worldState = new BlockWorldState();
-        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
-        EnumFacing facing = te.getFrontFacing().getOpposite();
-
-        //noinspection MismatchedReadAndWriteOfArray ???
-        int[] countMatchesCache = new int[countMatches.length];
-        boolean findFirstAisle = false;
-        int minX = -centerOffset[0];
-        int minZ = -centerOffset[4];
-        int minY = -centerOffset[1];
-
-        PatternMatchContext matchContext = new PatternMatchContext();
-        PatternMatchContext layerContext = new PatternMatchContext();
-
-        /**
-         * @see BlockPattern#checkPatternAt(World, BlockPos, EnumFacing)
-         */
-        {
-            //Checking aisles
-            for(int c = 0, z = minZ++, r; c < pattern.getFingerLength(); c++) {
-                //Checking repeatable slices
-                loop:
-                for(r = 0; (findFirstAisle ? r < aisleRepetitions[c][1] : z <= -centerOffset[3]); r++) {
-                    //Checking single slice
-                    layerContext.reset();
-
-                    for(int b = 0, y = minY; b < pattern.getThumbLength(); b++, y++) {
-                        for(int a = 0, x = minX; a < pattern.getPalmLength(); a++, x++) {
-                            Predicate<BlockWorldState> predicate = blockMatches[c][b][a];
-                            if(ReflectionHelper.callMethod(BlockPattern.class, "setActualRelativeOffset",
-                                    pattern, BlockPos.MutableBlockPos.class, int.class, int.class, int.class, EnumFacing.class,
-                                    blockPos, x, y, z, facing) == null) return null;
-                            minX = -centerOffset[0];
-                            minY = -centerOffset[1];
-                            blockPos.setPos(blockPos.getX() + targetPos.getX(), blockPos.getY() + targetPos.getY(), blockPos.getZ() + targetPos.getZ());
-                            worldState.update(world, blockPos, matchContext, layerContext);
-
-                            if(!predicate.test(worldState)) {
-                                if(findFirstAisle) {
-                                    if(r < aisleRepetitions[c][0]) {//retreat to see if the first aisle can start later
-                                        r = c = 0;
-                                        z = minZ++;
-                                        matchContext.reset();
-                                        findFirstAisle = false;
-                                    }
-                                } else {
-                                    z++;//continue searching for the first aisle
-                                }
-                                continue loop;
-                            }
-                            for(int i = 0; i < countMatchesCache.length; i++) {
-                                if(countMatches[i].getLeft().test(worldState)) {
-                                    countMatchesCache[i]++;
-                                }
-                            }
-                        }
-                    }
-                    findFirstAisle = true;
-                    z++;
-
-                    //Check layer-local matcher predicate
-                    Predicate<PatternMatchContext> layerPredicate = layerMatchers.get(c);
-                    if(layerPredicate != null && !layerPredicate.test(layerContext)) {
-                        return BlockPos.ORIGIN; // Highlight the controller.
-                    }
-                }
-                //Repetitions out of range
-                if(r < aisleRepetitions[c][0]) {
-                    return blockPos.subtract(targetPos); // Highlight last tested block.
-                }
+        PatternMatchContext ctx = pattern.checkPatternAt(world, targetPos, te.getFrontFacing().getOpposite());
+        if(ctx == null) {
+            BlockPos iPos = ReflectionHelper.getPrivate(BlockPattern.class, "blockPos", pattern);
+            if(iPos != null) {
+                return iPos.subtract(targetPos);
             }
-
-            return BlockPos.ORIGIN; // Highlight the controller.
         }
+
+        return BlockPos.ORIGIN;
     }
 
 }

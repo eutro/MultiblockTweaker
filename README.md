@@ -1,4 +1,4 @@
 # MultiblockTweaker
 Add GregTech CE Multiblocks via CraftTweaker
 
-Examples [here](https://gist.github.com/eutropius225/27082925cb6c84bb9732e599af5fa584)
+Examples [here](examples) and (in the context of a modpack) [here](https://github.com/OmnifactoryDevs/Omnifactory/blob/dev/overrides/scripts/Multiblocks.zs).
