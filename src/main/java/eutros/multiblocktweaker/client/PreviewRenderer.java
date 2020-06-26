@@ -39,7 +39,6 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static eutros.multiblocktweaker.client.ClientTickHandler.partialTicks;
@@ -52,6 +51,7 @@ public class PreviewRenderer {
     }
 
     private int baseY = 0;
+    private int maxIndex = -1;
     private int frame = 0;
     private int opList = -1;
 
@@ -132,16 +132,16 @@ public class PreviewRenderer {
         if(layerIndex == -1)
             return blocks;
 
+        if(layerIndex > maxIndex) {
+            reset();
+            return Collections.emptyList();
+        }
+
         List<BlockPos> list = new ArrayList<>();
         for(BlockPos pos : blocks) {
             if(pos.getY() == baseY + layerIndex) {
                 list.add(pos);
             }
-        }
-
-        if(list.isEmpty()) {
-            reset();
-            return list;
         }
 
         return list;
@@ -243,7 +243,8 @@ public class PreviewRenderer {
 
         controllerPos = BlockPos.ORIGIN;
         if(renderedBlocks != null) {
-            baseY = Collections.min(renderedBlocks, Comparator.comparing(BlockPos::getY)).getY();
+            baseY = Integer.MAX_VALUE;
+            maxIndex = Integer.MIN_VALUE;
             for(BlockPos blockPos : renderedBlocks) {
                 MetaTileEntity metaTE = BlockMachine.getMetaTileEntity(renderer.world, blockPos);
                 if(metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
@@ -252,6 +253,17 @@ public class PreviewRenderer {
                     break;
                 }
             }
+
+            for(BlockPos blockPos : renderedBlocks) {
+                int y = blockPos.getY();
+                if(y < baseY) {
+                    baseY = y;
+                }
+                if(y > maxIndex) {
+                    maxIndex = y;
+                }
+            }
+            maxIndex -= baseY;
         }
 
         rotatePreviewBy = Rotation.values()[(4 + facing.getHorizontalIndex() - previewFacing.getHorizontalIndex()) % 4];
