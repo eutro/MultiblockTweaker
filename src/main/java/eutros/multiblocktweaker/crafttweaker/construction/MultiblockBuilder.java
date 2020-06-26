@@ -13,7 +13,7 @@ import gregtech.api.recipes.RecipeMap;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -152,7 +152,7 @@ public class MultiblockBuilder {
                         .flatMap(Arrays::stream)
                         .flatMap(Arrays::stream) // flatten the 3D array
                         .map(BlockInfo::getBlockState)
-                        .filter(IBlockState::isOpaqueCube) // solid block gang
+                        .filter(s -> s.getRenderType() != EnumBlockRenderType.INVISIBLE)
                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                         .entrySet()
                         .stream()

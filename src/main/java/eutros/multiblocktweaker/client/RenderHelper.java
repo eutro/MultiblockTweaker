@@ -14,67 +14,45 @@ public class RenderHelper {
         BufferBuilder buff = tes.getBuffer();
 
         GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-
         buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
-
         // NORTH
-
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
-
 
         // SOUTH
-
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
-
 
         // WEST
-
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
-
 
         // EAST
-
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
 
-
         // TOP
-
         buff.pos(aabb.minX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.maxY, aabb.minZ).color(r, g, b, a).endVertex();
 
-
         // BOTTOM
-
         buff.pos(aabb.minX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.minX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.minZ).color(r, g, b, a).endVertex();
         buff.pos(aabb.maxX, aabb.minY, aabb.maxZ).color(r, g, b, a).endVertex();
 
-
         tes.draw();
-
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
     }
 

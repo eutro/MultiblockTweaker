@@ -50,10 +50,11 @@ public class PreviewRenderer {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private int baseY = 0;
-    private int maxIndex = -1;
     private int frame = 0;
     private int opList = -1;
+
+    private int minY;
+    private int maxY;
 
     @Nullable
     private WorldSceneRenderer renderer = null;
@@ -114,6 +115,7 @@ public class PreviewRenderer {
         GlStateManager.pushMatrix();
         GlStateManager.translate(-tx, -ty, -tz);
         GlStateManager.translate(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        GlStateManager.enableBlend();
         GlStateManager.callList(opList);
         highlightErrors();
         GlStateManager.popMatrix();
@@ -132,14 +134,14 @@ public class PreviewRenderer {
         if(layerIndex == -1)
             return blocks;
 
-        if(layerIndex > maxIndex) {
+        if(layerIndex > maxY - minY) {
             reset();
             return Collections.emptyList();
         }
 
         List<BlockPos> list = new ArrayList<>();
         for(BlockPos pos : blocks) {
-            if(pos.getY() == baseY + layerIndex) {
+            if(pos.getY() == minY + layerIndex) {
                 list.add(pos);
             }
         }
@@ -218,7 +220,7 @@ public class PreviewRenderer {
             if(layerIndex < -1) {
                 reset();
             } else {
-                setErroneousBlockPos();
+                checkErrors();
                 refreshOpList();
             }
             return true;
@@ -243,8 +245,6 @@ public class PreviewRenderer {
 
         controllerPos = BlockPos.ORIGIN;
         if(renderedBlocks != null) {
-            baseY = Integer.MAX_VALUE;
-            maxIndex = Integer.MIN_VALUE;
             for(BlockPos blockPos : renderedBlocks) {
                 MetaTileEntity metaTE = BlockMachine.getMetaTileEntity(renderer.world, blockPos);
                 if(metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
@@ -254,29 +254,30 @@ public class PreviewRenderer {
                 }
             }
 
+            minY = Integer.MAX_VALUE;
+            maxY = Integer.MIN_VALUE;
             for(BlockPos blockPos : renderedBlocks) {
                 int y = blockPos.getY();
-                if(y < baseY) {
-                    baseY = y;
+                if(y < minY) {
+                    minY = y;
                 }
-                if(y > maxIndex) {
-                    maxIndex = y;
+                if(y > maxY) {
+                    maxY = y;
                 }
             }
-            maxIndex -= baseY;
         }
 
         rotatePreviewBy = Rotation.values()[(4 + facing.getHorizontalIndex() - previewFacing.getHorizontalIndex()) % 4];
         refreshOpList();
 
-        setErroneousBlockPos();
+        checkErrors();
 
         return true;
     }
 
     private void highlightErrors() {
         if(frame % 20 == 0)
-            setErroneousBlockPos();
+            checkErrors();
 
         if(errorHighlight == null) return;
 
@@ -289,7 +290,7 @@ public class PreviewRenderer {
         GlStateManager.popMatrix();
     }
 
-    private void setErroneousBlockPos() {
+    private void checkErrors() {
         Minecraft mc = Minecraft.getMinecraft();
         MultiblockControllerBase te = PreviewHandler.getMetaController(mc.world, targetPos);
         if(te == null) return;
@@ -311,9 +312,9 @@ public class PreviewRenderer {
 
         PatternMatchContext ctx = pattern.checkPatternAt(world, targetPos, te.getFrontFacing().getOpposite());
         if(ctx == null) {
-            BlockPos iPos = ReflectionHelper.getPrivate(BlockPattern.class, "blockPos", pattern);
-            if(iPos != null) {
-                return iPos.subtract(targetPos);
+            BlockPos lastPos = ReflectionHelper.getPrivate(BlockPattern.class, "blockPos", pattern);
+            if(lastPos != null) {
+                return lastPos.subtract(targetPos);
             }
         }
 
