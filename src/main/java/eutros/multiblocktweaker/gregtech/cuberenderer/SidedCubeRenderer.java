@@ -72,7 +72,8 @@ public class SidedCubeRenderer implements ICubeRenderer {
         long rand = new Random().nextLong();
         particles = model.getParticleTexture();
         sprites = fillBlanks(
-                Arrays.stream(EnumFacing.values())
+                Stream.concat(Stream.of(new EnumFacing[] {null}),
+                        Arrays.stream(EnumFacing.values()))
                         .map(f -> model.getQuads(state, f, rand))
                         .map(List::stream)
                         .map(Stream::findFirst)
