@@ -18,7 +18,7 @@ public class CustomRecipeWrapper extends GTRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        int yPosition = recipeHeight - getPropertyListHeight(recipe);
+        int yPosition = recipeHeight - getPropertyListHeight();
         minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.total", Math.abs((long) recipe.getEUt()) * recipe.getDuration()), 0, yPosition, 0x111111);
         minecraft.fontRenderer.drawString(I18n.format(recipe.getEUt() >= 0 ? "gregtech.recipe.eu" : "gregtech.recipe.eu_inverted", Math.abs(recipe.getEUt())), 0, yPosition += LINE_DIFF, 0x111111);
         minecraft.fontRenderer.drawString(I18n.format("gregtech.recipe.duration", recipe.getDuration() / 20f), 0, yPosition += LINE_DIFF, 0x111111);
@@ -28,7 +28,7 @@ public class CustomRecipeWrapper extends GTRecipeWrapper {
         }
     }
 
-    public static int getPropertyListHeight(Recipe recipe) {
+    private int getPropertyListHeight() {
         return (recipe.getPropertyKeys().size() + 3) * LINE_DIFF;
     }
 

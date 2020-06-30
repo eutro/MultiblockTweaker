@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.gregtech.recipes;
 
 import eutros.multiblocktweaker.helper.MathHelper;
+import eutros.multiblocktweaker.jei.CustomRecipeWrapper;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -31,32 +32,22 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
 
     private static int getSlotsHeight(int items, int fluids) {
         int[] grid = determineSlotsGrid(items);
-        return SLOT_SIZE * (
-                grid[1] + (
-                        fluids > 0 ? (
-                                grid[1] >= fluids && grid[0] < 3 ?
-                                fluids - 1 :
-                                (int) Math.ceil(fluids / (double) GRID_WIDTH)
-                        ) :
-                        0
-                )
-        ) + 10;
+        return 10 + SLOT_SIZE * (grid[1] + (fluids > 0 ?
+                                            (grid[1] >= fluids && grid[0] < 3 ?
+                                             fluids - 1 :
+                                             (int) Math.ceil(fluids / (double) GRID_WIDTH)) :
+                                            0));
     }
 
     @Nonnull
     public ModularUI.Builder createUITemplate(DoubleSupplier progressSupplier, IItemHandlerModifiable importItems, IItemHandlerModifiable exportItems, FluidTankList importFluids, FluidTankList exportFluids) {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND,
                 176,
-                (
-                        slotsHeight +
-                                (
-                                        getRecipeList().parallelStream()
-                                                .map(Recipe::getPropertyKeys)
-                                                .mapToInt(Set::size)
-                                                .max()
-                                                .orElse(0) + 4
-                                ) * 10
-                ) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
+                (slotsHeight + (getRecipeList().parallelStream()
+                        .map(Recipe::getPropertyKeys)
+                        .mapToInt(Set::size)
+                        .max()
+                        .orElse(0) + 4) * CustomRecipeWrapper.LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
         builder.widget(new ProgressWidget(progressSupplier, 77, slotsHeight / 2 - 10, 20, 20, progressBarTexture, moveType));
         addInventorySlotGroup(builder, importItems, importFluids, false);
         addInventorySlotGroup(builder, exportItems, exportFluids, true);
