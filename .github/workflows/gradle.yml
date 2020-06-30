@@ -25,12 +25,8 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
 
-    - name: "Get file name"
-      run: echo "::set-output name=asset_name::$(ls ./build/libs)"
-      id: var
-
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.var.outputs.asset_name }}
-        path: ./build/libs/${{ steps.var.outputs.asset_name }}
+        name: build-output
+        path: ./build/libs/*
