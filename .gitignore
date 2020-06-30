@@ -29,3 +29,4 @@ forge*changelog.txt
 /.idea/
 /.settings/
 /FactoryBuilderDiagram.xcf
+/examples/tests/
