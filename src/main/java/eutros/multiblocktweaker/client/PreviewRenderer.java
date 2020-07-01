@@ -70,12 +70,12 @@ public class PreviewRenderer {
     public static final PreviewRenderer INSTANCE = new PreviewRenderer();
 
     @Nullable
+    @SuppressWarnings("unchecked")
     private static WorldSceneRenderer getRenderer(ItemStack stack) {
         IRecipeRegistry rr = MultiblockTweakerJEIPlugin.runtime.getRecipeRegistry();
 
         IFocus<ItemStack> focus = rr.createFocus(IFocus.Mode.INPUT, stack);
 
-        //noinspection unchecked
         return rr.getRecipeCategories(focus)
                 .stream()
                 .map(c -> (IRecipeCategory<IRecipeWrapper>) c)

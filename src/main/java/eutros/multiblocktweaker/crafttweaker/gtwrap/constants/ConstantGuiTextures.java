@@ -12,12 +12,8 @@ import stanhebben.zenscript.annotations.ZenProperty;
 public class ConstantGuiTextures {
 
     /** */ @ZenProperty public static final ITextureArea BACKGROUND = new MCTextureArea(GuiTextures.BACKGROUND);
-    /** */ @ZenProperty public static final ITextureArea BACKGROUND_SMALL = new MCTextureArea(GuiTextures.BACKGROUND_SMALL);
-    /** */ @ZenProperty public static final ITextureArea BACKGROUND_EXTENDED = new MCTextureArea(GuiTextures.BACKGROUND_EXTENDED);
     /** */ @ZenProperty public static final ITextureArea BORDERED_BACKGROUND = new MCTextureArea(GuiTextures.BORDERED_BACKGROUND);
-    /** */ @ZenProperty public static final ITextureArea BORDERED_BACKGROUND_EXTENDED = new MCTextureArea(GuiTextures.BORDERED_BACKGROUND_EXTENDED);
     /** */ @ZenProperty public static final ITextureArea SLOT = new MCTextureArea(GuiTextures.SLOT);
-    /** */ @ZenProperty public static final ITextureArea SLOT_BIG = new MCTextureArea(GuiTextures.SLOT_BIG);
     /** */ @ZenProperty public static final ITextureArea FLUID_SLOT = new MCTextureArea(GuiTextures.FLUID_SLOT);
     /** */ @ZenProperty public static final ITextureArea DISPLAY = new MCTextureArea(GuiTextures.DISPLAY);
     /** */ @ZenProperty public static final ITextureArea FLUID_TANK_BACKGROUND = new MCTextureArea(GuiTextures.FLUID_TANK_BACKGROUND);

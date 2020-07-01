@@ -3,6 +3,7 @@ package eutros.multiblocktweaker.jei;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import gregtech.api.recipes.Recipe;
+import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.*;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -18,10 +19,10 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
 
     @Override
     public void register(@NotNull IModRegistry registry) {
-        List<CustomInfoRecipeWrapper> recipeList = new ArrayList<>();
+        List<MultiblockInfoRecipeWrapper> recipeList = new ArrayList<>();
         for(CustomMultiblock customMultiblock : MultiblockRegistry.getAll()) {
             if(!customMultiblock.designs.isEmpty()) {
-                recipeList.add(new CustomInfoRecipeWrapper(new CustomInfoPage(customMultiblock)));
+                recipeList.add(new MultiblockInfoRecipeWrapper(new CustomInfoPage(customMultiblock)));
             }
         }
 
