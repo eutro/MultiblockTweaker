@@ -67,7 +67,7 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.575"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.581"
 
     deobfProvided "mezz.jei:jei_1.12.2:4.15.0.293:api"
     runtime "mezz.jei:jei_1.12.2:4.15.0.293"
@@ -110,4 +110,4 @@ task copyExamples {
     }
 }
 
-runClient.dependsOn(tasks.copyExamples);
+runClient.dependsOn(tasks.copyExamples)

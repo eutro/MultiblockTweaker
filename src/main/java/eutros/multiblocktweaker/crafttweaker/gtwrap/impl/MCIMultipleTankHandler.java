@@ -5,8 +5,10 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIFluidTank;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultipleTankHandler;
 import gregtech.api.capability.IMultipleTankHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class MCIMultipleTankHandler implements IIMultipleTankHandler {
 
@@ -46,6 +48,15 @@ public class MCIMultipleTankHandler implements IIMultipleTankHandler {
     @Nullable
     public ILiquidStack drain(int maxDrain, boolean doDrain) {
         return CraftTweakerMC.getILiquidStack(inner.drain(maxDrain, doDrain));
+    }
+
+    @NotNull
+    @Override
+    public Iterator<IIFluidTank> iterator() {
+        return inner.getFluidTanks().stream()
+                .map(MCFluidTank::new)
+                .map(IIFluidTank.class::cast)
+                .iterator();
     }
 
 }

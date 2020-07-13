@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.liquid.ILiquidStack;
+import stanhebben.zenscript.annotations.IterableSimple;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -11,8 +12,9 @@ import javax.annotation.Nullable;
  * Used for interacting with multiple fluid tanks.
  */
 @ZenClass("mods.gregtech.fluids.IMultipleTankHandler")
+@IterableSimple("mods.forge.fluids.IFluidTank")
 @ZenRegister
-public interface IIMultipleTankHandler {
+public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
 
     /**
      * @return All of the fluid tanks.

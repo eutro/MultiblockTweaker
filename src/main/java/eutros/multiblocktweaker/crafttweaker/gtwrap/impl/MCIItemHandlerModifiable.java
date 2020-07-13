@@ -4,8 +4,10 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Iterator;
 
 public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
 
@@ -51,6 +53,28 @@ public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
     @Override
     public boolean isItemValid(int slot, IItemStack stack) {
         return inner.isItemValid(slot, CraftTweakerMC.getItemStack(stack));
+    }
+
+    @NotNull
+    @Override
+    public Iterator<IItemStack> iterator() {
+        return new ItemHandlerIterator();
+    }
+
+    private class ItemHandlerIterator implements Iterator<IItemStack> {
+
+        private int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < getSlots();
+        }
+
+        @Override
+        public IItemStack next() {
+            return getStackInSlot(index++);
+        }
+
     }
 
 }

@@ -134,4 +134,9 @@ public class CustomMultiblock {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return String.format("CustomMultiblock(%s)", loc);
+    }
+
 }

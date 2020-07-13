@@ -1,12 +1,17 @@
 package eutros.multiblocktweaker.gregtech.recipes;
 
 
-import eutros.multiblocktweaker.crafttweaker.functions.*;
+import crafttweaker.CraftTweakerAPI;
+import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIItemHandlerModifiable;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultipleTankHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
+import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -25,10 +30,10 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
      * This property will set the chance of the inputs being consumed when a recipe is started.
      */
     public static final String CONSUME_CHANCE = "consumeChance";
-    @Nullable private final IUpdateFunction update;
-    @Nullable private final IUpdateWorktableFunction updateWorktable;
-    @Nullable private final ISetupRecipeFunction setupRecipe;
-    @Nullable private final ICompleteRecipeFunction completeRecipe;
+    @Nullable private IUpdateFunction update;
+    @Nullable private IUpdateWorktableFunction updateWorktable;
+    @Nullable private ISetupRecipeFunction setupRecipe;
+    @Nullable private ICompleteRecipeFunction completeRecipe;
 
     public CustomMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity,
                                        @Nullable IUpdateFunction update,
@@ -82,32 +87,66 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     // FUNCTIONS
 
+    private void logFailure(String func, Throwable t) {
+        CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, getMetaTile().getMultiblock()), t);
+    }
+
     @Override
     public void update() {
-        getUpdate().ifPresent(u -> u.run(this));
+        getUpdate().ifPresent(u -> {
+            try {
+                u.run(this);
+            } catch(Throwable t) {
+                logFailure("update", t);
+                update = null;
+            }
+        });
     }
 
     @Override
     public void trySearchNewRecipe() {
-        super.trySearchNewRecipe();
+        super.trySearchNewRecipe(); // protected.
     }
 
     @Override
     public void updateWorkable() {
-        if(getUpdateWorktable().map(u -> u.run(this)).orElse(true))
+        if(getUpdateWorktable().map(u -> {
+            try {
+                return u.run(this);
+            } catch(Throwable t) {
+                logFailure("updateWorktable", t);
+                updateWorktable = null;
+                return true;
+            }
+        }).orElse(true)) {
             super.updateWorkable();
+        }
     }
 
     @Override
     protected void setupRecipe(Recipe recipe) {
         super.setupRecipe(recipe);
-        getSetupRecipe().ifPresent(s -> s.run(this, new MCRecipe(recipe)));
+        getSetupRecipe().ifPresent(s -> {
+            try {
+                s.run(this, new MCRecipe(recipe));
+            } catch(Throwable t) {
+                logFailure("setupRecipe", t);
+                setupRecipe = null;
+            }
+        });
     }
 
     @Override
     protected void completeRecipe() {
         super.completeRecipe();
-        getCompleteRecipe().ifPresent(c -> c.run(this));
+        getCompleteRecipe().ifPresent(c -> {
+            try {
+                c.run(this);
+            } catch(Throwable t) {
+                logFailure("completeRecipe", t);
+                completeRecipe = null;
+            }
+        });
     }
 
     // CT EXPOSED
@@ -118,8 +157,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public IMetaTileEntity getMetaTile() {
-        return new MCMetaTileEntity(metaTileEntity);
+    public IControllerTile getMetaTile() {
+        return new MCControllerTile((TileControllerCustom) metaTileEntity);
     }
 
     @Override
