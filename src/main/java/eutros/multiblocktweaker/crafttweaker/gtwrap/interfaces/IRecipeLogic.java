@@ -13,50 +13,29 @@ import stanhebben.zenscript.annotations.ZenSetter;
 @ZenRegister
 public interface IRecipeLogic {
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenGetter("previousRecipe")
     IRecipe getPreviousRecipe();
 
-    /**
-     *
-     */
     @ZenGetter("metaTileEntity")
-    IMetaTileEntity getMetaTile();
+    IControllerTile getMetaTile();
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenGetter("workingEnabled")
     boolean isWorkingEnabled();
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenSetter("workingEnabled")
     void setWorkingEnabled(boolean val);
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenGetter("recipeProgress")
     int getProgress();
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenSetter("recipeProgress")
     void setProgress(int val);
 
-    /**
-     *
-     */
     @ZenMethod
     @ZenGetter("maxProgress")
     int getMaxProgress();
@@ -65,93 +44,48 @@ public interface IRecipeLogic {
     @ZenSetter("maxProgress")
     void setMaxProgress(int val);
 
-    /**
-     *
-     */
     @ZenMethod
     boolean isActive();
 
-    /**
-     *
-     */
     @ZenMethod
     void setAllowOverclocking(boolean val);
 
-    /**
-     *
-     */
     @ZenMethod
     boolean isAllowOverclocking();
 
-    /**
-     *
-     */
     @ZenMethod
     boolean isHasNotEnoughEnergy();
 
-    /**
-     *
-     */
     @ZenMethod
     long getEnergyStored();
 
-    /**
-     *
-     */
     @ZenMethod
     long getEnergyCapacity();
 
-    /**
-     *
-     */
     @ZenMethod
     boolean drawEnergy(int recipeEUt);
 
-    /**
-     *
-     */
     @ZenMethod
     void update();
 
-    /**
-     *
-     */
     @ZenMethod
     void trySearchNewRecipe();
 
-    /**
-     *
-     */
     @ZenMethod
     void forceRecipeRecheck();
 
-    /**
-     *
-     */
     @ZenMethod
     long getMaxVoltage();
 
-    /**
-     *
-     */
     @ZenGetter("inputInventory")
     IIItemHandlerModifiable getInInventory();
 
-    /**
-     *
-     */
     @ZenGetter("outputInventory")
     IIItemHandlerModifiable getOutInventory();
 
-    /**
-     *
-     */
     @ZenGetter("inputTank")
     IIMultipleTankHandler getInTank();
 
-    /**
-     *
-     */
     @ZenGetter("outputTank")
     IIMultipleTankHandler getOutTank();
 

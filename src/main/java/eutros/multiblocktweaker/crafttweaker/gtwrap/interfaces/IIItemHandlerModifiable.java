@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
+import stanhebben.zenscript.annotations.IterableSimple;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -9,8 +10,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
  * Used for interacting with inventories.
  */
 @ZenClass("mods.forge.items.IItemHandlerModifiable")
+@IterableSimple("crafttweaker.item.IItemStack")
 @ZenRegister
-public interface IIItemHandlerModifiable {
+public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
 
     /**
      * Set the item stack in a slot.

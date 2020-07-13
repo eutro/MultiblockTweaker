@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.gregtech.tile;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 
 public class TileControllerCustom extends RecipeMapMultiblockController {
 
-    private final CustomMultiblock multiblock;
+    public final CustomMultiblock multiblock;
 
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
@@ -91,7 +91,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         if(multiblock.recipePredicate == null) return true;
 
         return multiblock.recipePredicate.test(
-                new MCMetaTileEntity(this),
+                new MCControllerTile(this),
                 new MCRecipe(recipe),
                 consumeIfSuccess
         );
