@@ -1,6 +1,9 @@
 name: Java CI
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'gradle.properties'
 
 jobs:
   build:
@@ -25,8 +28,20 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build --no-daemon
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+    - name: Get file name
+      run: echo "::set-output name=file_path::$(ls build/libs/*)"
+      id: var
+
+    - name: Upload to CurseForge
+      uses: itsmeow/curseforge-upload@v2
       with:
-        name: build-output
-        path: ./build/libs/*
+        token: ${{ secrets.CURSEFORGE_TOKEN }}
+        project_id: 386188
+        game_endpoint: minecraft
+        file_path: ${{ steps.var.outputs.file_path }}
+        changelog: See recent commits [here](https://github.com/eutropius225/MultiblockTweaker/commits/master)
+        changelog_type: markdown
+        # 1.12.2, Java 8
+        game_versions: 6756,4458
+        release_type: release
+        relations: jei:optionalDependency,crafttweaker:requiredDependency,gregtechce:requiredDependency
