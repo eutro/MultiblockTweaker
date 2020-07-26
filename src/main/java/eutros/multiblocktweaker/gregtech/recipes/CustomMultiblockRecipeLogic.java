@@ -64,7 +64,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         boolean ret = (totalEUt >= 0 ?
                      getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
                      (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
-                MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
+                MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getOutputs()) &&
                 MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
                 recipe.matches(new Random().nextInt(100) <=
                                 (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
