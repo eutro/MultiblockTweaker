@@ -3,6 +3,7 @@ package eutros.multiblocktweaker.gregtech.recipes;
 import com.google.common.collect.ImmutableMap;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
+import gregtech.api.util.EnumValidationResult;
 import gregtech.api.util.ValidationResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
 
     public CustomRecipeBuilder(CustomRecipeBuilder builder) {
         super(builder);
-        builder.propertyMap = new HashMap<>(propertyMap);
+        propertyMap = new HashMap<>(builder.propertyMap);
     }
 
     @Override
@@ -28,12 +29,28 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
     }
 
     @Override
-    public @NotNull CustomRecipeBuilder copy() {
+    @NotNull
+    public CustomRecipeBuilder copy() {
         return new CustomRecipeBuilder(this);
     }
 
+    @NotNull
+    protected EnumValidationResult validate() {
+        if(this.EUt == 0) {
+            int eUt = EUt;
+            EUt = 1;
+            super.validate();
+            EUt = eUt;
+        } else {
+            super.validate();
+        }
+
+        return this.recipeStatus;
+    }
+
     @Override
-    public @NotNull ValidationResult<Recipe> build() {
+    @NotNull
+    public ValidationResult<Recipe> build() {
         return ValidationResult.newResult(this.finalizeAndValidate(),
                 new Recipe(this.inputs,
                         this.outputs,

@@ -7,8 +7,6 @@ import mods.gregtech.multiblock.FactoryMultiblockShapeInfo;
 import mods.gregtech.multiblock.IBlockInfo;
 
 import mods.gregtech.MetaTileEntities;
-import mods.gregtech.IMetaTileEntity;
-import mods.gregtech.recipe.IRecipe;
 
 import mods.gregtech.recipe.FactoryRecipeMap;
 import mods.gregtech.recipe.RecipeMap;
@@ -224,7 +222,7 @@ sim_chamber_multiblock.completeRecipe = function(logic as IRecipeLogic) {
             return;
         }
     }
-};
+} as ICompleteRecipeFunction;
 
 val withTier = function(tier as int) as IItemCondition {
     return function(stack as IItemStack) as bool {

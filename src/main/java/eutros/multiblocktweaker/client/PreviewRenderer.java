@@ -50,6 +50,8 @@ public class PreviewRenderer {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    private static BlockPos DEFAULT_POS = BlockPos.ORIGIN.offset(EnumFacing.DOWN);
+
     private int frame = 0;
     private int opList = -1;
 
@@ -62,8 +64,8 @@ public class PreviewRenderer {
     private BlockPos errorHighlight;
     private List<BlockPos> renderedBlocks;
 
-    public BlockPos targetPos = BlockPos.ORIGIN;
-    public BlockPos controllerPos = BlockPos.ORIGIN;
+    public BlockPos targetPos = DEFAULT_POS;
+    public BlockPos controllerPos = DEFAULT_POS;
     public Rotation rotatePreviewBy = Rotation.NONE;
     private int layerIndex = -1;
 
@@ -125,7 +127,7 @@ public class PreviewRenderer {
 
     private void reset() {
         renderer = null;
-        targetPos = BlockPos.ORIGIN;
+        targetPos = DEFAULT_POS;
         layerIndex = -1;
         removeOpList();
     }

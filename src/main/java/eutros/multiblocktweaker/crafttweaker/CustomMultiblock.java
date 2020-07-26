@@ -50,6 +50,13 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public final RecipeMap<?> recipeMap;
+
+    /**
+     * Set to true if the multiblock should not check for energy inputs/outputs before forming.
+     */
+    @ZenProperty
+    public boolean noEnergy = false;
+
     public final ResourceLocation loc;
     public final BlockPattern pattern;
     public final gregtech.api.render.ICubeRenderer texture;

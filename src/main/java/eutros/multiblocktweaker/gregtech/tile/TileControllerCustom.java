@@ -104,8 +104,9 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         int fluidInputsCount = abilities.getOrDefault(MultiblockAbility.IMPORT_FLUIDS, Collections.emptyList()).size();
         return itemInputsCount >= this.recipeMap.getMinInputs()
                 && fluidInputsCount >= this.recipeMap.getMinFluidInputs()
-                && (abilities.containsKey(MultiblockAbility.INPUT_ENERGY)
-                || abilities.containsKey(MultiblockAbility.OUTPUT_ENERGY));
+                && (multiblock.noEnergy ||
+                abilities.containsKey(MultiblockAbility.INPUT_ENERGY) ||
+                abilities.containsKey(MultiblockAbility.OUTPUT_ENERGY));
     }
 
     @Override
