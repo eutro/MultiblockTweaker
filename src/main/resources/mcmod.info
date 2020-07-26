@@ -9,5 +9,6 @@
     "Eutros"
   ],
   "credits": "ALongStringOfNumbers for testing.",
-  "dependencies": ["gregtech", "crafttweaker"]
+  "dependencies": ["gregtech", "crafttweaker"],
+  "logoFile": "assets/multiblocktweaker/logo.png"
 }]
