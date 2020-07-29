@@ -72,7 +72,7 @@ dependencies {
     deobfProvided "mezz.jei:jei_1.12.2:4.15.0.293:api"
     runtime "mezz.jei:jei_1.12.2:4.15.0.293"
 
-    deobfCompile "gregtechce:gregtech:1.12.2:1.9.2.515"
+    deobfCompile "gregtechce:gregtech:1.12.2:1.9.3.531"
 
     deobfCompile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.357:universal"
 

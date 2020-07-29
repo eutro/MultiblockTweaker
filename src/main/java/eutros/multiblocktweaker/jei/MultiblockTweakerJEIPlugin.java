@@ -2,11 +2,11 @@ package eutros.multiblocktweaker.jei;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
-import gregtech.api.recipes.Recipe;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
-import mezz.jei.api.*;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.IJeiRuntime;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.JEIPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,36 +27,11 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
         }
 
         registry.addRecipes(recipeList, "gregtech:multiblock_info");
-
-        for(CustomMultiblock multiblock : MultiblockRegistry.getAll()) {
-            List<CustomRecipeWrapper> recipes = new ArrayList<>();
-            for(Recipe recipe : multiblock.recipeMap.getRecipeList()) { // override all the default GT recipes
-                if(recipe.hasValidInputsForDisplay()) {
-                    recipes.add(new CustomRecipeWrapper(multiblock.recipeMap, recipe));
-                }
-            }
-            registry.addRecipes(recipes, "gregtech:" + multiblock.recipeMap.getUnlocalizedName());
-        }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onRuntimeAvailable(@NotNull IJeiRuntime jeiRuntime) {
         runtime = jeiRuntime;
-
-        IRecipeRegistry rr = runtime.getRecipeRegistry();
-
-        for(CustomMultiblock multiblock : MultiblockRegistry.getAll()) {
-            String uid = "gregtech:" + multiblock.recipeMap.getUnlocalizedName();
-            IRecipeCategory<IRecipeWrapper> category = rr.getRecipeCategory(uid);
-            if(category != null) {
-                for(IRecipeWrapper recipe : rr.getRecipeWrappers(category)) { // hide all of GT's recipes for our multiblocks
-                    if(!(recipe instanceof CustomRecipeWrapper)) {
-                        rr.hideRecipe(recipe, uid);
-                    }
-                }
-            }
-        }
     }
 
 }

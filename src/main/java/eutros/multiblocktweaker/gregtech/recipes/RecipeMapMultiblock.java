@@ -1,7 +1,6 @@
 package eutros.multiblocktweaker.gregtech.recipes;
 
 import eutros.multiblocktweaker.helper.MathHelper;
-import eutros.multiblocktweaker.jei.CustomRecipeWrapper;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -18,6 +17,7 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
 
     public static final int SLOT_SIZE = 18;
     public static final int GRID_WIDTH = 3;
+    public static final int LINE_DIFF = 10;
     private final int slotsHeight;
 
     public RecipeMapMultiblock(String unlocalizedName, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs, CustomRecipeBuilder defaultRecipe) {
@@ -47,7 +47,7 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
                         .map(Recipe::getPropertyKeys)
                         .mapToInt(Set::size)
                         .max()
-                        .orElse(0) + 4) * CustomRecipeWrapper.LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
+                        .orElse(0) + 4) * LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
         builder.widget(new ProgressWidget(progressSupplier, 77, slotsHeight / 2 - 10, 20, 20, progressBarTexture, moveType));
         addInventorySlotGroup(builder, importItems, importFluids, false);
         addInventorySlotGroup(builder, exportItems, exportFluids, true);
