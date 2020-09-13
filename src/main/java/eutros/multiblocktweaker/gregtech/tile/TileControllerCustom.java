@@ -7,9 +7,11 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
@@ -40,6 +42,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public static final String TAG_PERSISTENT = MultiblockTweaker.MOD_ID + ":persistent";
     public final CustomMultiblock multiblock;
     // remove on error
+    private IFormStructureFunction formStructureFunction;
     private IDisplayTextFunction displayTextFunction;
     private IRemovalFunction removalFunction;
     private IRecipePredicate recipePredicate;
@@ -59,6 +62,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         displayTextFunction = multiblock.displayTextFunction;
         removalFunction = multiblock.removalFunction;
         recipePredicate = multiblock.recipePredicate;
+        formStructureFunction = multiblock.formStructureFunction;
     }
 
     @Override
@@ -97,6 +101,15 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList())
         );
+
+        if(formStructureFunction == null) return;
+
+        try {
+            formStructureFunction.formStructure(new MCPatternMatchContext(context));
+        } catch(RuntimeException e) {
+            logFailure("formStructureFunction", e);
+            formStructureFunction = null;
+        }
     }
 
     @Override

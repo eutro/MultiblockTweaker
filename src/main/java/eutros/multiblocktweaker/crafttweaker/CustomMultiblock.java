@@ -104,6 +104,12 @@ public class CustomMultiblock {
      * Should be set using the ZenSetter.
      */
     @ZenProperty public IDisplayTextFunction displayTextFunction;
+    /**
+     * The {@link IFormStructureFunction} this multiblock has.
+     *
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty public IFormStructureFunction formStructureFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
