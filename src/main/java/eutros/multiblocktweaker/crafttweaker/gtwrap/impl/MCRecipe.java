@@ -5,12 +5,10 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
-import gregtech.api.recipes.CountableIngredient;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class MCRecipe implements IRecipe {
 
@@ -29,9 +27,10 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public IIngredient[] getInputs() {
-        return CraftTweakerMC.getIIngredients(inner.getInputs().stream()
-                .map(CountableIngredient::getIngredient)
-                .collect(Collectors.toList()));
+        return inner.getInputs().stream()
+                .map(ci -> CraftTweakerMC.getIIngredient(ci.getIngredient())
+                        .amount(ci.getCount()))
+                .toArray(IIngredient[]::new);
     }
 
     @Override

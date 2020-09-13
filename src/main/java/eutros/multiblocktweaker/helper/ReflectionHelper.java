@@ -12,10 +12,10 @@ public class ReflectionHelper {
 
     @SuppressWarnings("unchecked")
     @Nullable
-    public static <T, C> T getPrivate(Class<? super C> fieldClass, String fieldName, C object) {
+    public static <T, C> T getPrivate(Class<? super C> fieldClass, String fieldName, C object) throws ClassCastException {
         try {
             return (T) FieldUtils.getField(fieldClass, fieldName, true).get(object);
-        } catch(IllegalAccessException | ClassCastException | NullPointerException e) {
+        } catch(IllegalAccessException | NullPointerException e) {
             LOGGER.debug(String.format("Reflection on class %s failed. Couldn't get field %s of %s.", fieldClass, fieldName, object), e);
             return null;
         }
