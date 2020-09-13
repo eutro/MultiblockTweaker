@@ -80,7 +80,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         if(displayTextFunction == null) return;
 
         try {
-            List<IFormattedText> added = displayTextFunction.addDisplayText();
+            List<IFormattedText> added = displayTextFunction.addDisplayText(new MCControllerTile(this));
             if(added != null) {
                 for(IFormattedText component : added) {
                     textList.add(new TextComponentString(component.getText()));
@@ -107,7 +107,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         if(formStructureFunction == null) return;
 
         try {
-            formStructureFunction.formStructure(new MCPatternMatchContext(context));
+            formStructureFunction.formStructure(new MCControllerTile(this), new MCPatternMatchContext(context));
         } catch(RuntimeException e) {
             logFailure("formStructureFunction", e);
             formStructureFunction = null;

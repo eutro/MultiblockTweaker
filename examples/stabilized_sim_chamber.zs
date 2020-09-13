@@ -1,3 +1,4 @@
+#modloaded deepmoblearning
 import mods.gregtech.multiblock.Builder;
 import mods.gregtech.multiblock.FactoryBlockPattern;
 import mods.gregtech.multiblock.RelativeDirection;
@@ -17,9 +18,6 @@ import crafttweaker.data.IData;
 import crafttweaker.world.IFacing;
 import crafttweaker.item.IItemStack;
 import crafttweaker.item.IItemCondition;
-
-if(loadedMods in "deepmoblearning")
-{
 
 // from DML's config
 val mobs as int[string] = {
@@ -241,6 +239,4 @@ for mob, cost in mobs {
             .chancedOutput(itemUtils.getItem(pristine_prefix + mob), pristine_chance * 100, 0)
             .buildAndRegister();
     }
-}
-
 }

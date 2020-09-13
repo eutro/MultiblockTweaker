@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.functions;
 
 import crafttweaker.annotations.ZenRegister;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -20,9 +21,10 @@ public interface IFormStructureFunction {
     /**
      * Implement this with a function.
      *
+     * @param controller The multiblock controller.
      * @param context The context of the structure.
      */
     @ZenMethod
-    void formStructure(@Nonnull IPatternMatchContext context);
+    void formStructure(@Nonnull IControllerTile controller, @Nonnull IPatternMatchContext context);
 
 }
