@@ -7,6 +7,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import javax.annotation.Nonnull;
+
 /**
  * Called before a recipe is chosen. Used for additional logic such as blast furnace temperature.
  */
@@ -24,7 +26,7 @@ public interface IRecipePredicate {
      * @return Whether the recipe is valid and should be gone through with.
      */
     @ZenMethod
-    boolean test(IControllerTile controller, IRecipe recipe, boolean consumeIfSuccess);
+    boolean test(@Nonnull IControllerTile controller, @Nonnull IRecipe recipe, boolean consumeIfSuccess);
 
 }
 

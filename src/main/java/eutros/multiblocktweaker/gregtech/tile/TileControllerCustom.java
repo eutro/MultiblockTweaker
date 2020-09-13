@@ -81,8 +81,10 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
         try {
             List<IFormattedText> added = displayTextFunction.addDisplayText();
-            for(IFormattedText component : added) {
-                textList.add(new TextComponentString(component.getText()));
+            if(added != null) {
+                for(IFormattedText component : added) {
+                    textList.add(new TextComponentString(component.getText()));
+                }
             }
         } catch(RuntimeException e) {
             logFailure("displayTextFunction", e);

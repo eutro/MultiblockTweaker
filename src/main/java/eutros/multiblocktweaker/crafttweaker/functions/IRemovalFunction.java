@@ -5,6 +5,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import javax.annotation.Nonnull;
+
 /**
  * Called when the controller block is about to be removed.
  */
@@ -19,6 +21,6 @@ public interface IRemovalFunction {
      * @param controller The controller about to be removed.
      */
     @ZenMethod
-    void onRemoval(IControllerTile controller);
+    void onRemoval(@Nonnull IControllerTile controller);
 
 }

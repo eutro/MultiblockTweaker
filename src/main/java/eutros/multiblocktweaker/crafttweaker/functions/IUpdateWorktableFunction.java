@@ -5,6 +5,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import javax.annotation.Nonnull;
+
 /**
  * A function run when the worktable is updated, that is, every tick.
  */
@@ -19,6 +21,6 @@ public interface IUpdateWorktableFunction {
      * @return Whether to perform the rest of the update logic.
      */
     @ZenMethod
-    boolean run(IRecipeLogic logic);
+    boolean run(@Nonnull IRecipeLogic logic);
 
 }
