@@ -11,7 +11,7 @@ import java.util.List;
  * Called when adding text to the multiblock GUI.
  */
 @FunctionalInterface
-@ZenClass("mods.gregtech.recipe.functions.IDisplayTextFunction")
+@ZenClass("mods.gregtech.multiblock.functions.IDisplayTextFunction")
 @ZenRegister
 public interface IDisplayTextFunction {
 

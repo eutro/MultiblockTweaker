@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
  * Called when the controller block is about to be removed.
  */
 @FunctionalInterface
-@ZenClass("mods.gregtech.recipe.functions.IRemovalFunction")
+@ZenClass("mods.gregtech.multiblock.functions.IRemovalFunction")
 @ZenRegister
 public interface IRemovalFunction {
 
