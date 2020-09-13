@@ -48,7 +48,11 @@ public class SidedCubeRenderer implements ICubeRenderer {
     }
 
     public static <T> EnumMap<EnumFacing, T> fillBlanks(Map<EnumFacing, T> map) {
-        Preconditions.checkNotNull(map.get(EnumFacing.UP));
+        Preconditions.checkNotNull(
+                map.get(EnumFacing.UP),
+                "UP side has no texture! " +
+                        "Consider using mods.gregtech.multiblock.Builder#withTexture to specify the texture explicitly."
+        );
         EnumMap<EnumFacing, T> retMap = new EnumMap<>(map);
 
         retMap.computeIfAbsent(EnumFacing.DOWN, k -> retMap.get(EnumFacing.UP));

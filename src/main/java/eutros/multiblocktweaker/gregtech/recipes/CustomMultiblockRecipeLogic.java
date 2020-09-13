@@ -108,7 +108,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getUpdate().ifPresent(u -> {
             try {
                 u.run(this);
-            } catch(Throwable t) {
+            } catch(RuntimeException t) {
                 logFailure("update", t);
                 update = null;
             }
@@ -125,7 +125,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         if(getUpdateWorktable().map(u -> {
             try {
                 return u.run(this);
-            } catch(Throwable t) {
+            } catch(RuntimeException t) {
                 logFailure("updateWorktable", t);
                 updateWorktable = null;
                 return true;
@@ -141,7 +141,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getSetupRecipe().ifPresent(s -> {
             try {
                 s.run(this, new MCRecipe(recipe));
-            } catch(Throwable t) {
+            } catch(RuntimeException t) {
                 logFailure("setupRecipe", t);
                 setupRecipe = null;
             }
@@ -154,7 +154,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getCompleteRecipe().ifPresent(c -> {
             try {
                 c.run(this);
-            } catch(Throwable t) {
+            } catch(RuntimeException t) {
                 logFailure("completeRecipe", t);
                 completeRecipe = null;
             }

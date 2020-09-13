@@ -6,6 +6,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import javax.annotation.Nonnull;
+
 /**
  * Called whenever the worktable sets up for a new recipe.
  */
@@ -18,6 +20,6 @@ public interface ISetupRecipeFunction {
      * Implement this with a function.
      */
     @ZenMethod
-    void run(IRecipeLogic logic, IRecipe recipe);
+    void run(@Nonnull IRecipeLogic logic, @Nonnull IRecipe recipe);
 
 }

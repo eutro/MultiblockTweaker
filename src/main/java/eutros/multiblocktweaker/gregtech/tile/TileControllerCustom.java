@@ -1,11 +1,20 @@
 package eutros.multiblocktweaker.gregtech.tile;
 
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.data.IData;
+import crafttweaker.api.formatting.IFormattedText;
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
+import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
-import gregtech.api.GTValues;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -16,21 +25,30 @@ import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.render.ICubeRenderer;
-import gregtech.api.util.GTUtility;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TileControllerCustom extends RecipeMapMultiblockController {
 
+    public static final String TAG_PERSISTENT = MultiblockTweaker.MOD_ID + ":persistent";
     public final CustomMultiblock multiblock;
+    // remove on error
+    private IFormStructureFunction formStructureFunction;
+    private IDisplayTextFunction displayTextFunction;
+    private IRemovalFunction removalFunction;
+    private IRecipePredicate recipePredicate;
+
+    @Nullable
+    public IData persistentData;
 
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
@@ -41,37 +59,38 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 multiblock.setupRecipe,
                 multiblock.completeRecipe
         );
+        displayTextFunction = multiblock.displayTextFunction;
+        removalFunction = multiblock.removalFunction;
+        recipePredicate = multiblock.recipePredicate;
+        formStructureFunction = multiblock.formStructureFunction;
     }
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        if(isStructureFormed()) {
-            if(energyContainer != null && energyContainer.getEnergyCapacity() > 0L) {
-                long maxVoltage = Math.max(energyContainer.getInputVoltage(), energyContainer.getOutputVoltage());
-                String voltageName = GTValues.VN[GTUtility.getTierByVoltage(maxVoltage)];
-                textList.add(new TextComponentTranslation("gregtech.multiblock.max_energy_per_tick", maxVoltage, voltageName));
+        super.addDisplayText(textList);
+        if(isStructureFormed() &&
+                recipeMapWorkable.isWorkingEnabled() &&
+                recipeMapWorkable.isActive()) {
+            int eut = recipeMapWorkable.getRecipeEUt();
+            if(eut < 0) {
+                textList.add(new TextComponentTranslation("gregtech.multiblock.generation_eu", Math.min(-eut, energyContainer.getOutputVoltage())));
             }
-
-            if(!recipeMapWorkable.isWorkingEnabled()) {
-                textList.add(new TextComponentTranslation("gregtech.multiblock.work_paused"));
-            } else if(recipeMapWorkable.isActive()) {
-                textList.add(new TextComponentTranslation("gregtech.multiblock.running"));
-                int currentProgress = (int) (recipeMapWorkable.getProgressPercent() * 100.0D);
-                textList.add(new TextComponentTranslation("gregtech.multiblock.progress", currentProgress));
-                int eut = recipeMapWorkable.getRecipeEUt();
-                if(eut < 0) {
-                    textList.add(new TextComponentTranslation("gregtech.multiblock.generation_eu", Math.min(-eut, energyContainer.getOutputVoltage())));
-                }
-            } else {
-                textList.add(new TextComponentTranslation("gregtech.multiblock.idling"));
-            }
-
-            if(recipeMapWorkable.isHasNotEnoughEnergy()) {
-                textList.add((new TextComponentTranslation("gregtech.multiblock.not_enough_energy")).setStyle((new Style()).setColor(TextFormatting.RED)));
-            }
-        } else {
-            textList.add((new TextComponentTranslation("gregtech.multiblock.invalid_structure")).setStyle((new Style()).setColor(TextFormatting.RED)));
         }
+
+        if(displayTextFunction == null) return;
+
+        try {
+            List<IFormattedText> added = displayTextFunction.addDisplayText(new MCControllerTile(this));
+            if(added != null) {
+                for(IFormattedText component : added) {
+                    textList.add(new TextComponentString(component.getText()));
+                }
+            }
+        } catch(RuntimeException e) {
+            logFailure("displayTextFunction", e);
+            displayTextFunction = null;
+        }
+
     }
 
     @Override
@@ -84,17 +103,50 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList())
         );
+
+        if(formStructureFunction == null) return;
+
+        try {
+            formStructureFunction.formStructure(new MCControllerTile(this), new MCPatternMatchContext(context));
+        } catch(RuntimeException e) {
+            logFailure("formStructureFunction", e);
+            formStructureFunction = null;
+        }
     }
 
     @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
-        if(multiblock.recipePredicate == null) return true;
+        if(recipePredicate == null) return true;
 
-        return multiblock.recipePredicate.test(
-                new MCControllerTile(this),
-                new MCRecipe(recipe),
-                consumeIfSuccess
-        );
+        try {
+            return recipePredicate.test(
+                    new MCControllerTile(this),
+                    new MCRecipe(recipe),
+                    consumeIfSuccess
+            );
+        } catch(RuntimeException e) {
+            logFailure("recipePredicate", e);
+            recipePredicate = null;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRemoval() {
+        super.onRemoval();
+
+        if(removalFunction == null) return;
+
+        try {
+            removalFunction.onRemoval(new MCControllerTile(this));
+        } catch(RuntimeException e) {
+            logFailure("removalFunction", e);
+            removalFunction = null;
+        }
+    }
+
+    private void logFailure(String func, Throwable t) {
+        CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, multiblock), t);
     }
 
     @Override
@@ -122,6 +174,23 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public MetaTileEntity createMetaTileEntity(MetaTileEntityHolder holder) {
         return new TileControllerCustom(multiblock);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
+
+        if(persistentData != null)
+            data.setTag(TAG_PERSISTENT, CraftTweakerMC.getNBT(persistentData));
+
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+
+        persistentData = CraftTweakerMC.getIData(data.getTag(TAG_PERSISTENT));
     }
 
 }

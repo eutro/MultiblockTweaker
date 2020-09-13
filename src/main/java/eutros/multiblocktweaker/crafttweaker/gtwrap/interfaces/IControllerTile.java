@@ -1,12 +1,14 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.data.IData;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
+import stanhebben.zenscript.annotations.ZenSetter;
 
 @ZenClass("mods.gregtech.IControllerTile")
 @ZenRegister
@@ -53,5 +55,27 @@ public interface IControllerTile extends IMetaTileEntity {
 
     @ZenMethod
     boolean isStructureFormed();
+
+    /**
+     * Store extra data for retrieval with {@link #getExtraData()}
+     *
+     * This will be stored in the tile's NBT when the world is saved,
+     * so will persist even through restarts.
+     *
+     * @param data The extra data to store on the controller.
+     */
+    @ZenMethod
+    @ZenSetter("extraData")
+    void setExtraData(IData data);
+
+    /**
+     * Retrieve extra data stored with {@link #setExtraData(IData)}
+     *
+     * @return The extra data stored on this controller.
+     */
+    @ZenMethod
+    @ZenGetter("extraData")
+    IData getExtraData();
+
 
 }
