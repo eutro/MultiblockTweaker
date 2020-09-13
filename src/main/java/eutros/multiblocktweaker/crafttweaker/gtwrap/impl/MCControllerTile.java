@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
+import crafttweaker.api.data.IData;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
@@ -66,6 +67,16 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     @Override
     public boolean isStructureFormed() {
         return getInternal().isStructureFormed();
+    }
+
+    @Override
+    public IData getExtraData() {
+        return getInternal().persistentData;
+    }
+
+    @Override
+    public void setExtraData(IData data) {
+        getInternal().persistentData = data;
     }
 
 }

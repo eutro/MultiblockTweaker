@@ -1,7 +1,10 @@
 package eutros.multiblocktweaker.gregtech.tile;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.data.IData;
 import crafttweaker.api.formatting.IFormattedText;
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
@@ -20,23 +23,29 @@ import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.render.ICubeRenderer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TileControllerCustom extends RecipeMapMultiblockController {
 
+    public static final String TAG_PERSISTENT = MultiblockTweaker.MOD_ID + ":persistent";
     public final CustomMultiblock multiblock;
     // remove on error
     private IDisplayTextFunction displayTextFunction;
     private IRemovalFunction removalFunction;
     private IRecipePredicate recipePredicate;
+
+    @Nullable
+    public IData persistentData;
 
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
@@ -150,6 +159,23 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public MetaTileEntity createMetaTileEntity(MetaTileEntityHolder holder) {
         return new TileControllerCustom(multiblock);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        data = super.writeToNBT(data);
+
+        if(persistentData != null)
+            data.setTag(TAG_PERSISTENT, CraftTweakerMC.getNBT(persistentData));
+
+        return data;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+
+        persistentData = CraftTweakerMC.getIData(data.getTag(TAG_PERSISTENT));
     }
 
 }
