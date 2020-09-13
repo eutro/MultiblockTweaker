@@ -1,6 +1,11 @@
 package eutros.multiblocktweaker.gregtech.tile;
 
+import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.formatting.IFormattedText;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
+import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
@@ -16,6 +21,7 @@ import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.render.ICubeRenderer;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.items.IItemHandler;
 
@@ -27,6 +33,10 @@ import java.util.stream.Stream;
 public class TileControllerCustom extends RecipeMapMultiblockController {
 
     public final CustomMultiblock multiblock;
+    // remove on error
+    private IDisplayTextFunction displayTextFunction;
+    private IRemovalFunction removalFunction;
+    private IRecipePredicate recipePredicate;
 
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
@@ -37,6 +47,9 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 multiblock.setupRecipe,
                 multiblock.completeRecipe
         );
+        displayTextFunction = multiblock.displayTextFunction;
+        removalFunction = multiblock.removalFunction;
+        recipePredicate = multiblock.recipePredicate;
     }
 
     @Override
@@ -50,6 +63,19 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 textList.add(new TextComponentTranslation("gregtech.multiblock.generation_eu", Math.min(-eut, energyContainer.getOutputVoltage())));
             }
         }
+
+        if(displayTextFunction == null) return;
+
+        try {
+            List<IFormattedText> added = displayTextFunction.addDisplayText();
+            for(IFormattedText component : added) {
+                textList.add(new TextComponentString(component.getText()));
+            }
+        } catch(RuntimeException e) {
+            logFailure("displayTextFunction", e);
+            displayTextFunction = null;
+        }
+
     }
 
     @Override
@@ -66,22 +92,37 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
-        if(multiblock.recipePredicate == null) return true;
+        if(recipePredicate == null) return true;
 
-        return multiblock.recipePredicate.test(
-                new MCControllerTile(this),
-                new MCRecipe(recipe),
-                consumeIfSuccess
-        );
+        try {
+            return recipePredicate.test(
+                    new MCControllerTile(this),
+                    new MCRecipe(recipe),
+                    consumeIfSuccess
+            );
+        } catch(RuntimeException e) {
+            logFailure("recipePredicate", e);
+            recipePredicate = null;
+        }
+        return true;
     }
 
     @Override
     public void onRemoval() {
         super.onRemoval();
 
-        if(multiblock.removalFunction == null) return;
+        if(removalFunction == null) return;
 
-        multiblock.removalFunction.onRemoval(new MCControllerTile(this));
+        try {
+            removalFunction.onRemoval(new MCControllerTile(this));
+        } catch(RuntimeException e) {
+            logFailure("removalFunction", e);
+            removalFunction = null;
+        }
+    }
+
+    private void logFailure(String func, Throwable t) {
+        CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, multiblock), t);
     }
 
     @Override

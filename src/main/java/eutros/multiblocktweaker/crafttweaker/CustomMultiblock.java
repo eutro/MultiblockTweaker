@@ -98,6 +98,12 @@ public class CustomMultiblock {
      * Should be set using the ZenSetter.
      */
     @ZenProperty public IRemovalFunction removalFunction;
+    /**
+     * The {@link IDisplayTextFunction} this multiblock has.
+     *
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty public IDisplayTextFunction displayTextFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
