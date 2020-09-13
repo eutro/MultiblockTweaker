@@ -92,6 +92,12 @@ public class CustomMultiblock {
      * Should be set using the ZenSetter.
      */
     @ZenProperty public IRecipePredicate recipePredicate;
+    /**
+     * The {@link IRemovalFunction} this multiblock has.
+     *
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty public IRemovalFunction removalFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
