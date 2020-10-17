@@ -3,7 +3,6 @@ package eutros.multiblocktweaker.helper;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ public class ReflectionHelper {
     private static Map<Class<?>, Map<String, MethodHandle>> handles = new IdentityHashMap<>();
 
     @SuppressWarnings("unchecked")
-    @Nullable
     public static <T, C> T getPrivate(Class<? super C> fieldClass, String fieldName, C object) throws ClassCastException {
         try {
             return (T) handles

@@ -2,10 +2,12 @@ package eutros.multiblocktweaker.client;
 
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import eutros.multiblocktweaker.jei.MultiblockTweakerJEIPlugin;
+import gnu.trove.map.TIntObjectMap;
 import gregtech.api.block.machines.BlockMachine;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.multiblock.BlockWorldState;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.render.scene.WorldSceneRenderer;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
@@ -36,10 +38,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static eutros.multiblocktweaker.client.ClientTickHandler.partialTicks;
 
@@ -312,15 +316,108 @@ public class PreviewRenderer {
             return null;
         }
 
-        PatternMatchContext ctx = pattern.checkPatternAt(world, targetPos, te.getFrontFacing().getOpposite());
-        if(ctx == null) {
-            BlockPos lastPos = ReflectionHelper.getPrivate(BlockPattern.class, "blockPos", pattern);
-            if(lastPos != null) {
-                return lastPos.subtract(targetPos);
+        BlockPos lastPos = getPatternError(pattern, world, targetPos, te.getFrontFacing().getOpposite());
+        return lastPos.subtract(targetPos);
+    }
+
+    /**
+     * Copied from {@link BlockPattern#checkPatternAt(World, BlockPos, EnumFacing)}, but excluding
+     * some of the whole-structure checks. Additionally, this does not mutate the BlockPattern at all.
+     */
+    @Nonnull
+    private static BlockPos getPatternError(BlockPattern pattern, World world, BlockPos centerPos, EnumFacing facing) {
+        int fingerLength = pattern.getFingerLength();
+        int thumbLength = pattern.getThumbLength();
+        int palmLength = pattern.getPalmLength();
+        int[] centerOffset = ReflectionHelper.getPrivate(BlockPattern.class, "centerOffset", pattern);
+        int[][] aisleRepetitions = ReflectionHelper.getPrivate(BlockPattern.class, "aisleRepetitions", pattern);
+        Predicate<BlockWorldState>[][][] blockMatches = ReflectionHelper.getPrivate(BlockPattern.class, "blockMatches", pattern);
+        TIntObjectMap<Predicate<PatternMatchContext>> layerMatchers = ReflectionHelper.getPrivate(BlockPattern.class, "layerMatchers", pattern);
+        PatternMatchContext matchContext = new PatternMatchContext();
+        PatternMatchContext layerContext = new PatternMatchContext();
+        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
+        BlockWorldState worldState = new BlockWorldState();
+
+        boolean findFirstAisle = false;
+        int minZ = -centerOffset[4];
+
+        //Checking aisles
+        for(int c = 0, z = minZ++, r; c < fingerLength; c++) {
+            //Checking repeatable slices
+            loop:
+            for(r = 0; (findFirstAisle ? r < aisleRepetitions[c][1] : z <= -centerOffset[3]); r++) {
+                //Checking single slice
+                layerContext.reset();
+
+                for(int b = 0, y = -centerOffset[1]; b < thumbLength; b++, y++) {
+                    for(int a = 0, x = -centerOffset[0]; a < palmLength; a++, x++) {
+                        Predicate<BlockWorldState> predicate = blockMatches[c][b][a];
+                        setActualRelativeOffset(pattern, blockPos, x, y, z, facing);
+                        blockPos.setPos(blockPos.getX() + centerPos.getX(), blockPos.getY() + centerPos.getY(), blockPos.getZ() + centerPos.getZ());
+                        worldState.update(world, blockPos, matchContext, layerContext);
+
+                        if(!predicate.test(worldState)) {
+                            if(findFirstAisle) {
+                                if(r < aisleRepetitions[c][0]) {//retreat to see if the first aisle can start later
+                                    r = c = 0;
+                                    z = minZ++;
+                                    matchContext.reset();
+                                    findFirstAisle = false;
+                                }
+                            } else {
+                                z++;//continue searching for the first aisle
+                            }
+                            continue loop;
+                        }
+                    }
+                }
+                findFirstAisle = true;
+                z++;
+
+                //Check layer-local matcher predicate
+                Predicate<PatternMatchContext> layerPredicate = layerMatchers.get(c);
+                if(layerPredicate != null && !layerPredicate.test(layerContext)) {
+                    return blockPos;
+                }
+            }
+            //Repetitions out of range
+            if(r < aisleRepetitions[c][0]) {
+                return blockPos;
             }
         }
 
-        return BlockPos.ORIGIN;
+        // excluded countMatches and validators; these should highlight the controller
+
+        return centerPos;
+    }
+
+    private static void setActualRelativeOffset(BlockPattern pattern, BlockPos.MutableBlockPos pos, int x, int y, int z, EnumFacing facing) {
+        BlockPattern.RelativeDirection[] structureDir = ReflectionHelper.getPrivate(BlockPattern.class, "structureDir", pattern);
+
+        int[] c0 = new int[] {x, y, z}, c1 = new int[3];
+        for(int i = 0; i < 3; i++) {
+            switch(structureDir[i].getActualFacing(facing)) {
+                case UP:
+                    c1[1] = c0[i];
+                    break;
+                case DOWN:
+                    c1[1] = -c0[i];
+                    break;
+                case WEST:
+                    c1[0] = -c0[i];
+                    break;
+                case EAST:
+                    c1[0] = c0[i];
+                    break;
+                case NORTH:
+                    c1[2] = -c0[i];
+                    break;
+                case SOUTH:
+                    c1[2] = c0[i];
+                    break;
+            }
+        }
+        pos.setPos(c1[0], c1[1], c1[2]);
     }
 
 }
