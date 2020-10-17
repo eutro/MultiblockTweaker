@@ -1,24 +1,54 @@
 package eutros.multiblocktweaker.helper;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class ReflectionHelper {
 
-    private static Logger LOGGER = LogManager.getLogger();
+    private static Map<Class<?>, Map<String, MethodHandle>> handles = new IdentityHashMap<>();
 
     @SuppressWarnings("unchecked")
     @Nullable
     public static <T, C> T getPrivate(Class<? super C> fieldClass, String fieldName, C object) throws ClassCastException {
         try {
-            return (T) FieldUtils.getField(fieldClass, fieldName, true).get(object);
-        } catch(IllegalAccessException | NullPointerException e) {
-            LOGGER.debug(String.format("Reflection on class %s failed. Couldn't get field %s of %s.", fieldClass, fieldName, object), e);
-            return null;
+            return (T) handles
+                    .computeIfAbsent(fieldClass, c -> new HashMap<>())
+                    .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
+                    .invoke(object);
+        } catch(Error | RuntimeException e) {
+            throw e;
+        } catch(Throwable e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private static <C> Function<String, MethodHandle> computeHandle(Class<? super C> fieldClass, String fieldName) {
+        return p -> {
+            try {
+                return MethodHandles.publicLookup()
+                        .unreflectGetter(
+                                Preconditions.checkNotNull(
+                                        FieldUtils.getField(
+                                                fieldClass,
+                                                fieldName,
+                                                true
+                                        ),
+                                        "Couldn't find field %s of %s.",
+                                        fieldName, fieldClass
+                                )
+                        );
+            } catch(IllegalAccessException e) {
+                throw new IllegalStateException(String.format("Couldn't access field %s of %s", fieldName, fieldClass), e);
+            }
+        };
     }
 
 }
