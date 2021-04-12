@@ -5,8 +5,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 @Mod(modid = MultiblockTweaker.MOD_ID,
-     name = "Multiblock Tweaker",
-     version = "@GRADLE:VERSION@")
+        name = "Multiblock Tweaker",
+        version = "@GRADLE:VERSION@")
 public class MultiblockTweaker {
 
     public static final String MOD_ID = "multiblocktweaker";
@@ -16,7 +16,7 @@ public class MultiblockTweaker {
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent evt) {
-        if(evt.getSide().isClient())
+        if (evt.getSide().isClient())
             PreviewHandler.init();
     }
 

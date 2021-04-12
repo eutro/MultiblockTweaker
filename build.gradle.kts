@@ -75,7 +75,7 @@ dependencies {
     val runtime: Configuration by configurations
     val implementation: Configuration by configurations
 
-    deobfCompile("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.581")
+    deobfCompile("CraftTweaker2:CraftTweaker2-MC1120-Main:${properties["ct_ver"]}")
 
     deobfProvided("mezz.jei:jei_1.12.2:${properties["jei_ver"]}:api")
     runtime("mezz.jei:jei_1.12.2:${properties["jei_ver"]}")
@@ -117,10 +117,10 @@ tasks.register("copyExamples") {
         examplesDir.copyRecursively(scriptsDir)
     }
 }
+tasks["runClient"].dependsOn("copyExamples")
 
 val javadoc: Javadoc by tasks
 javadoc.apply {
     exclude { el -> el.file.isFile && el.file.useLines { lines -> !lines.contains("@ZenRegister") } }
+    setDestinationDir(file("docs"))
 }
-
-tasks["runClient"].dependsOn("copyExamples")

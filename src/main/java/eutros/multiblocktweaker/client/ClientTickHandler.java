@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT,
-                        modid = MultiblockTweaker.MOD_ID)
+        modid = MultiblockTweaker.MOD_ID)
 public class ClientTickHandler {
 
     public static int ticksInGame = 0;
@@ -27,8 +27,8 @@ public class ClientTickHandler {
 
     @SubscribeEvent
     public static void renderTick(TickEvent.RenderTickEvent event) {
-        if(event.phase == TickEvent.Phase.START) {
-            if(!Minecraft.getMinecraft().isGamePaused()) {
+        if (event.phase == TickEvent.Phase.START) {
+            if (!Minecraft.getMinecraft().isGamePaused()) {
                 partialTicks = event.renderTickTime;
             }
         } else {
@@ -38,8 +38,8 @@ public class ClientTickHandler {
 
     @SubscribeEvent
     public static void clientTickEnd(TickEvent.ClientTickEvent event) {
-        if(event.phase == TickEvent.Phase.END) {
-            if(!Minecraft.getMinecraft().isGamePaused()) {
+        if (event.phase == TickEvent.Phase.END) {
+            if (!Minecraft.getMinecraft().isGamePaused()) {
                 ++ticksInGame;
                 partialTicks = 0;
             }

@@ -18,7 +18,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
 
 /**
  * This is used to define what block should show in the JEI preview.
- *
+ * <p>
  * It is used in {@link MultiblockShapeInfoBuilder#where(String, IBlockInfo)}.
  *
  * @see MultiblockShapeInfoBuilder
@@ -33,7 +33,7 @@ public interface IBlockInfo {
 
     /**
      * Get an {@link IBlockInfo} from a block.
-     *
+     * <p>
      * Equivalent to {@code block as IBlockInfo}.
      *
      * @param block The block to display.
@@ -46,7 +46,7 @@ public interface IBlockInfo {
 
     /**
      * Get an {@link IBlockInfo} from a block state.
-     *
+     * <p>
      * Equivalent to {@code state as IBlockInfo}.
      *
      * @param state The block state to display.
@@ -60,7 +60,7 @@ public interface IBlockInfo {
     /**
      * Get an {@link IBlockInfo} from a controller's string ID.
      *
-     * @param id The id of the meta tile entity to display.
+     * @param id     The id of the meta tile entity to display.
      * @param facing (Optional) The direction this should face. {@code IFacing.west()} by default.
      * @return An {@link IBlockInfo} that represents the given block.
      */
@@ -78,6 +78,7 @@ public interface IBlockInfo {
     /**
      * An {@link IBlockInfo} that displays nothing.
      */
-    @ZenProperty IBlockInfo EMPTY = new MCBlockInfo(BlockInfo.EMPTY);
+    @ZenProperty
+    IBlockInfo EMPTY = new MCBlockInfo(BlockInfo.EMPTY);
 
 }

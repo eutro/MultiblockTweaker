@@ -29,6 +29,7 @@ public interface IMetaTileEntity {
 
     /**
      * Get a meta tile entity by its ID.
+     *
      * @param id The ID of the meta tile entity.
      * @return The meta tile entity referenced by the ID, or null.
      */
@@ -37,13 +38,13 @@ public interface IMetaTileEntity {
     static IMetaTileEntity byId(@NotNull String id) {
         ResourceLocation loc = new ResourceLocation(id);
 
-        if(loc.getResourceDomain().equals("minecraft")) {
+        if (loc.getResourceDomain().equals("minecraft")) {
             loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
         }
 
         MetaTileEntity te = GregTechAPI.META_TILE_ENTITY_REGISTRY.getObject(loc);
 
-        if(te != null)
+        if (te != null)
             return new MCMetaTileEntity(te);
 
         return null;

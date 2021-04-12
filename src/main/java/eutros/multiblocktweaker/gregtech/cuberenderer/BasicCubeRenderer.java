@@ -22,10 +22,10 @@ public class BasicCubeRenderer implements ICubeRenderer {
     private TextureAtlasSprite sprite = null;
 
     public BasicCubeRenderer(ResourceLocation loc) {
-        if(FMLCommonHandler.instance().getSide().isServer())
+        if (FMLCommonHandler.instance().getSide().isServer())
             return;
         this.loc = loc;
-        if(MapHolder.map != null) {
+        if (MapHolder.map != null) {
             sprite = MapHolder.map.getAtlasSprite(loc.toString());
         } else {
             MinecraftForge.EVENT_BUS.register(this);
@@ -41,7 +41,7 @@ public class BasicCubeRenderer implements ICubeRenderer {
     @SideOnly(Side.CLIENT)
     @Override // why why why why why
     public void render(CCRenderState state, Matrix4 translate, IVertexOperation[] ops, Cuboid6 cuboid) {
-        for(EnumFacing face : EnumFacing.values()) {
+        for (EnumFacing face : EnumFacing.values()) {
             Textures.renderFace(state, translate, ops, face, cuboid, sprite);
         }
     }
@@ -49,7 +49,7 @@ public class BasicCubeRenderer implements ICubeRenderer {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void preStitch(TextureStitchEvent.Pre evt) {
-        if(sprite == null)
+        if (sprite == null)
             sprite = evt.getMap().registerSprite(loc);
     }
 

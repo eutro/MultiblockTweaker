@@ -42,10 +42,10 @@ public class MCBlockInfo implements IBlockInfo {
 
         @Override
         public TileEntity getTileEntity() {
-            if(te == null) {
+            if (te == null) {
                 te = new MetaTileEntityHolder();
                 CustomMultiblock mb = MultiblockRegistry.get(id);
-                if(mb != null) {
+                if (mb != null) {
                     te.setMetaTileEntity(new TileControllerCustom(mb));
                     te.getMetaTileEntity().setFrontFacing(facing);
                 } else {
@@ -58,7 +58,7 @@ public class MCBlockInfo implements IBlockInfo {
         @Override
         public void apply(World world, BlockPos pos) {
             world.setBlockState(pos, getBlockState());
-            if(getTileEntity() != null) {
+            if (getTileEntity() != null) {
                 world.setTileEntity(pos, getTileEntity());
             }
         }

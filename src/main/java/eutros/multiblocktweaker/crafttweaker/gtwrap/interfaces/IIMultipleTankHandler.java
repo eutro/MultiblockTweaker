@@ -39,7 +39,7 @@ public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
      * Try to fill the tank with a fluid.
      *
      * @param fluidStack The fluid to fill with.
-     * @param doFill Whether the filling should actually be done.
+     * @param doFill     Whether the filling should actually be done.
      * @return How much of the fluid was inserted.
      */
     @ZenMethod
@@ -49,7 +49,7 @@ public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
      * Try to drain the tank of a fluid.
      *
      * @param fluidStack The fluid to drain.
-     * @param doDrain Whether the draining should actually be done.
+     * @param doDrain    Whether the draining should actually be done.
      * @return How much of the fluid was drained.
      */
     @Nullable
@@ -60,7 +60,7 @@ public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
      * Try to drain the tank of fluid.
      *
      * @param maxDrain How much fluid to drain.
-     * @param doDrain Whether the draining should actually be done.
+     * @param doDrain  Whether the draining should actually be done.
      * @return How much of the fluid was drained.
      */
     @Nullable

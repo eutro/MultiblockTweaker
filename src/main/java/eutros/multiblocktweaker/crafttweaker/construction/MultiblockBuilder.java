@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * The Builder, or Multiblock Builder, is used to define a custom {@link CustomMultiblock}.
- *
+ * <p>
  * To get started, call {@link #start(String, int)}.
  */
 @ZenClass("mods.gregtech.multiblock.Builder")
@@ -59,7 +59,7 @@ public class MultiblockBuilder {
     @ZenMethod
     public static MultiblockBuilder start(@NotNull String location, int metaId) {
         ResourceLocation loc = new ResourceLocation(location);
-        if(loc.getResourceDomain().equals("minecraft")) {
+        if (loc.getResourceDomain().equals("minecraft")) {
             loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
         }
         return new MultiblockBuilder(loc, metaId);
@@ -115,7 +115,7 @@ public class MultiblockBuilder {
      */
     @ZenMethod
     public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo... designs) {
-        for(IMultiblockShapeInfo info : designs) {
+        for (IMultiblockShapeInfo info : designs) {
             this.designs.add(info.getInternal());
         }
         return this;
@@ -123,7 +123,7 @@ public class MultiblockBuilder {
 
     /**
      * Construct the {@link CustomMultiblock} using the defined features.
-     *
+     * <p>
      * Will fail if {@link #withPattern(IBlockPattern)} or {@link #withRecipeMap(RecipeMap)} wasn't called,
      * or if neither {@link #withTexture(IICubeRenderer)} nor {@link #addDesign(IMultiblockShapeInfo...)} was called.
      *
@@ -132,16 +132,16 @@ public class MultiblockBuilder {
     @ZenMethod
     @Nullable
     public CustomMultiblock build() {
-        if(pattern == null) {
+        if (pattern == null) {
             CraftTweakerAPI.logError(String.format("No pattern defined for multiblock \"%s\"", loc));
             return null;
         }
-        if(recipeMap == null) {
+        if (recipeMap == null) {
             CraftTweakerAPI.logError(String.format("No recipeMap defined for multiblock \"%s\"", loc));
             return null;
         }
-        if(texture == null) {
-            if(designs.isEmpty()) {
+        if (texture == null) {
+            if (designs.isEmpty()) {
                 CraftTweakerAPI.logError(String.format("No texture defined for multiblock \"%s\", and there are no defined designs.", loc));
                 return null;
             } else {
@@ -160,7 +160,7 @@ public class MultiblockBuilder {
                         .map(Map.Entry::getKey)
                         .map(SidedCubeRenderer::new);
 
-                if(!tex.isPresent()) {
+                if (!tex.isPresent()) {
                     CraftTweakerAPI.logWarning(String.format("No texture defined for multiblock \"%s\", and couldn't resolve texture from defined designs.", loc));
                     return null;
                 }
@@ -168,7 +168,7 @@ public class MultiblockBuilder {
                 texture = tex.get();
             }
         }
-        if(designs.isEmpty()) {
+        if (designs.isEmpty()) {
             CraftTweakerAPI.logWarning(String.format("No designs defined for multiblock \"%s\". It will not show up in JEI.", loc));
         }
 
@@ -177,8 +177,11 @@ public class MultiblockBuilder {
 
     /**
      * Convenience method, equivalent to {@code build().register()}
+     * <p>
      *
-     * {@link #build()}, {@link CustomMultiblock#register()}
+     * @return The built {@link CustomMultiblock}.
+     * @see #build()
+     * @see CustomMultiblock#register()
      */
     @Nullable
     @ZenMethod

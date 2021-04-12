@@ -115,8 +115,8 @@ public interface IICubeRenderer {
     @ZenMethod
     static IICubeRenderer sided(Map<IFacing, String> map) {
         EnumMap<EnumFacing, ResourceLocation> result = new EnumMap<>(EnumFacing.class);
-        for(Map.Entry<IFacing, String> e : map.entrySet()) {
-            if(result.put((EnumFacing) e.getKey().getInternal(), new ResourceLocation(e.getValue())) != null) {
+        for (Map.Entry<IFacing, String> e : map.entrySet()) {
+            if (result.put((EnumFacing) e.getKey().getInternal(), new ResourceLocation(e.getValue())) != null) {
                 CraftTweakerAPI.logError("Duplicate key: " + e.getKey().getName());
             }
         }
@@ -156,11 +156,11 @@ public interface IICubeRenderer {
 
         builder.put(EnumFacing.UP, new ResourceLocation(up));
 
-        if(north != null) builder.put(EnumFacing.NORTH, new ResourceLocation(north));
-        if(east != null) builder.put(EnumFacing.EAST, new ResourceLocation(east));
-        if(west != null) builder.put(EnumFacing.WEST, new ResourceLocation(west));
-        if(south != null) builder.put(EnumFacing.SOUTH, new ResourceLocation(south));
-        if(down != null) builder.put(EnumFacing.DOWN, new ResourceLocation(down));
+        if (north != null) builder.put(EnumFacing.NORTH, new ResourceLocation(north));
+        if (east != null) builder.put(EnumFacing.EAST, new ResourceLocation(east));
+        if (west != null) builder.put(EnumFacing.WEST, new ResourceLocation(west));
+        if (south != null) builder.put(EnumFacing.SOUTH, new ResourceLocation(south));
+        if (down != null) builder.put(EnumFacing.DOWN, new ResourceLocation(down));
 
         return new MCCubeRenderer(new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(builder)));
     }

@@ -22,7 +22,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
  *
  * @see IMultiblockShapeInfo
  * <p>
- * Used for {@link MultiblockBuilder#addDesign(IMultiblockShapeInfo)}.
+ * Used for {@link MultiblockBuilder#addDesign(IMultiblockShapeInfo...)}.
  */
 @ZenClass("mods.gregtech.multiblock.FactoryMultiblockShapeInfo")
 @ZenRegister
@@ -36,7 +36,7 @@ public class MultiblockShapeInfoBuilder {
 
     /**
      * Start an empty builder.
-     *
+     * <p>
      * Unlike {@link MultiblockShapeInfoBuilder}, this cannot be rotated.
      *
      * @return An empty builder.
@@ -67,7 +67,7 @@ public class MultiblockShapeInfoBuilder {
      */
     @ZenMethod
     public MultiblockShapeInfoBuilder aisleRepeated(int count, String... data) {
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             inner = inner.aisle(data);
         }
         return this;
@@ -83,7 +83,7 @@ public class MultiblockShapeInfoBuilder {
     @ZenMethod
     public MultiblockShapeInfoBuilder where(String symbol, IBlockInfo value) {
         char c = getSymbol(symbol);
-        if(c != '\0')
+        if (c != '\0')
             inner = inner.where(c, value.getInternal());
         return this;
     }
@@ -99,7 +99,7 @@ public class MultiblockShapeInfoBuilder {
     public MultiblockShapeInfoBuilder where(String symbol, IBlock block) {
         Block blocc = CraftTweakerMC.getBlock(block.getDefinition());
         char c = getSymbol(symbol);
-        if(c != '\0')
+        if (c != '\0')
             inner = inner.where(c, blocc.getDefaultState());
         return this;
     }
@@ -126,7 +126,7 @@ public class MultiblockShapeInfoBuilder {
     @ZenMethod
     public MultiblockShapeInfoBuilder where(String symbol, IBlockState blockState) {
         char c = getSymbol(symbol);
-        if(c != '\0')
+        if (c != '\0')
             inner = inner.where(c, CraftTweakerMC.getBlockState(blockState));
         return this;
     }
@@ -142,7 +142,7 @@ public class MultiblockShapeInfoBuilder {
     @ZenMethod
     public MultiblockShapeInfoBuilder where(String symbol, IMetaTileEntity te, IFacing frontSide) {
         char c = getSymbol(symbol);
-        if(c != '\0')
+        if (c != '\0')
             inner = inner.where(c, te.getInternal(), (EnumFacing) frontSide.getInternal());
         return this;
     }
@@ -158,7 +158,7 @@ public class MultiblockShapeInfoBuilder {
     }
 
     private char getSymbol(String symbol) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return '\0';
         }

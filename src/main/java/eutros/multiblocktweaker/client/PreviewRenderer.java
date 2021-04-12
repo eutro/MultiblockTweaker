@@ -98,9 +98,9 @@ public class PreviewRenderer {
     public void renderModelPreview(RenderWorldLastEvent evt) {
         Minecraft mc = Minecraft.getMinecraft();
 
-        if(renderer == null || opList == -1) return;
+        if (renderer == null || opList == -1) return;
 
-        if(PreviewHandler.getMetaController(mc.world, targetPos) == null) {
+        if (PreviewHandler.getMetaController(mc.world, targetPos) == null) {
             reset();
             return;
         }
@@ -108,7 +108,7 @@ public class PreviewRenderer {
         frame++;
 
         Entity entity = mc.getRenderViewEntity();
-        if(entity == null) entity = mc.player;
+        if (entity == null) entity = mc.player;
 
         double tx = entity.lastTickPosX + ((entity.posX - entity.lastTickPosX) * partialTicks);
         double ty = entity.lastTickPosY + ((entity.posY - entity.lastTickPosY) * partialTicks);
@@ -137,17 +137,17 @@ public class PreviewRenderer {
     }
 
     private List<BlockPos> filterLayer(List<BlockPos> blocks) {
-        if(layerIndex == -1)
+        if (layerIndex == -1)
             return blocks;
 
-        if(layerIndex > maxY - minY) {
+        if (layerIndex > maxY - minY) {
             reset();
             return Collections.emptyList();
         }
 
         List<BlockPos> list = new ArrayList<>();
-        for(BlockPos pos : blocks) {
-            if(pos.getY() == minY + layerIndex) {
+        for (BlockPos pos : blocks) {
+            if (pos.getY() == minY + layerIndex) {
                 list.add(pos);
             }
         }
@@ -158,11 +158,11 @@ public class PreviewRenderer {
     private void refreshOpList() {
         removeOpList();
 
-        if(renderer == null) return;
+        if (renderer == null) return;
 
         List<BlockPos> renderedBlocks = filterLayer(this.renderedBlocks);
 
-        if(renderedBlocks.isEmpty()) return;
+        if (renderedBlocks.isEmpty()) return;
 
         opList = GLAllocation.generateDisplayLists(1);
         GlStateManager.glNewList(opList, GL11.GL_COMPILE);
@@ -184,7 +184,7 @@ public class PreviewRenderer {
 
         TargetBlockAccess targetBA = new TargetBlockAccess(world, BlockPos.ORIGIN);
 
-        for(BlockPos pos : renderedBlocks) {
+        for (BlockPos pos : renderedBlocks) {
             targetBA.setPos(pos);
 
             GlStateManager.pushMatrix();
@@ -196,8 +196,8 @@ public class PreviewRenderer {
 
             buff.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             IBlockState state = world.getBlockState(pos);
-            for(BlockRenderLayer brl : BlockRenderLayer.values()) {
-                if(state.getBlock().canRenderInLayer(state, brl)) {
+            for (BlockRenderLayer brl : BlockRenderLayer.values()) {
+                if (state.getBlock().canRenderInLayer(state, brl)) {
                     ForgeHooksClient.setRenderLayer(brl);
                     brd.renderBlock(state, BlockPos.ORIGIN, targetBA, buff);
                 }
@@ -214,16 +214,16 @@ public class PreviewRenderer {
     }
 
     private void removeOpList() {
-        if(opList != -1) {
+        if (opList != -1) {
             GlStateManager.glDeleteLists(opList, 1);
             opList = -1;
         }
     }
 
     public boolean onUse(World world, BlockPos pos, boolean isRightClick) {
-        if(pos.equals(targetPos)) {
+        if (pos.equals(targetPos)) {
             layerIndex += isRightClick ? 1 : -1;
-            if(layerIndex < -1) {
+            if (layerIndex < -1) {
                 reset();
             } else {
                 checkErrors();
@@ -232,13 +232,13 @@ public class PreviewRenderer {
             return true;
         }
 
-        if(!isRightClick) return false;
+        if (!isRightClick) return false;
 
         MultiblockControllerBase te = PreviewHandler.getMetaController(world, pos);
-        if(te == null) return false;
+        if (te == null) return false;
 
         WorldSceneRenderer tempRenderer = getRenderer(te.getStackForm());
-        if(tempRenderer == null) return false;
+        if (tempRenderer == null) return false;
 
         reset();
         renderer = tempRenderer;
@@ -250,10 +250,10 @@ public class PreviewRenderer {
         renderedBlocks = ReflectionHelper.getPrivate(WorldSceneRenderer.class, "renderedBlocks", renderer);
 
         controllerPos = BlockPos.ORIGIN;
-        if(renderedBlocks != null) {
-            for(BlockPos blockPos : renderedBlocks) {
+        if (renderedBlocks != null) {
+            for (BlockPos blockPos : renderedBlocks) {
                 MetaTileEntity metaTE = BlockMachine.getMetaTileEntity(renderer.world, blockPos);
-                if(metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
+                if (metaTE != null && metaTE.metaTileEntityId.equals(te.metaTileEntityId)) {
                     controllerPos = blockPos;
                     previewFacing = metaTE.getFrontFacing();
                     break;
@@ -262,12 +262,12 @@ public class PreviewRenderer {
 
             minY = Integer.MAX_VALUE;
             maxY = Integer.MIN_VALUE;
-            for(BlockPos blockPos : renderedBlocks) {
+            for (BlockPos blockPos : renderedBlocks) {
                 int y = blockPos.getY();
-                if(y < minY) {
+                if (y < minY) {
                     minY = y;
                 }
-                if(y > maxY) {
+                if (y > maxY) {
                     maxY = y;
                 }
             }
@@ -282,10 +282,10 @@ public class PreviewRenderer {
     }
 
     private void highlightErrors() {
-        if(frame % 20 == 0)
+        if (frame % 20 == 0)
             checkErrors();
 
-        if(errorHighlight == null) return;
+        if (errorHighlight == null) return;
 
         GlStateManager.pushMatrix();
 
@@ -299,9 +299,9 @@ public class PreviewRenderer {
     private void checkErrors() {
         Minecraft mc = Minecraft.getMinecraft();
         MultiblockControllerBase te = PreviewHandler.getMetaController(mc.world, targetPos);
-        if(te == null) return;
+        if (te == null) return;
         BlockPattern pattern = ReflectionHelper.getPrivate(MultiblockControllerBase.class, "structurePattern", te);
-        if(pattern == null) return;
+        if (pattern == null) return;
 
         errorHighlight = getErroneousPos(pattern);
     }
@@ -311,7 +311,7 @@ public class PreviewRenderer {
         WorldClient world = Minecraft.getMinecraft().world;
         MetaTileEntity te = BlockMachine.getMetaTileEntity(world, targetPos);
 
-        if(((MultiblockControllerBase) te).isStructureFormed()) {
+        if (((MultiblockControllerBase) te).isStructureFormed()) {
             reset();
             return null;
         }
@@ -342,23 +342,23 @@ public class PreviewRenderer {
         int minZ = -centerOffset[4];
 
         //Checking aisles
-        for(int c = 0, z = minZ++, r; c < fingerLength; c++) {
+        for (int c = 0, z = minZ++, r; c < fingerLength; c++) {
             //Checking repeatable slices
             loop:
-            for(r = 0; (findFirstAisle ? r < aisleRepetitions[c][1] : z <= -centerOffset[3]); r++) {
+            for (r = 0; (findFirstAisle ? r < aisleRepetitions[c][1] : z <= -centerOffset[3]); r++) {
                 //Checking single slice
                 layerContext.reset();
 
-                for(int b = 0, y = -centerOffset[1]; b < thumbLength; b++, y++) {
-                    for(int a = 0, x = -centerOffset[0]; a < palmLength; a++, x++) {
+                for (int b = 0, y = -centerOffset[1]; b < thumbLength; b++, y++) {
+                    for (int a = 0, x = -centerOffset[0]; a < palmLength; a++, x++) {
                         Predicate<BlockWorldState> predicate = blockMatches[c][b][a];
                         setActualRelativeOffset(pattern, blockPos, x, y, z, facing);
                         blockPos.setPos(blockPos.getX() + centerPos.getX(), blockPos.getY() + centerPos.getY(), blockPos.getZ() + centerPos.getZ());
                         worldState.update(world, blockPos, matchContext, layerContext);
 
-                        if(!predicate.test(worldState)) {
-                            if(findFirstAisle) {
-                                if(r < aisleRepetitions[c][0]) {//retreat to see if the first aisle can start later
+                        if (!predicate.test(worldState)) {
+                            if (findFirstAisle) {
+                                if (r < aisleRepetitions[c][0]) {//retreat to see if the first aisle can start later
                                     r = c = 0;
                                     z = minZ++;
                                     matchContext.reset();
@@ -376,12 +376,12 @@ public class PreviewRenderer {
 
                 //Check layer-local matcher predicate
                 Predicate<PatternMatchContext> layerPredicate = layerMatchers.get(c);
-                if(layerPredicate != null && !layerPredicate.test(layerContext)) {
+                if (layerPredicate != null && !layerPredicate.test(layerContext)) {
                     return blockPos;
                 }
             }
             //Repetitions out of range
-            if(r < aisleRepetitions[c][0]) {
+            if (r < aisleRepetitions[c][0]) {
                 return blockPos;
             }
         }
@@ -394,9 +394,9 @@ public class PreviewRenderer {
     private static void setActualRelativeOffset(BlockPattern pattern, BlockPos.MutableBlockPos pos, int x, int y, int z, EnumFacing facing) {
         BlockPattern.RelativeDirection[] structureDir = ReflectionHelper.getPrivate(BlockPattern.class, "structureDir", pattern);
 
-        int[] c0 = new int[] {x, y, z}, c1 = new int[3];
-        for(int i = 0; i < 3; i++) {
-            switch(structureDir[i].getActualFacing(facing)) {
+        int[] c0 = new int[] { x, y, z }, c1 = new int[3];
+        for (int i = 0; i < 3; i++) {
+            switch (structureDir[i].getActualFacing(facing)) {
                 case UP:
                     c1[1] = c0[i];
                     break;

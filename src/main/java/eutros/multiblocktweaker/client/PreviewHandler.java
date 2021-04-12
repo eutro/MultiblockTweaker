@@ -22,15 +22,15 @@ public class PreviewHandler {
     }
 
     public static void init() {
-        if(Loader.isModLoaded("jei"))
+        if (Loader.isModLoaded("jei"))
             MinecraftForge.EVENT_BUS.register(new PreviewHandler());
     }
 
     @Nullable
     public static MultiblockControllerBase getMetaController(World world, @Nullable BlockPos targetPos) {
-        if(targetPos == null) return null;
+        if (targetPos == null) return null;
         MetaTileEntity mte = BlockMachine.getMetaTileEntity(world, targetPos);
-        if(!(mte instanceof MultiblockControllerBase)) {
+        if (!(mte instanceof MultiblockControllerBase)) {
             return null;
         }
         return (MultiblockControllerBase) mte;
@@ -42,26 +42,26 @@ public class PreviewHandler {
 
         boolean left = false;
         boolean right = false;
-        if(mc.gameSettings.keyBindAttack.isPressed()) {
+        if (mc.gameSettings.keyBindAttack.isPressed()) {
             ++mc.gameSettings.keyBindAttack.pressTime;
             left = true;
-        } else if(mc.gameSettings.keyBindUseItem.isPressed()) {
+        } else if (mc.gameSettings.keyBindUseItem.isPressed()) {
             ++mc.gameSettings.keyBindUseItem.pressTime;
             right = true;
         } else return;
 
-        if(mc.world == null
-                || mc.player == null
-                || mc.objectMouseOver == null
-                || mc.objectMouseOver.typeOfHit != RayTraceResult.Type.BLOCK
-                || getMetaController(mc.world, mc.objectMouseOver.getBlockPos()) == null
-                || (!mc.player.getHeldItemMainhand().isEmpty() || !mc.player.isSneaking())
-                || !PreviewRenderer.INSTANCE.onUse(mc.world, mc.objectMouseOver.getBlockPos(), right)) return;
+        if (mc.world == null
+            || mc.player == null
+            || mc.objectMouseOver == null
+            || mc.objectMouseOver.typeOfHit != RayTraceResult.Type.BLOCK
+            || getMetaController(mc.world, mc.objectMouseOver.getBlockPos()) == null
+            || (!mc.player.getHeldItemMainhand().isEmpty() || !mc.player.isSneaking())
+            || !PreviewRenderer.INSTANCE.onUse(mc.world, mc.objectMouseOver.getBlockPos(), right)) return;
 
         mc.player.swingArm(EnumHand.MAIN_HAND);
 
-        if(left) unPress(mc.gameSettings.keyBindAttack);
-        if(right) unPress(mc.gameSettings.keyBindUseItem);
+        if (left) unPress(mc.gameSettings.keyBindAttack);
+        if (right) unPress(mc.gameSettings.keyBindUseItem);
     }
 
     private void unPress(KeyBinding key) {

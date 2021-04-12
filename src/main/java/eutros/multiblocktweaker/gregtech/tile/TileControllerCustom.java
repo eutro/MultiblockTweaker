@@ -68,25 +68,25 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if(isStructureFormed() &&
-                recipeMapWorkable.isWorkingEnabled() &&
-                recipeMapWorkable.isActive()) {
+        if (isStructureFormed() &&
+            recipeMapWorkable.isWorkingEnabled() &&
+            recipeMapWorkable.isActive()) {
             int eut = recipeMapWorkable.getRecipeEUt();
-            if(eut < 0) {
+            if (eut < 0) {
                 textList.add(new TextComponentTranslation("gregtech.multiblock.generation_eu", Math.min(-eut, energyContainer.getOutputVoltage())));
             }
         }
 
-        if(displayTextFunction == null) return;
+        if (displayTextFunction == null) return;
 
         try {
             List<IFormattedText> added = displayTextFunction.addDisplayText(new MCControllerTile(this));
-            if(added != null) {
-                for(IFormattedText component : added) {
+            if (added != null) {
+                for (IFormattedText component : added) {
                     textList.add(new TextComponentString(component.getText()));
                 }
             }
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             logFailure("displayTextFunction", e);
             displayTextFunction = null;
         }
@@ -104,11 +104,11 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                         .collect(Collectors.toList())
         );
 
-        if(formStructureFunction == null) return;
+        if (formStructureFunction == null) return;
 
         try {
             formStructureFunction.formStructure(new MCControllerTile(this), new MCPatternMatchContext(context));
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             logFailure("formStructureFunction", e);
             formStructureFunction = null;
         }
@@ -116,7 +116,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
-        if(recipePredicate == null) return true;
+        if (recipePredicate == null) return true;
 
         try {
             return recipePredicate.test(
@@ -124,7 +124,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                     new MCRecipe(recipe),
                     consumeIfSuccess
             );
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             logFailure("recipePredicate", e);
             recipePredicate = null;
         }
@@ -135,11 +135,11 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public void onRemoval() {
         super.onRemoval();
 
-        if(removalFunction == null) return;
+        if (removalFunction == null) return;
 
         try {
             removalFunction.onRemoval(new MCControllerTile(this));
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             logFailure("removalFunction", e);
             removalFunction = null;
         }
@@ -155,10 +155,10 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 .map(IItemHandler.class::cast).mapToInt(IItemHandler::getSlots).sum();
         int fluidInputsCount = abilities.getOrDefault(MultiblockAbility.IMPORT_FLUIDS, Collections.emptyList()).size();
         return itemInputsCount >= this.recipeMap.getMinInputs()
-                && fluidInputsCount >= this.recipeMap.getMinFluidInputs()
-                && (multiblock.noEnergy ||
-                abilities.containsKey(MultiblockAbility.INPUT_ENERGY) ||
-                abilities.containsKey(MultiblockAbility.OUTPUT_ENERGY));
+               && fluidInputsCount >= this.recipeMap.getMinFluidInputs()
+               && (multiblock.noEnergy ||
+                   abilities.containsKey(MultiblockAbility.INPUT_ENERGY) ||
+                   abilities.containsKey(MultiblockAbility.OUTPUT_ENERGY));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data = super.writeToNBT(data);
 
-        if(persistentData != null)
+        if (persistentData != null)
             data.setTag(TAG_PERSISTENT, CraftTweakerMC.getNBT(persistentData));
 
         return data;

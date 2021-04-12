@@ -23,13 +23,12 @@ import java.util.List;
 
 /**
  * A representation of a custom GregTech Multiblock.
- *
+ * <p>
  * This is best used for easy access to the recipe map.
- *
+ * <p>
  * Use this to set any custom working functions.
  *
  * @see MultiblockBuilder
- *
  * @see IUpdateFunction
  * @see IUpdateWorktableFunction
  * @see ISetupRecipeFunction
@@ -64,52 +63,60 @@ public class CustomMultiblock {
 
     /**
      * The {@link IUpdateFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IUpdateFunction update;
+    @ZenProperty
+    public IUpdateFunction update;
     /**
      * The {@link IUpdateWorktableFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IUpdateWorktableFunction updateWorktable;
+    @ZenProperty
+    public IUpdateWorktableFunction updateWorktable;
     /**
      * The {@link ISetupRecipeFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public ISetupRecipeFunction setupRecipe;
+    @ZenProperty
+    public ISetupRecipeFunction setupRecipe;
     /**
      * The {@link ICompleteRecipeFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public ICompleteRecipeFunction completeRecipe;
+    @ZenProperty
+    public ICompleteRecipeFunction completeRecipe;
     /**
      * The {@link IRecipePredicate} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IRecipePredicate recipePredicate;
+    @ZenProperty
+    public IRecipePredicate recipePredicate;
     /**
      * The {@link IRemovalFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IRemovalFunction removalFunction;
+    @ZenProperty
+    public IRemovalFunction removalFunction;
     /**
      * The {@link IDisplayTextFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IDisplayTextFunction displayTextFunction;
+    @ZenProperty
+    public IDisplayTextFunction displayTextFunction;
     /**
      * The {@link IFormStructureFunction} this multiblock has.
-     *
+     * <p>
      * Should be set using the ZenSetter.
      */
-    @ZenProperty public IFormStructureFunction formStructureFunction;
+    @ZenProperty
+    public IFormStructureFunction formStructureFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;

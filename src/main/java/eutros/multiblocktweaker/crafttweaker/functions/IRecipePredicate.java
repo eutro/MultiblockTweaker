@@ -20,8 +20,8 @@ public interface IRecipePredicate {
     /**
      * Implement this with a function.
      *
-     * @param controller The controller this is being called from.
-     * @param recipe The recipe to check.
+     * @param controller       The controller this is being called from.
+     * @param recipe           The recipe to check.
      * @param consumeIfSuccess Whether the ingredients are to be consumed.
      * @return Whether the recipe is valid and should be gone through with.
      */

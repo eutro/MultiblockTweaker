@@ -16,8 +16,20 @@ import stanhebben.zenscript.symbols.IZenSymbol;
 import stanhebben.zenscript.type.ZenType;
 import stanhebben.zenscript.type.natives.IJavaMethod;
 
+import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A bracket handler for getting a custom multiblock.
+ * <p>
+ * Usage:
+ * <p>
+ * To get by metadata:
+ * {@code <multiblock:{meta}>}
+ * <p>
+ * To get by resource location:
+ * {@code <multiblock:{location}>}
+ */
 @BracketHandler
 @ZenRegister
 public class CustomMultiblockBracketHandler implements IBracketHandler {
@@ -32,18 +44,23 @@ public class CustomMultiblockBracketHandler implements IBracketHandler {
 
     @Override
     public IZenSymbol resolve(IEnvironmentGlobal environment, List<Token> tokens) {
-        if(tokens.size() < 3) {
+        if (tokens.size() < 3) {
             return null;
         }
 
-        if(tokens.get(0).getValue().equals("multiblock") &&
-                tokens.get(1).getValue().equals(":")) {
-            Token locToken = tokens.get(2);
-            if(locToken.getType() == ZenTokener.T_INTVALUE) {
+        Iterator<Token> it = tokens.iterator();
+        if (it.next().getValue().equals("multiblock") &&
+            it.next().getValue().equals(":")) {
+            Token locToken = it.next();
+            if (locToken.getType() == ZenTokener.T_INTVALUE) {
                 int metaId = Integer.parseInt(locToken.getValue());
                 return position -> new ExpressionCallStatic(position, environment, intGet, new ExpressionInt(position, metaId, ZenType.INT));
             } else {
-                return position -> new ExpressionCallStatic(position, environment, stringGet, new ExpressionString(position, locToken.getValue()));
+                StringBuilder sb = new StringBuilder(locToken.getValue());
+                while (it.hasNext()) {
+                    sb.append(it.next().getValue());
+                }
+                return position -> new ExpressionCallStatic(position, environment, stringGet, new ExpressionString(position, sb.toString()));
             }
         }
 
@@ -51,12 +68,12 @@ public class CustomMultiblockBracketHandler implements IBracketHandler {
     }
 
     @SuppressWarnings("unused")
-    public CustomMultiblock get(String loc) {
+    public static CustomMultiblock get(String loc) {
         return MultiblockRegistry.get(loc);
     }
 
     @SuppressWarnings("unused")
-    public CustomMultiblock get(int metaId) {
+    public static CustomMultiblock get(int metaId) {
         return MultiblockRegistry.get(metaId);
     }
 

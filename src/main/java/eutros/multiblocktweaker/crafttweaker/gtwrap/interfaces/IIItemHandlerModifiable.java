@@ -17,7 +17,7 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
     /**
      * Set the item stack in a slot.
      *
-     * @param slot The slot to set.
+     * @param slot      The slot to set.
      * @param itemStack The stack to set it to.
      */
     @ZenMethod
@@ -41,9 +41,9 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
     /**
      * Try to insert an item stack in a specific slot.
      *
-     * @param slot The slot to insert into.
+     * @param slot      The slot to insert into.
      * @param itemStack The item stack to insert.
-     * @param simulate Whether the insertion should be only simulated, or actually performed.
+     * @param simulate  Whether the insertion should be only simulated, or actually performed.
      * @return The remaining item stack.
      */
     @ZenMethod
@@ -52,8 +52,8 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
     /**
      * Try to extract from an item stack in a specific slot.
      *
-     * @param slot The slot to extract from.
-     * @param amount How much to extract.
+     * @param slot     The slot to extract from.
+     * @param amount   How much to extract.
      * @param simulate Whether the extraction should be only simulated, or actually performed.
      * @return The item stack that was extracted.
      */
@@ -70,7 +70,7 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
     /**
      * Check whether an item stack could potentially be inserted into a slot.
      *
-     * @param slot The slot to check.
+     * @param slot  The slot to check.
      * @param stack The stack to check.
      * @return Whether the slot is valid for the stack.
      */

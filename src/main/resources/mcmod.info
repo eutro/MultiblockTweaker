@@ -1,14 +1,19 @@
-[{
-  "modid": "multiblocktweaker",
-  "name": "Multiblock Tweaker",
-  "description": "Add GregTech CE Multiblocks via CraftTweaker",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "https://www.curseforge.com/minecraft/mc-mods/multiblocktweaker",
-  "authorList": [
-    "Eutros"
-  ],
-  "credits": "ALongStringOfNumbers for testing.",
-  "dependencies": ["gregtech", "crafttweaker"],
-  "logoFile": "assets/multiblocktweaker/logo.png"
-}]
+[
+  {
+    "modid": "multiblocktweaker",
+    "name": "Multiblock Tweaker",
+    "description": "Add GregTech CE Multiblocks via CraftTweaker",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://www.curseforge.com/minecraft/mc-mods/multiblocktweaker",
+    "authorList": [
+      "Eutros"
+    ],
+    "credits": "ALongStringOfNumbers for testing.",
+    "dependencies": [
+      "gregtech",
+      "crafttweaker"
+    ],
+    "logoFile": "assets/multiblocktweaker/logo.png"
+  }
+]

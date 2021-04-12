@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 /**
- * Called every time the worktable updates, probably.
+ * Called every time the worktable updates.
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IUpdateFunction")
@@ -16,7 +16,11 @@ import javax.annotation.Nonnull;
 public interface IUpdateFunction {
 
     /**
+     * Called every time the worktable updates.
+     * <p>
      * Implement this with a function.
+     *
+     * @param logic The {@link IRecipeLogic} of the multiblock from which this is run.
      */
     @ZenMethod
     void run(@Nonnull IRecipeLogic logic);

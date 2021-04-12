@@ -19,8 +19,8 @@ public interface IRecipe {
      * Check whether the recipe matches the given ingredients.
      *
      * @param consumeIfSuccessful Whether to consume the ingredients on success.
-     * @param inputs The item inputs.
-     * @param fluidInputs The fluid inputs.
+     * @param inputs              The item inputs.
+     * @param fluidInputs         The fluid inputs.
      * @return Whether the recipe matches.
      */
     @ZenMethod
@@ -60,6 +60,7 @@ public interface IRecipe {
     ILiquidStack[] getFluidInputs();
 
     /**
+     * @param fluid The fluid to check.
      * @return Whether the given fluid is an ingredient.
      */
     @ZenMethod
@@ -96,18 +97,21 @@ public interface IRecipe {
     String[] getPropertyKeys();
 
     /**
+     * @param key The key to reference.
      * @return Get the boolean property referenced by the given key.
      */
     @ZenMethod
     boolean getBooleanProperty(String key);
 
     /**
+     * @param key The key to reference.
      * @return Get the integer property referenced by the given key.
      */
     @ZenMethod
     int getIntegerProperty(String key);
 
     /**
+     * @param key The key to reference.
      * @return Get the string property referenced by the given key.
      */
     @ZenMethod

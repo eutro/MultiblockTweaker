@@ -33,10 +33,10 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
     private static int getSlotsHeight(int items, int fluids) {
         int[] grid = determineSlotsGrid(items);
         return 10 + SLOT_SIZE * (grid[1] + (fluids > 0 ?
-                                            (grid[1] >= fluids && grid[0] < 3 ?
-                                             fluids - 1 :
-                                             (int) Math.ceil(fluids / (double) GRID_WIDTH)) :
-                                            0));
+                (grid[1] >= fluids && grid[0] < 3 ?
+                        fluids - 1 :
+                        (int) Math.ceil(fluids / (double) GRID_WIDTH)) :
+                0));
     }
 
     @Nonnull
@@ -44,10 +44,10 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND,
                 176,
                 (slotsHeight + (getRecipeList().parallelStream()
-                        .map(Recipe::getPropertyKeys)
-                        .mapToInt(Set::size)
-                        .max()
-                        .orElse(0) + 4) * LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
+                                        .map(Recipe::getPropertyKeys)
+                                        .mapToInt(Set::size)
+                                        .max()
+                                        .orElse(0) + 4) * LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
         builder.widget(new ProgressWidget(progressSupplier, 77, slotsHeight / 2 - 10, 20, 20, progressBarTexture, moveType));
         addInventorySlotGroup(builder, importItems, importFluids, false);
         addInventorySlotGroup(builder, exportItems, exportFluids, true);
@@ -60,7 +60,7 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
         int itemInputsCount = itemHandler.getSlots();
         int fluidInputsCount = fluidHandler.getTanks();
         boolean invertFluids = false;
-        if(itemInputsCount == 0) {
+        if (itemInputsCount == 0) {
             int tmp = itemInputsCount;
             itemInputsCount = fluidInputsCount;
             fluidInputsCount = tmp;
@@ -72,24 +72,24 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
         int startInputsX = isOutputs ? 106 : 69 - itemSlotsToLeft * 18;
         //             replace hard-coded 32...
         int startInputsY = slotsHeight / 2 - (int) (itemSlotsToDown / 2.0 * SLOT_SIZE);
-        for(int i = 0; i < itemSlotsToDown; i++) {
-            for(int j = 0; j < itemSlotsToLeft; j++) {
+        for (int i = 0; i < itemSlotsToDown; i++) {
+            for (int j = 0; j < itemSlotsToLeft; j++) {
                 int slotIndex = i * itemSlotsToLeft + j;
                 int x = startInputsX + 18 * j;
                 int y = startInputsY + 18 * i;
                 addSlot(builder, x, y, slotIndex, itemHandler, fluidHandler, invertFluids, isOutputs);
             }
         }
-        if(fluidInputsCount > 0 || invertFluids) {
-            if(itemSlotsToDown >= fluidInputsCount && itemSlotsToLeft < 3) {
+        if (fluidInputsCount > 0 || invertFluids) {
+            if (itemSlotsToDown >= fluidInputsCount && itemSlotsToLeft < 3) {
                 int startSpecX = isOutputs ? startInputsX + itemSlotsToLeft * 18 : startInputsX - 18;
-                for(int i = 0; i < fluidInputsCount; i++) {
+                for (int i = 0; i < fluidInputsCount; i++) {
                     int y = startInputsY + 18 * i;
                     addSlot(builder, startSpecX, y, i, itemHandler, fluidHandler, !invertFluids, isOutputs);
                 }
             } else {
                 int startSpecY = startInputsY + itemSlotsToDown * 18;
-                for(int i = 0; i < fluidInputsCount; i++) {
+                for (int i = 0; i < fluidInputsCount; i++) {
                     int x = isOutputs ?
                             startInputsX + 18 * (i % 3) :
                             startInputsX + itemSlotsToLeft * 18 - 18 - 18 * (i % 3);

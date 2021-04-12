@@ -37,7 +37,7 @@ public interface IIFluidTank {
      * Try to fill this tank.
      *
      * @param fluidStack The {@link ILiquidStack} to try and fill the tank with.
-     * @param doFill {@code true} to actually do the filling, {@code false} to only simulate.
+     * @param doFill     {@code true} to actually do the filling, {@code false} to only simulate.
      * @return How much fluid was inserted, in mB.
      */
     @ZenMethod
@@ -47,7 +47,7 @@ public interface IIFluidTank {
      * Try to drain this tank.
      *
      * @param maxDrain How much should be drained at most, in mB.
-     * @param doDrain {@code true} to actually do the draining, {@code false} to only simulate.
+     * @param doDrain  {@code true} to actually do the draining, {@code false} to only simulate.
      * @return An {@link ILiquidStack} representing what was drained, {@code null} if there was nothing drained.
      */
     @Nullable

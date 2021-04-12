@@ -22,8 +22,8 @@ import java.util.*;
 @ZenRegister
 public class MultiblockRegistry {
 
-    private static Int2ObjectMap<CustomMultiblock> metaIdMap = new Int2ObjectOpenHashMap<>();
-    private static Map<ResourceLocation, CustomMultiblock> resourceLocMap = new HashMap<>();
+    private static final Int2ObjectMap<CustomMultiblock> metaIdMap = new Int2ObjectOpenHashMap<>();
+    private static final Map<ResourceLocation, CustomMultiblock> resourceLocMap = new HashMap<>();
 
     public static void registerMultiblock(@NotNull CustomMultiblock multiblock) {
         resourceLocMap.put(multiblock.loc, multiblock);
@@ -53,7 +53,7 @@ public class MultiblockRegistry {
     @ZenMethod
     public static CustomMultiblock get(@NotNull String location) {
         ResourceLocation loc = new ResourceLocation(location);
-        if(loc.getResourceDomain().equals("minecraft")) {
+        if (loc.getResourceDomain().equals("minecraft")) {
             loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
         }
         return get(loc);
@@ -66,7 +66,6 @@ public class MultiblockRegistry {
     public static List<CustomMultiblock> all() {
         return new ArrayList<>(getAll());
     }
-
 
     @Nullable
     public static CustomMultiblock get(@NotNull ResourceLocation resourceLocation) {

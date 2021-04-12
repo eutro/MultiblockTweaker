@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Called when the multiblock is formed.
- *
+ * <p>
  * Use this to store any extra data from the pattern matching.
  */
 @FunctionalInterface
@@ -22,7 +22,7 @@ public interface IFormStructureFunction {
      * Implement this with a function.
      *
      * @param controller The multiblock controller.
-     * @param context The context of the structure.
+     * @param context    The context of the structure.
      */
     @ZenMethod
     void formStructure(@Nonnull IControllerTile controller, @Nonnull IPatternMatchContext context);

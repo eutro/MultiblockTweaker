@@ -20,7 +20,7 @@ public interface ITextureArea {
 
     /**
      * Get the full image at a location.
-     *
+     * <p>
      * You will most likely wish to define this in a script with {@code #loader preinit}, so the texture actually gets loaded.
      *
      * @param imageLocation The full location of the image.
@@ -33,10 +33,16 @@ public interface ITextureArea {
 
     /**
      * Get an area of an image at a location.
-     *
+     * <p>
      * You will most likely wish to define this in a script with {@code #loader preinit}, so the texture actually gets loaded.
      *
      * @param imageLocation The full location of the image.
+     * @param imageSizeX The X size of the image itself, in pixels.
+     * @param imageSizeY The Y size of the image itself, in pixels.
+     * @param u The X coordinate of the image to start the texture at, in pixels.
+     * @param v The Y coordinate of the image to start the texture at, in pixels.
+     * @param width The width of the texture.
+     * @param height The height of the texture.
      * @return An {@link ITextureArea} of the area of the given image.
      */
     @ZenMethod
@@ -49,8 +55,8 @@ public interface ITextureArea {
      *
      * @param offsetX The offsetX relative to this image.
      * @param offsetY The offsetY relative to this image.
-     * @param width The width of the image.
-     * @param height The height of the image.
+     * @param width   The width of the image.
+     * @param height  The height of the image.
      * @return The new {@link ITextureArea}.
      */
     @ZenMethod

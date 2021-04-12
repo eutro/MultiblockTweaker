@@ -24,6 +24,13 @@ import stanhebben.zenscript.util.ZenPosition;
 
 import java.util.List;
 
+/**
+ * A bracket handler for getting an IBlockState by metadata.
+ * <p>
+ * Usage:
+ * <p>
+ * {@code <metastate:{modid}:{name}:{meta}>}
+ */
 @BracketHandler
 @ZenRegister
 public class MetaStateBracketHandler implements IBracketHandler {
@@ -54,12 +61,12 @@ public class MetaStateBracketHandler implements IBracketHandler {
 
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
 
-        if(block == null)
+        if (block == null)
             block = Blocks.AIR; // this shouldn't ever happen
 
         net.minecraft.block.state.IBlockState mcState = block.getDefaultState();
-        for(net.minecraft.block.state.IBlockState s : block.getBlockState().getValidStates()) {
-            if(block.getMetaFromState(s) == meta) {
+        for (net.minecraft.block.state.IBlockState s : block.getBlockState().getValidStates()) {
+            if (block.getMetaFromState(s) == meta) {
                 mcState = s;
                 break;
             }
@@ -85,7 +92,7 @@ public class MetaStateBracketHandler implements IBracketHandler {
                     if (split.length > 3) {
                         try {
                             meta = Integer.parseInt(split[3]);
-                        } catch(NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             CraftTweakerAPI.logError(String.format("Invalid integer passed for metastate bracket handler: %s", split[3]), e);
                         }
                     }

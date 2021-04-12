@@ -17,7 +17,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * Used for {@link RecipeMap} creation.
- *
+ * <p>
  * Used for {@link MultiblockBuilder#withRecipeMap(RecipeMap)}.
  */
 @ZenClass("mods.gregtech.recipe.FactoryRecipeMap")
@@ -260,11 +260,11 @@ public class RecipeMapBuilder {
                 maxFluidOutputs,
                 (CustomRecipeBuilder) ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"));
 
-        for(byte key : slotOverlays.keys()) {
+        for (byte key : slotOverlays.keys()) {
             map.setSlotOverlay((key & 2) != 0, (key & 1) != 0, (key & 4) != 0, slotOverlays.get(key));
         }
 
-        if(progressBarTexture != null && moveType != null) {
+        if (progressBarTexture != null && moveType != null) {
             map.setProgressBar(progressBarTexture, moveType);
         }
 

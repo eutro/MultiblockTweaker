@@ -20,7 +20,7 @@ import java.util.Arrays;
  * Used to construct an {@link IBlockPattern}.
  *
  * @see IBlockPattern
- *
+ * <p>
  * Used for {@link MultiblockBuilder#withPattern(IBlockPattern)}.
  */
 @ZenClass("mods.gregtech.multiblock.FactoryBlockPattern")
@@ -131,7 +131,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder setAmountLimit(String symbol, int minAmount, int maxLimit) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -148,7 +148,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder setAmountAtLeast(String symbol, int minValue) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -165,7 +165,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder setAmountAtMost(String symbol, int maxValue) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -182,7 +182,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IBlockMatcher blockMatcher) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -200,7 +200,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder whereAnd(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -223,7 +223,7 @@ public class BlockPatternBuilder {
      */
     @ZenMethod
     public BlockPatternBuilder whereOr(String symbol, IBlockMatcher first, IBlockMatcher... matchers) {
-        if(symbol.length() != 1) {
+        if (symbol.length() != 1) {
             CraftTweakerAPI.logError("Symbol given is not a single character!");
             return this;
         }
@@ -238,6 +238,10 @@ public class BlockPatternBuilder {
 
     /**
      * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.statePredicate(state))}
+     *
+     * @param symbol The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param state  The predicate to match blocks by.
+     * @return This builder, for convenience.
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IBlockState state) {
@@ -246,6 +250,10 @@ public class BlockPatternBuilder {
 
     /**
      * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.blockPredicate(block))}
+     *
+     * @param symbol The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param block  The predicate to match blocks by.
+     * @return This builder, for convenience.
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IBlock block) {
@@ -254,6 +262,10 @@ public class BlockPatternBuilder {
 
     /**
      * Convenience method for {@link #where(String, IBlockMatcher)}, shorthand for {@code where(symbol, IBlockMatcher.blockPredicate(stack))}
+     *
+     * @param symbol The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param stack  The predicate to match blocks by.
+     * @return This builder, for convenience.
      */
     @ZenMethod
     public BlockPatternBuilder where(String symbol, IItemStack stack) {

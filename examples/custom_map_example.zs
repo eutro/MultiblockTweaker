@@ -99,7 +99,8 @@ recipes.addShaped(
     ]
 );
 
-magic_miner.recipeMap
+<multiblock:multiblocktweaker:magic_miner> // The Bracket Handler can also be used to refer to it
+    .recipeMap
 	.recipeBuilder()
     .duration(500)
     .EUt(500)

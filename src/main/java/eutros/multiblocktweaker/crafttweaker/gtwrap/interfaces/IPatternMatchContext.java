@@ -25,7 +25,7 @@ public interface IPatternMatchContext {
     /**
      * Set a key's value.
      *
-     * @param key The key whose value should be set.
+     * @param key   The key whose value should be set.
      * @param value The value to set it to.
      */
     @ZenMethod
@@ -34,7 +34,7 @@ public interface IPatternMatchContext {
     /**
      * Set a key's value.
      *
-     * @param key The key whose value should be set.
+     * @param key   The key whose value should be set.
      * @param value The value to set it to.
      */
     @ZenMethod
@@ -43,7 +43,7 @@ public interface IPatternMatchContext {
     /**
      * Increment an integer value.
      *
-     * @param key The key whose value should be incremented.
+     * @param key   The key whose value should be incremented.
      * @param value The value to increment by.
      */
     @ZenMethod
@@ -52,7 +52,7 @@ public interface IPatternMatchContext {
     /**
      * Get the string referenced by a key, or the fallback value given.
      *
-     * @param key The key whose value should be returned
+     * @param key          The key whose value should be returned
      * @param defaultValue The value to return if the key is not present.
      * @return The value referenced by the key, or default value if the key wasn't present.
      */
@@ -60,12 +60,14 @@ public interface IPatternMatchContext {
     String getOrDefault(String key, String defaultValue);
 
     /**
+     * @param key The key to get.
      * @return The string referenced by a key.
      */
     @ZenMethod
     String get(String key);
 
     /**
+     * @param key The key to get.
      * @return The integer referenced by a key, or 0 if it wasn't set before.
      */
     @ZenMethod
@@ -74,7 +76,7 @@ public interface IPatternMatchContext {
     /**
      * Get the string referenced by a key, put the fallback value given if the key was not present.
      *
-     * @param key The key whose value should be returned
+     * @param key          The key whose value should be returned
      * @param initialValue The value to set and return if the key is not present.
      * @return The value referenced by the key, or initial value if the key wasn't present.
      */

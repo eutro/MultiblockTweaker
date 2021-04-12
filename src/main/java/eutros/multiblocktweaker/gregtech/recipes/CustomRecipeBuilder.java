@@ -36,7 +36,7 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
 
     @NotNull
     protected EnumValidationResult validate() {
-        if(this.EUt == 0) {
+        if (this.EUt == 0) {
             int eUt = EUt;
             EUt = 1;
             super.validate();

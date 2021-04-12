@@ -21,9 +21,9 @@ public class ReflectionHelper {
                     .computeIfAbsent(fieldClass, c -> new HashMap<>())
                     .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
                     .invoke(object);
-        } catch(Error | RuntimeException e) {
+        } catch (Error | RuntimeException e) {
             throw e;
-        } catch(Throwable e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
@@ -43,7 +43,7 @@ public class ReflectionHelper {
                                         fieldName, fieldClass
                                 )
                         );
-            } catch(IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 throw new IllegalStateException(String.format("Couldn't access field %s of %s", fieldName, fieldClass), e);
             }
         };

@@ -20,8 +20,8 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
     @Override
     public void register(@NotNull IModRegistry registry) {
         List<MultiblockInfoRecipeWrapper> recipeList = new ArrayList<>();
-        for(CustomMultiblock customMultiblock : MultiblockRegistry.getAll()) {
-            if(!customMultiblock.designs.isEmpty()) {
+        for (CustomMultiblock customMultiblock : MultiblockRegistry.getAll()) {
+            if (!customMultiblock.designs.isEmpty()) {
                 recipeList.add(new MultiblockInfoRecipeWrapper(new CustomInfoPage(customMultiblock)));
             }
         }

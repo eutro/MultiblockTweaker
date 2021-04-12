@@ -58,6 +58,7 @@ public interface IBlockWorldState {
     IWorld getWorld();
 
     /**
+     * @param face The direction to offset in.
      * @return The block state at the position offset from this.
      */
     @ZenMethod

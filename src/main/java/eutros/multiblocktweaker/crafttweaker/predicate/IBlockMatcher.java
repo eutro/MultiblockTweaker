@@ -56,21 +56,25 @@ public interface IBlockMatcher {
      * Equivalent to
      * {@code function (state as IBlockWorldState) as boolean { return true; } as IBlockMatcher}
      */
-    @ZenProperty IBlockMatcher ANY = a -> true;
+    @ZenProperty
+    IBlockMatcher ANY = a -> true;
     /**
      * Matches any air blocks.
      */
-    @ZenProperty IBlockMatcher AIR = a -> MultiblockControllerBase.isAirPredicate().test(a.getInternal());
+    @ZenProperty
+    IBlockMatcher AIR = a -> MultiblockControllerBase.isAirPredicate().test(a.getInternal());
     /**
      * Matches anything while inside the JEI preview.
-     *
+     * <p>
      * Equivalent to
+     * <p>
      * {@code function (state as IBlockWorldState) as boolean { return state.getWorld().getDimension() == 2147483647; } as IBlockMatcher }
      */
-    @ZenProperty IBlockMatcher IN_PREVIEW = a -> a.getWorld().getDimension() == Integer.MAX_VALUE;
+    @ZenProperty
+    IBlockMatcher IN_PREVIEW = a -> a.getWorld().getDimension() == Integer.MAX_VALUE;
 
     static Predicate<BlockWorldState> toInternal(IBlockMatcher blockMatcher) {
-        if(blockMatcher instanceof MCBlockMatcher) {
+        if (blockMatcher instanceof MCBlockMatcher) {
             return ((MCBlockMatcher) blockMatcher).predicate;
         }
         return a -> blockMatcher.test(new MCBlockWorldState(a));
@@ -82,20 +86,27 @@ public interface IBlockMatcher {
 
     /**
      * Get an {@link IBlockMatcher} that combines two predicates such that a block must pass both to be valid.
-     *
-     * Can be applied by just {@code &&}.
-     *
+     * <p>
+     * Can be applied by just {@code &}.
+     * <p>
      * {@code (matcher_a as IBlockMatcher).and(matcher_b as IBlockMatcher)}
+     * <p>
      * is equivalent to
-     * {@code matcher_a as IBlockMatcher && matcher_b as IBlockMatcher}
+     * <p>
+     * {@code matcher_a as IBlockMatcher & matcher_b as IBlockMatcher}
+     * <p>
      * which is equivalent to
+     * <p>
      * {@code function (state as IBlockWorldState) as boolean { return (matcher_a as IBlockMatcher).test(state) && (matcher_b as IBlockMatcher).test(state); } as IBlockMatcher}
+     *
+     * @param other The other predicate, both this and other must succeed.
+     * @return A predicate that succeeds if both this and the other predicate succeed.
      */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.AND)
     default IBlockMatcher and(@Nonnull IBlockMatcher other) {
-        if(isCenterPredicate(this) || isCenterPredicate(other)) {
+        if (isCenterPredicate(this) || isCenterPredicate(other)) {
             return new MCBlockMatcher(
                     BlockWorldState.wrap(toInternal(this).and(toInternal(other)))
             );
@@ -105,20 +116,26 @@ public interface IBlockMatcher {
 
     /**
      * Get an {@link IBlockMatcher} that inverts a predicate such that blocks that fail the original pass the new one.
-     *
+     * <p>
      * Can be applied by just {@code !}.
-     *
+     * <p>
      * {@code (matcher as IBlockMatcher).negate()}
+     * <p>
      * is equivalent to
+     * <p>
      * {@code !(matcher as IBlockMatcher)}
+     * <p>
      * which is equivalent to
+     * <p>
      * {@code function (state as IBlockWorldState) as boolean { return !(matcher as IBlockMatcher).test(state); } as IBlockMatcher}
+     *
+     * @return A predicate that succeeds when this would fail, and fails when this would succeed.
      */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.NEG)
     default IBlockMatcher negate() {
-        if(isCenterPredicate(this)) {
+        if (isCenterPredicate(this)) {
             return new MCBlockMatcher(
                     BlockWorldState.wrap(toInternal(this).negate())
             );
@@ -128,20 +145,27 @@ public interface IBlockMatcher {
 
     /**
      * Get an {@link IBlockMatcher} that combines two predicates such that a block may pass either to be valid.
-     *
-     * Can be applied by just {@code ||}.
-     *
+     * <p>
+     * Can be applied by just {@code |}.
+     * <p>
      * {@code (matcher_a as IBlockMatcher).or(matcher_b as IBlockMatcher)}
+     * <p>
      * is equivalent to
-     * {@code matcher_a as IBlockMatcher || matcher_b as IBlockMatcher}
+     * <p>
+     * {@code matcher_a as IBlockMatcher | matcher_b as IBlockMatcher}
+     * <p>
      * which is equivalent to
+     * <p>
      * {@code function (state as IBlockWorldState) as boolean { return (matcher_a as IBlockMatcher).test(state) || (matcher_b as IBlockMatcher).test(state); } as IBlockMatcher}
+     *
+     * @param other The other predicate, either this or other may succeed.
+     * @return A predicate that succeeds if this or the other predicate succeeds.
      */
     @Nonnull
     @ZenMethod
     @ZenOperator(OperatorType.OR)
     default IBlockMatcher or(@Nonnull IBlockMatcher other) {
-        if(isCenterPredicate(this) || isCenterPredicate(other)) {
+        if (isCenterPredicate(this) || isCenterPredicate(other)) {
             return new MCBlockMatcher(
                     BlockWorldState.wrap(toInternal(this).or(toInternal(other)))
             );
@@ -151,7 +175,7 @@ public interface IBlockMatcher {
 
     static boolean isCenterPredicate(@Nonnull IBlockMatcher matcher) {
         return matcher instanceof MCBlockMatcher &&
-                ((MCBlockMatcher) matcher).predicate instanceof IPatternCenterPredicate;
+               ((MCBlockMatcher) matcher).predicate instanceof IPatternCenterPredicate;
     }
 
     /**
@@ -165,7 +189,7 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher controller(String resourceLocation) {
         ResourceLocation loc = new ResourceLocation(resourceLocation);
-        if(loc.getResourceDomain().equals("minecraft")) {
+        if (loc.getResourceDomain().equals("minecraft")) {
             loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
         }
         ResourceLocation finalLoc = loc;
@@ -183,7 +207,7 @@ public interface IBlockMatcher {
         Set<? extends MultiblockAbility<?>> abilities = Arrays.stream(allowedAbilities).map(IMultiblockAbility::getInternal).collect(Collectors.toSet());
 
         return toCT(tilePredicate((state, tile) -> tile instanceof IMultiblockAbilityPart &&
-                abilities.contains(((IMultiblockAbilityPart<?>) tile).getAbility())));
+                                                   abilities.contains(((IMultiblockAbilityPart<?>) tile).getAbility())));
     }
 
     /**
@@ -201,7 +225,7 @@ public interface IBlockMatcher {
         Class<?> clazz;
         try {
             clazz = Class.forName(className);
-        } catch(ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             CraftTweakerAPI.logError(String.format("No class found for name: %s", className));
             return a -> false;
         }
@@ -221,7 +245,7 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher statePredicate(IBlockState... allowedStates) {
         Set<net.minecraft.block.state.IBlockState> states = new HashSet<>();
-        for(IBlockState allowedState : allowedStates) {
+        for (IBlockState allowedState : allowedStates) {
             states.add(CraftTweakerMC.getBlockState(allowedState));
         }
 
@@ -239,7 +263,7 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher blockPredicate(IBlock... blocks) {
         Set<Block> bloxx = new HashSet<>();
-        for(IBlock block : blocks) {
+        for (IBlock block : blocks) {
             bloxx.add(CraftTweakerMC.getBlock(block.getDefinition()));
         }
 
@@ -257,7 +281,7 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher blockPredicate(IItemStack... stacks) {
         List<IBlock> list = new ArrayList<>();
-        for(IItemStack stack : stacks) {
+        for (IItemStack stack : stacks) {
             IBlock asBlock = stack.asBlock();
             list.add(asBlock);
         }
@@ -272,12 +296,12 @@ public interface IBlockMatcher {
      *
      * @param key      The key whose value will be incremented when a match occurs.
      * @param original The {@link IBlockMatcher} to count matches for.
-     * @return An {@link IBlockMatcher} that returns true the same as {@param original}, but also counts the matches.
+     * @return An {@link IBlockMatcher} that returns true the same as original, but also counts the matches.
      */
     @ZenMethod
     static IBlockMatcher countMatch(String key, IBlockMatcher original) {
         return (blockWorldState) -> {
-            if(original.test(blockWorldState)) {
+            if (original.test(blockWorldState)) {
                 blockWorldState.getLayerContext().increment(key, 1);
                 return true;
             } else {

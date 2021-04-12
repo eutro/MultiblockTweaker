@@ -58,7 +58,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      * Store extra data for retrieval with {@link #getExtraData()}
-     *
+     * <p>
      * This will be stored in the tile's NBT when the world is saved,
      * so will persist even through restarts.
      *

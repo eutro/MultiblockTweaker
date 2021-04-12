@@ -31,10 +31,14 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
      * This property will set the chance of the inputs being consumed when a recipe is started.
      */
     public static final String CONSUME_CHANCE = "consumeChance";
-    @Nullable private IUpdateFunction update;
-    @Nullable private IUpdateWorktableFunction updateWorktable;
-    @Nullable private ISetupRecipeFunction setupRecipe;
-    @Nullable private ICompleteRecipeFunction completeRecipe;
+    @Nullable
+    private IUpdateFunction update;
+    @Nullable
+    private IUpdateWorktableFunction updateWorktable;
+    @Nullable
+    private ISetupRecipeFunction setupRecipe;
+    @Nullable
+    private ICompleteRecipeFunction completeRecipe;
 
     public CustomMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity,
                                        @Nullable IUpdateFunction update,
@@ -50,8 +54,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     protected boolean setupAndConsumeRecipeInputs(Recipe recipe) {
-        TileControllerCustom controller = (TileControllerCustom)this.metaTileEntity;
-        if(!controller.checkRecipe(recipe, false)) {
+        TileControllerCustom controller = (TileControllerCustom) this.metaTileEntity;
+        if (!controller.checkRecipe(recipe, false)) {
             return false;
         }
 
@@ -62,17 +66,17 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         IMultipleTankHandler importFluids = getInputTank();
         IMultipleTankHandler exportFluids = getOutputTank();
         boolean ret = (totalEUt >= 0 ?
-                     getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
-                     (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
-                MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
-                MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
-                recipe.matches(new Random().nextInt(100) <=
-                                (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
-                                 recipe.getIntegerProperty(CONSUME_CHANCE) :
-                                 100),
-                        importInventory, importFluids);
+                getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
+                (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
+                      MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
+                      MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
+                      recipe.matches(new Random().nextInt(100) <=
+                                     (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
+                                             recipe.getIntegerProperty(CONSUME_CHANCE) :
+                                             100),
+                              importInventory, importFluids);
 
-        if(ret) {
+        if (ret) {
             controller.checkRecipe(recipe, true);
         }
 
@@ -108,7 +112,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getUpdate().ifPresent(u -> {
             try {
                 u.run(this);
-            } catch(RuntimeException t) {
+            } catch (RuntimeException t) {
                 logFailure("update", t);
                 update = null;
             }
@@ -122,10 +126,10 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     public void updateWorkable() {
-        if(getUpdateWorktable().map(u -> {
+        if (getUpdateWorktable().map(u -> {
             try {
                 return u.run(this);
-            } catch(RuntimeException t) {
+            } catch (RuntimeException t) {
                 logFailure("updateWorktable", t);
                 updateWorktable = null;
                 return true;
@@ -141,7 +145,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getSetupRecipe().ifPresent(s -> {
             try {
                 s.run(this, new MCRecipe(recipe));
-            } catch(RuntimeException t) {
+            } catch (RuntimeException t) {
                 logFailure("setupRecipe", t);
                 setupRecipe = null;
             }
@@ -154,7 +158,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         getCompleteRecipe().ifPresent(c -> {
             try {
                 c.run(this);
-            } catch(RuntimeException t) {
+            } catch (RuntimeException t) {
                 logFailure("completeRecipe", t);
                 completeRecipe = null;
             }
@@ -164,9 +168,9 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     protected boolean checkRecipeInputsDirty(IItemHandler inputs, IMultipleTankHandler fluidInputs) {
         boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
-        if(ret) return true;
+        if (ret) return true;
 
-        if(metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
+        if (metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
             // check every 20 ticks, if there is a recipe predicate, they may be checking different things
             return ((TileControllerCustom) metaTileEntity).multiblock.recipePredicate != null;
         }

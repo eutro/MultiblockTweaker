@@ -17,7 +17,12 @@ import javax.annotation.Nonnull;
 public interface ISetupRecipeFunction {
 
     /**
+     * Called whenever the worktable sets up for a new recipe.
+     * <p>
      * Implement this with a function.
+     *
+     * @param logic  The {@link IRecipeLogic} of the multiblock from which this is run.
+     * @param recipe The recipe about to be run.
      */
     @ZenMethod
     void run(@Nonnull IRecipeLogic logic, @Nonnull IRecipe recipe);

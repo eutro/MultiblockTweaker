@@ -34,10 +34,10 @@ public class SidedCubeRenderer implements ICubeRenderer {
     private TextureAtlasSprite particles;
 
     public SidedCubeRenderer(Map<EnumFacing, ResourceLocation> sides) {
-        if(FMLCommonHandler.instance().getSide().isServer())
+        if (FMLCommonHandler.instance().getSide().isServer())
             return;
         this.sides = sides;
-        if(MapHolder.map != null) {
+        if (MapHolder.map != null) {
             sprites = sides.keySet().stream()
                     .collect(Collectors.toMap(Function.identity(),
                             r -> MapHolder.map.getAtlasSprite(sides.get(r).toString())));
@@ -51,7 +51,7 @@ public class SidedCubeRenderer implements ICubeRenderer {
         Preconditions.checkNotNull(
                 map.get(EnumFacing.UP),
                 "UP side has no texture! " +
-                        "Consider using mods.gregtech.multiblock.Builder#withTexture to specify the texture explicitly."
+                "Consider using mods.gregtech.multiblock.Builder#withTexture to specify the texture explicitly."
         );
         EnumMap<EnumFacing, T> retMap = new EnumMap<>(map);
 
@@ -69,14 +69,14 @@ public class SidedCubeRenderer implements ICubeRenderer {
     }
 
     public SidedCubeRenderer(IBlockState state) {
-        if(FMLCommonHandler.instance().getSide().isServer())
+        if (FMLCommonHandler.instance().getSide().isServer())
             return;
         BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
         IBakedModel model = brd.getModelForState(state);
         long rand = new Random().nextLong();
         particles = model.getParticleTexture();
         sprites = fillBlanks(
-                Stream.concat(Stream.of(new EnumFacing[] {null}),
+                Stream.concat(Stream.of(new EnumFacing[] { null }),
                         Arrays.stream(EnumFacing.values()))
                         .map(f -> model.getQuads(state, f, rand))
                         .map(List::stream)
@@ -106,7 +106,7 @@ public class SidedCubeRenderer implements ICubeRenderer {
     @SideOnly(Side.CLIENT)
     @Override
     public void render(CCRenderState state, Matrix4 translate, IVertexOperation[] ops, Cuboid6 cuboid) {
-        for(EnumFacing side : EnumFacing.values()) {
+        for (EnumFacing side : EnumFacing.values()) {
             Textures.renderFace(state, translate, ops, side, cuboid, sprites.get(side));
         }
     }
