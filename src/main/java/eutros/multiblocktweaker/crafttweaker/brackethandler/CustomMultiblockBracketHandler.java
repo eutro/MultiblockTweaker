@@ -5,7 +5,7 @@ import crafttweaker.annotations.BracketHandler;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.zenscript.IBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import stanhebben.zenscript.ZenTokener;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;

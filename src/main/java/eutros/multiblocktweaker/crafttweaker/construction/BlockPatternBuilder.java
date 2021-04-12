@@ -19,6 +19,7 @@ import java.util.Arrays;
 /**
  * Used to construct an {@link IBlockPattern}.
  *
+ * @zenClass mods.gregtech.multiblock.FactoryBlockPattern
  * @see IBlockPattern
  * <p>
  * Used for {@link MultiblockBuilder#withPattern(IBlockPattern)}.

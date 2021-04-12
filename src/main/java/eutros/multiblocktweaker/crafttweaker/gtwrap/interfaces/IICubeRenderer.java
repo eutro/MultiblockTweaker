@@ -27,6 +27,7 @@ import java.util.Map;
  * Used in {@link MultiblockBuilder#withTexture(IICubeRenderer)} to set the texture of the controller,
  * and that of all the components, when the multiblock forms.
  *
+ * @zenClass mods.gregtech.render.ICubeRenderer
  * @see MultiblockBuilder
  */
 @ZenClass("mods.gregtech.render.ICubeRenderer")

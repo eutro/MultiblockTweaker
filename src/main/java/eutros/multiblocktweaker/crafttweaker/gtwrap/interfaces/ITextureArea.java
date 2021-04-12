@@ -10,6 +10,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * Can be used for defining a custom recipe arrow.
+ *
+ * @zenClass mods.gregtech.render.ITextureArea
  */
 @ZenClass("mods.gregtech.render.ITextureArea")
 @ZenRegister
@@ -37,12 +39,12 @@ public interface ITextureArea {
      * You will most likely wish to define this in a script with {@code #loader preinit}, so the texture actually gets loaded.
      *
      * @param imageLocation The full location of the image.
-     * @param imageSizeX The X size of the image itself, in pixels.
-     * @param imageSizeY The Y size of the image itself, in pixels.
-     * @param u The X coordinate of the image to start the texture at, in pixels.
-     * @param v The Y coordinate of the image to start the texture at, in pixels.
-     * @param width The width of the texture.
-     * @param height The height of the texture.
+     * @param imageSizeX    The X size of the image itself, in pixels.
+     * @param imageSizeY    The Y size of the image itself, in pixels.
+     * @param u             The X coordinate of the image to start the texture at, in pixels.
+     * @param v             The Y coordinate of the image to start the texture at, in pixels.
+     * @param width         The width of the texture.
+     * @param height        The height of the texture.
      * @return An {@link ITextureArea} of the area of the given image.
      */
     @ZenMethod

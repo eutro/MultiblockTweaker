@@ -121,6 +121,17 @@ tasks["runClient"].dependsOn("copyExamples")
 
 val javadoc: Javadoc by tasks
 javadoc.apply {
-    exclude { el -> el.file.isFile && el.file.useLines { lines -> !lines.contains("@ZenRegister") } }
+    exclude { el ->
+        el.file.isFile &&
+                (el.file.name != "package-info.java" &&
+                        el.file.useLines { lines -> !lines.contains("@ZenRegister") })
+    }
     setDestinationDir(file("docs"))
+    (options as StandardJavadocDocletOptions).run {
+        tags!!.addAll(listOf(
+                "zenClass:a:ZenClass:",
+                "zenGetter:a:ZenGetter:",
+                "zenSetter:a:ZenSetter:"
+        ))
+    }
 }

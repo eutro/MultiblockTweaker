@@ -8,7 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
-import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
@@ -28,6 +27,7 @@ import java.util.List;
  * <p>
  * Use this to set any custom working functions.
  *
+ * @zenClass mods.gregtech.multiblock.Multiblock
  * @see MultiblockBuilder
  * @see IUpdateFunction
  * @see IUpdateWorktableFunction
@@ -129,6 +129,8 @@ public class CustomMultiblock {
 
     /**
      * @return The meta tile entity ID of this multiblock. Set in {@link MultiblockBuilder#start(String, int)}.
+     *
+     * @zenGetter loc
      */
     @NotNull
     @ZenGetter("loc")
@@ -138,6 +140,8 @@ public class CustomMultiblock {
 
     /**
      * @return The pattern of the multiblock. Set in {@link MultiblockBuilder#withPattern(IBlockPattern)}.
+     *
+     * @zenGetter pattern
      */
     @NotNull
     @ZenGetter("pattern")
@@ -147,6 +151,8 @@ public class CustomMultiblock {
 
     /**
      * @return The texture of the multiblock. Optionally set in {@link MultiblockBuilder#withTexture(IICubeRenderer)}.
+     *
+     * @zenGetter texture
      */
     @NotNull
     @ZenGetter("texture")

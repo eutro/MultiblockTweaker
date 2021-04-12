@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.jei;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;

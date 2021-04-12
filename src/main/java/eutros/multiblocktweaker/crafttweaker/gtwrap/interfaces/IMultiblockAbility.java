@@ -9,6 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 /**
  * An ability that a multiblock may have, such as fluid import/export, or item import/export.
  *
+ * @zenClass mods.gregtech.multiblock.IMultiblockAbility
  * @see ConstantMultiblockAbility
  */
 @ZenClass("mods.gregtech.multiblock.IMultiblockAbility")

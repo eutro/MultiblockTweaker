@@ -63,6 +63,7 @@ public interface IControllerTile extends IMetaTileEntity {
      * so will persist even through restarts.
      *
      * @param data The extra data to store on the controller.
+     * @zenSetter extraData
      */
     @ZenMethod
     @ZenSetter("extraData")

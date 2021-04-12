@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 
 /**
  * Called every time a recipe completes.
+ *
+ * @zenClass mods.gregtech.recipe.functions.ICompleteRecipeFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.ICompleteRecipeFunction")

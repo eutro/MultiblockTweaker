@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 /**
  * Used for interacting with fluid tanks.
+ *
+ * @zenClass mods.forge.fluids.IFluidTank
  */
 @ZenClass("mods.forge.fluids.IFluidTank")
 @ZenRegister

@@ -18,6 +18,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * A GregTech meta tile entity.
  *
+ * @zenClass mods.gregtech.IMetaTileEntity
  * @see ConstantMetaTileEntities
  */
 @ZenClass("mods.gregtech.IMetaTileEntity")

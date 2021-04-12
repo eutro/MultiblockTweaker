@@ -33,6 +33,7 @@ import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.ti
 /**
  * Used by an {@link IBlockPattern} to decide whether the placement of a block is valid.
  *
+ * @zenClass mods.gregtech.multiblock.IBlockMatcher
  * @see BlockPatternBuilder
  */
 @FunctionalInterface

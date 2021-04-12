@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 
 /**
  * A function run when the worktable is updated, that is, every tick.
+ *
+ * @zenClass mods.gregtech.recipe.functions.IUpdateWorktableFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IUpdateWorktableFunction")

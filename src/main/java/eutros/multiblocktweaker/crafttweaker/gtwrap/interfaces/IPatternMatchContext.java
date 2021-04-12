@@ -8,6 +8,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * The context of a match. Can be obtained from {@link IBlockWorldState#getMatchContext()} or {@link IBlockWorldState#getLayerContext()}.
+ *
+ * @zenClass mods.gregtech.multiblock.IPatternMatchContext
  */
 @ZenClass("mods.gregtech.multiblock.IPatternMatchContext")
 @ZenRegister
@@ -60,6 +62,8 @@ public interface IPatternMatchContext {
     String getOrDefault(String key, String defaultValue);
 
     /**
+     * Get the string referenced by a key.
+     *
      * @param key The key to get.
      * @return The string referenced by a key.
      */
@@ -67,6 +71,8 @@ public interface IPatternMatchContext {
     String get(String key);
 
     /**
+     * Get the integer referenced by a key, or 0 if it wasn't set before.
+     *
      * @param key The key to get.
      * @return The integer referenced by a key, or 0 if it wasn't set before.
      */

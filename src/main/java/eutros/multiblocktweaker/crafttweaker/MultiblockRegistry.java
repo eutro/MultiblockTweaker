@@ -1,8 +1,7 @@
-package eutros.multiblocktweaker.gregtech;
+package eutros.multiblocktweaker.crafttweaker;
 
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.MultiblockTweaker;
-import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.GregTechAPI;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -17,6 +16,8 @@ import java.util.*;
 
 /**
  * An alternative way to get a {@link CustomMultiblock} from its metadata or ID.
+ *
+ * @zenClass mods.gregtech.multiblock.MultiblockRegistry
  */
 @ZenClass("mods.gregtech.multiblock.MultiblockRegistry")
 @ZenRegister

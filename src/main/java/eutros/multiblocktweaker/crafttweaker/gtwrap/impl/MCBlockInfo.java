@@ -1,8 +1,8 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
-import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.util.BlockInfo;

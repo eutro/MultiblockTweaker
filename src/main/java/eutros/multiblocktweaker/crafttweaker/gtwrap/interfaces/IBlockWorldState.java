@@ -14,6 +14,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * Similar to an {@link IBlockState}, but bound to a position and world,
  * and holding extra information about the match taking place.
+ *
+ * @zenClass mods.gregtech.multiblock.IBlockWorldState
  */
 @ZenClass("mods.gregtech.multiblock.IBlockWorldState")
 @ZenRegister

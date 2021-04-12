@@ -8,6 +8,8 @@ import stanhebben.zenscript.annotations.ZenSetter;
 
 /**
  * Used to perform the recipe logic.
+ *
+ * @zenClass mods.gregtech.recipe.IRecipeLogic
  */
 @ZenClass("mods.gregtech.recipe.IRecipeLogic")
 @ZenRegister

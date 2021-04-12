@@ -9,6 +9,8 @@ import javax.annotation.Nonnull;
 
 /**
  * Called every time the worktable updates.
+ *
+ * @zenClass mods.gregtech.recipe.functions.IUpdateFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IUpdateFunction")

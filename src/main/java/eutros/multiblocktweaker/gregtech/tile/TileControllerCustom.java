@@ -13,7 +13,7 @@ import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
-import eutros.multiblocktweaker.gregtech.MultiblockRegistry;
+import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;

@@ -21,6 +21,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
  * <p>
  * It is used in {@link MultiblockShapeInfoBuilder#where(String, IBlockInfo)}.
  *
+ * @zenClass mods.gregtech.multiblock.IBlockInfo
  * @see MultiblockShapeInfoBuilder
  * @see IMultiblockShapeInfo
  */

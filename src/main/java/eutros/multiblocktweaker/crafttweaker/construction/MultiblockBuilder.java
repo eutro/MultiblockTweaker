@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
  * The Builder, or Multiblock Builder, is used to define a custom {@link CustomMultiblock}.
  * <p>
  * To get started, call {@link #start(String, int)}.
+ *
+ * @zenClass mods.gregtech.multiblock.Builder
  */
 @ZenClass("mods.gregtech.multiblock.Builder")
 @ZenRegister

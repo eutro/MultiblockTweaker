@@ -17,6 +17,8 @@ import java.util.function.Predicate;
  * <p>
  * They are used internally by GregTech for the Distillation Tower, to ensure that each
  * layer contains exactly one fluid output hatch.
+ *
+ * @zenClass mods.gregtech.multiblock.IMatchValidator
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.IMatchValidator")

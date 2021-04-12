@@ -9,6 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 /**
  * Represents an example structure for a multiblock, shown in JEI or as an in-world preview.
  *
+ * @zenClass mods.gregtech.multiblock.IMultiblockShapeInfo
  * @see MultiblockShapeInfoBuilder
  */
 @ZenClass("mods.gregtech.multiblock.IMultiblockShapeInfo")

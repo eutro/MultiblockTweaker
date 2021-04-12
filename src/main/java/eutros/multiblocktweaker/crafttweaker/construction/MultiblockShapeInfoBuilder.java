@@ -20,6 +20,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * Used to create a design to show in JEI or as an in-world preview.
  *
+ * @zenClass mods.gregtech.multiblock.FactoryMultiblockShapeInfo
  * @see IMultiblockShapeInfo
  * <p>
  * Used for {@link MultiblockBuilder#addDesign(IMultiblockShapeInfo...)}.

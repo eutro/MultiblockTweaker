@@ -10,6 +10,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * A constructed GregTech recipe, with details about inputs, outputs, or custom properties.
+ *
+ * @zenClass mods.gregtech.recipe.IRecipe
  */
 @ZenClass("mods.gregtech.recipe.IRecipe")
 @ZenRegister
@@ -27,18 +29,24 @@ public interface IRecipe {
     boolean matches(boolean consumeIfSuccessful, IItemStack[] inputs, ILiquidStack[] fluidInputs);
 
     /**
+     * Get the defined input ingredients.
+     *
      * @return The defined input ingredients.
      */
     @ZenMethod
     IIngredient[] getInputs();
 
     /**
+     * Get the defined output items.
+     *
      * @return The defined output items.
      */
     @ZenMethod
     IItemStack[] getOutputs();
 
     /**
+     * Get the defined chanced output items.
+     *
      * @return The defined chanced output items.
      */
     @ZenMethod
@@ -54,12 +62,16 @@ public interface IRecipe {
     IItemStack[] getAllItemOutputs(int maxOutputSlots);
 
     /**
+     * Get the defined input fluids.
+     *
      * @return The defined input fluids.
      */
     @ZenMethod
     ILiquidStack[] getFluidInputs();
 
     /**
+     * Get whether the given fluid is an ingredient.
+     *
      * @param fluid The fluid to check.
      * @return Whether the given fluid is an ingredient.
      */
@@ -67,52 +79,68 @@ public interface IRecipe {
     boolean hasInputFluid(ILiquidStack fluid);
 
     /**
+     * Get the defined output fluids.
+     *
      * @return The defined output fluids.
      */
     @ZenMethod
     ILiquidStack[] getFluidOutputs();
 
     /**
+     * Get the duration of the recipe.
+     *
      * @return The duration of the recipe.
      */
     @ZenMethod
     int getDuration();
 
     /**
+     * Get the EU/t cost of the recipe. Negative if the recipe generates energy.
+     *
      * @return The EU/t cost of the recipe. Negative if the recipe generates energy.
      */
     @ZenMethod
     int getEUt();
 
     /**
+     * Get whether the recipe is a hidden one.
+     *
      * @return Whether the recipe is a hidden one.
      */
     @ZenMethod
     boolean isHidden();
 
     /**
-     * @return Get all the defined properties.
+     * Get all the defined properties.
+     *
+     * @return All the defined properties.
      */
     @ZenMethod
     String[] getPropertyKeys();
 
     /**
+     * Get the boolean property referenced by the given key.
+     *
      * @param key The key to reference.
-     * @return Get the boolean property referenced by the given key.
+     * @return The boolean property referenced by the given key.
      */
     @ZenMethod
     boolean getBooleanProperty(String key);
 
     /**
+     * Get the integer property referenced by the given key.
+     *
      * @param key The key to reference.
-     * @return Get the integer property referenced by the given key.
+     * @return The integer property referenced by the given key.
      */
     @ZenMethod
     int getIntegerProperty(String key);
 
     /**
+     * Get the string property referenced by the given key.
+     *
      * @param key The key to reference.
-     * @return Get the string property referenced by the given key.
+     * @return The string property referenced by the given key.
      */
     @ZenMethod
     String getProperty(String key);

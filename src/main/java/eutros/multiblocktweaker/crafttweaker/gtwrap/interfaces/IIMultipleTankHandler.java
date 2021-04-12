@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 
 /**
  * Used for interacting with multiple fluid tanks.
+ *
+ * @zenClass mods.gregtech.fluids.IMultipleTankHandler
  */
 @ZenClass("mods.gregtech.fluids.IMultipleTankHandler")
 @IterableSimple("mods.forge.fluids.IFluidTank")

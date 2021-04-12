@@ -8,6 +8,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
  * Used for interacting with inventories.
+ *
+ * @zenClass mods.forge.items.IItemHandlerModifiable
  */
 @ZenClass("mods.forge.items.IItemHandlerModifiable")
 @IterableSimple("crafttweaker.item.IItemStack")

@@ -12,6 +12,8 @@ import javax.annotation.Nonnull;
  * Called when the multiblock is formed.
  * <p>
  * Use this to store any extra data from the pattern matching.
+ *
+ * @zenClass mods.gregtech.multiblock.functions.IFormStructureFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.functions.IFormStructureFunction")

@@ -14,6 +14,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * This is what defines the required structure of a multiblock
  *
+ * @zenClass mods.gregtech.multiblock.IBlockPattern
  * @see BlockPatternBuilder
  */
 @ZenClass("mods.gregtech.multiblock.IBlockPattern")
