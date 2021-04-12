@@ -23,7 +23,7 @@ compileJava {
 }
 
 minecraft {
-    version = project.forgeVersion
+    version = project.forge_ver
     runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.
@@ -49,32 +49,37 @@ jar {
 }
 
 repositories {
-    maven {
+    maven { // CraftTweaker
         url = "https://maven.blamejared.com/"
     }
-    maven {
+    maven { // GTCE
         url = "https://minecraft.curseforge.com/api/maven"
     }
-    maven {
+    maven { // CCL
         url = "http://chickenbones.net/maven/"
     }
-    maven {
+    maven { // JEI
         url = "https://dvs1.progwml6.com/files/maven/"
     }
-    maven {
+    maven { // JEI fallback
         url = "https://modmaven.k-4u.nl"
+    }
+    maven { // CTM
+        url = "http://maven.tterrag.com/"
     }
 }
 
 dependencies {
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.581"
 
-    deobfProvided "mezz.jei:jei_1.12.2:4.15.0.293:api"
-    runtime "mezz.jei:jei_1.12.2:4.15.0.293"
+    deobfProvided "mezz.jei:jei_1.12.2:$jei_ver:api"
+    runtime "mezz.jei:jei_1.12.2:$jei_ver"
 
-    deobfCompile "gregtechce:gregtech:1.12.2:1.9.3.531"
+    deobfCompile "gregtechce:gregtech:1.12.2:$gt_ver"
 
-    deobfCompile "codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.357:universal"
+    deobfCompile "codechicken-lib-1-8:CodeChickenLib-1.12.2:$ccl_ver:universal"
+
+    deobfCompile "team.chisel.ctm:CTM:$ctm_ver"
 
     implementation 'org.jetbrains:annotations:15.0'
 
