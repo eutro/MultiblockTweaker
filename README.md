@@ -1,10 +1,17 @@
 # MultiblockTweaker
-Add GregTech CE Multiblocks via CraftTweaker
 
-Examples [here](examples) and (in the context of a modpack) [here](https://github.com/OmnifactoryDevs/Omnifactory/blob/dev/overrides/scripts/Multiblocks.zs).
+Add GregTech CE Multiblocks via CraftTweaker
 
 ## Help
 
-For documentation, your best option will likely be to look at the javadocs in [this package and its subpackages](https://github.com/eutropius225/MultiblockTweaker/tree/master/src/main/java/eutros/multiblocktweaker/crafttweaker).
+For documentation, the best option is to
+[look at the JavaDocs](https://eutro.github.io/MultiblockTweaker/index.html)
+(or just [the source](https://github.com/eutro/MultiblockTweaker/tree/master/src/main/java/eutros/multiblocktweaker/crafttweaker)).
 
-I suggest that you [start here](https://github.com/eutropius225/MultiblockTweaker/blob/master/src/main/java/eutros/multiblocktweaker/crafttweaker/construction/MultiblockBuilder.java).
+There are examples
+[here](examples) and (in the context of a modpack)
+[here](https://github.com/OmnifactoryDevs/Omnifactory/blob/dev/overrides/scripts/Multiblocks.zs).
+
+For additional help, feel free to ask on Discord:
+
+[<img src="https://i.imgur.com/jqvafNM.png" alt="Discord Link" width="150" height="51">](https://discord.gg/JEwXvYt)
