@@ -3,10 +3,17 @@ import net.minecraftforge.gradle.user.UserBaseExtension
 buildscript {
     repositories {
         jcenter()
-        maven("https://files.minecraftforge.net/maven")
+        maven {
+            name = "jitpack"
+            setUrl("https://jitpack.io")
+        }
+        maven {
+            name = "forge"
+            setUrl("https://maven.minecraftforge.net/")
+        }
     }
     dependencies {
-        classpath("net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT")
+        classpath("com.github.GregTechCE:ForgeGradle:FG_2.3-SNAPSHOT")
     }
 }
 
