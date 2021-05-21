@@ -83,7 +83,7 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public String[] getPropertyKeys() {
-        return inner.getPropertyKeys().toArray(new String[0]);
+        return inner.getRecipePropertyStorage().getRecipePropertyKeys().toArray(new String[0]);
     }
 
     @Override

@@ -71,7 +71,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
                       MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
                       MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
                       recipe.matches(new Random().nextInt(100) <=
-                                     (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
+                                     (recipe.getRecipePropertyStorage().getRecipePropertyKeys().contains(CONSUME_CHANCE) ?
                                              recipe.getIntegerProperty(CONSUME_CHANCE) :
                                              100),
                               importInventory, importFluids);
