@@ -7,6 +7,7 @@ import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.recipeproperties.*;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
@@ -44,7 +45,8 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND,
                 176,
                 (slotsHeight + (getRecipeList().parallelStream()
-                                        .map(Recipe::getPropertyKeys)
+                                        .map(Recipe::getRecipePropertyStorage)
+                                        .map(RecipePropertyStorage::getRecipePropertyKeys)
                                         .mapToInt(Set::size)
                                         .max()
                                         .orElse(0) + 4) * LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3
