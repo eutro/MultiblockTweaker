@@ -51,6 +51,12 @@ public class CustomMultiblock {
     public final RecipeMap<?> recipeMap;
 
     /**
+     * The default zoom level of the multiblock. Set in {@link MultiblockBuilder#withZoom(float)}
+     */
+    @ZenProperty
+    public final float zoom;
+
+    /**
      * Set to true if the multiblock should not check for energy inputs/outputs before forming.
      */
     @ZenProperty
@@ -121,6 +127,7 @@ public class CustomMultiblock {
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
         loc = builder.loc;
+        zoom = builder.zoom;
         pattern = builder.pattern;
         recipeMap = builder.recipeMap;
         texture = builder.texture;
