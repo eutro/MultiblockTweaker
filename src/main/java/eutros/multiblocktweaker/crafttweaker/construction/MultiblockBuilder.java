@@ -37,7 +37,7 @@ public class MultiblockBuilder {
 
     public ResourceLocation loc;
     public int metaId;
-    public float zoom;
+    public float zoom = 1.0f;
     public gregtech.api.render.ICubeRenderer texture = null;
     public RecipeMap<?> recipeMap = null;
     public BlockPattern pattern = null;
