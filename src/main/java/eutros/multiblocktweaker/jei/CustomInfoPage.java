@@ -33,4 +33,8 @@ public class CustomInfoPage extends MultiblockInfoPage {
         return new String[] { I18n.format(s) };
     }
 
+    @Override
+    public float getDefaultZoom() {
+        return multiblock.zoom;
+    }
 }

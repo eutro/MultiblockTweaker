@@ -37,6 +37,7 @@ public class MultiblockBuilder {
 
     public ResourceLocation loc;
     public int metaId;
+    public float zoom = 1.0f;
     public gregtech.api.render.ICubeRenderer texture = null;
     public RecipeMap<?> recipeMap = null;
     public BlockPattern pattern = null;
@@ -104,6 +105,19 @@ public class MultiblockBuilder {
     @ZenMethod
     public MultiblockBuilder withTexture(@NotNull IICubeRenderer texture) {
         this.texture = texture.getInternal();
+        return this;
+    }
+
+    /**
+     * Set the default zoom level for the multiblock.
+     * This is optional, and if not defined will default to 1.0f
+     *
+     * @param zoom The default zoom level of the multiblock on the JEI preview page
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder withZoom(float zoom) {
+        this.zoom = zoom;
         return this;
     }
 
