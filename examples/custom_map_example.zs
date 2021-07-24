@@ -65,6 +65,7 @@ var magic_miner = Builder.start(loc, meta)
             .where("E", MetaTileEntities.ENERGY_INPUT_HATCH[2], IFacing.west())
             .where(" ", IBlockInfo.EMPTY)
             .build())
+    .clearTooltips(true)
     .withRecipeMap(
         FactoryRecipeMap.start(loc)
 		    .minInputs(1)

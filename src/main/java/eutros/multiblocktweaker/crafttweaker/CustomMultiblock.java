@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
 import eutros.multiblocktweaker.crafttweaker.functions.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
@@ -11,7 +12,9 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -19,6 +22,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A representation of a custom GregTech Multiblock.
@@ -55,6 +59,18 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public final float zoom;
+
+    /**
+     * The Tooltip map for the multiblock components. Set in {@link MultiblockBuilder#withPartTooltip(IItemStack, crafttweaker.api.text.ITextComponent)}
+     */
+    @ZenProperty
+    public final Map<ItemStack, List<ITextComponent>> tooltipMap;
+
+    /**
+     * If the existing tooltip map for the multiblock should be cleared. Set in {@link MultiblockBuilder#clearTooltips(boolean)}
+     */
+    @ZenProperty
+    public final boolean clearTooltips;
 
     /**
      * Set to true if the multiblock should not check for energy inputs/outputs before forming.
@@ -128,6 +144,8 @@ public class CustomMultiblock {
         metaId = builder.metaId;
         loc = builder.loc;
         zoom = builder.zoom;
+        tooltipMap = builder.tooltipMap;
+        clearTooltips = builder.clearTooltips;
         pattern = builder.pattern;
         recipeMap = builder.recipeMap;
         texture = builder.texture;
