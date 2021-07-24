@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 @Mod(modid = MultiblockTweaker.MOD_ID,
         name = "Multiblock Tweaker",
         version = "@GRADLE:VERSION@",
-        dependencies = "required-after:gregtech@[1.15.0.721,);")
+        dependencies = "required-after:gregtech@[1.17.0.764,);")
 public class MultiblockTweaker {
 
     public static final String MOD_ID = "multiblocktweaker";
