@@ -14,7 +14,10 @@ import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.ItemStackHashStrategy;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
@@ -42,7 +45,8 @@ public class MultiblockBuilder {
     public ResourceLocation loc;
     public int metaId;
     public float zoom = 1.0f;
-    public Map<ItemStack, List<ITextComponent>> tooltipMap = new HashMap<>();
+    private final Hash.Strategy<ItemStack> strategy = ItemStackHashStrategy.comparingAllButCount();
+    public Map<ItemStack, List<ITextComponent>> tooltipMap = new Object2ObjectOpenCustomHashMap<>(strategy);
     public boolean clearTooltips = false;
     public gregtech.api.render.ICubeRenderer texture = null;
     public RecipeMap<?> recipeMap = null;
@@ -142,23 +146,13 @@ public class MultiblockBuilder {
         ItemStack actualStack = CraftTweakerMC.getItemStack(itemStack);
         ITextComponent tooltipText = CraftTweakerMC.getITextComponent(tooltip);
 
-        List<ITextComponent> possibleTooltips = tooltipMap.getOrDefault(actualStack, null);
-
-        if(possibleTooltips == null) {
-            List<net.minecraft.util.text.ITextComponent> tooltipToAdd = new ArrayList();
-            tooltipToAdd.add(tooltipText);
-            this.tooltipMap.put(actualStack, tooltipToAdd);
-        } else {
-            possibleTooltips.add(tooltipText);
-            this.tooltipMap.put(actualStack, possibleTooltips);
-        }
+        tooltipMap.computeIfAbsent(actualStack, $ -> new ArrayList<>()).add(tooltipText);
 
         return this;
     }
 
     /**
      * A Helper method to clear pre-existing tooltips from Multiblocks.
-     * This should always be called before tooltips are added.
      * This is optional, and if not called will default false.
      *
      * @param clear - If existing tooltips should be cleared.
