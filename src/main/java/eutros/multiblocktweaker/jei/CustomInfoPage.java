@@ -6,8 +6,11 @@ import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.integration.jei.multiblock.MultiblockInfoPage;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
+import java.util.Map;
 
 public class CustomInfoPage extends MultiblockInfoPage {
 
@@ -36,5 +39,24 @@ public class CustomInfoPage extends MultiblockInfoPage {
     @Override
     public float getDefaultZoom() {
         return multiblock.zoom;
+    }
+
+    @Override
+    protected void generateBlockTooltips() {
+        super.generateBlockTooltips();
+
+        Map<ItemStack, List<ITextComponent>> tooltipMap = getBlockTooltipMap();
+
+        //Clear existing tooltips if desired
+        if(multiblock.clearTooltips) {
+            tooltipMap.clear();
+        }
+
+        Map<ItemStack, List<ITextComponent>> additionalTooltips = multiblock.tooltipMap;
+        for(Map.Entry<ItemStack, List<ITextComponent>> tooltip : additionalTooltips.entrySet()) {
+            for(ITextComponent component : tooltip.getValue()) {
+                addBlockTooltip(tooltip.getKey(), component);
+            }
+        }
     }
 }

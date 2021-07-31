@@ -7,6 +7,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.ingredients.VanillaTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,6 +28,12 @@ public class MultiblockTweakerJEIPlugin implements IModPlugin {
         }
 
         registry.addRecipes(recipeList, "gregtech:multiblock_info");
+
+        for(MultiblockInfoRecipeWrapper wrapper : recipeList) {
+            registry.addIngredientInfo(wrapper.getInfoPage().getController().getStackForm(),
+                    VanillaTypes.ITEM, wrapper.getInfoPage().getDescription());
+        }
+
     }
 
     @Override

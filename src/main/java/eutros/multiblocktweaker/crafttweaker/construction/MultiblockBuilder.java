@@ -2,6 +2,8 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -12,9 +14,14 @@ import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
+import gregtech.api.util.ItemStackHashStrategy;
 import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -38,6 +45,9 @@ public class MultiblockBuilder {
     public ResourceLocation loc;
     public int metaId;
     public float zoom = 1.0f;
+    private final Hash.Strategy<ItemStack> strategy = ItemStackHashStrategy.comparingAllButCount();
+    public Map<ItemStack, List<ITextComponent>> tooltipMap = new Object2ObjectOpenCustomHashMap<>(strategy);
+    public boolean clearTooltips = false;
     public gregtech.api.render.ICubeRenderer texture = null;
     public RecipeMap<?> recipeMap = null;
     public BlockPattern pattern = null;
@@ -118,6 +128,39 @@ public class MultiblockBuilder {
     @ZenMethod
     public MultiblockBuilder withZoom(float zoom) {
         this.zoom = zoom;
+        return this;
+    }
+
+    /**
+     * Add a tooltip to a specific {@link net.minecraft.item.ItemStack} in a Multiblock Structure.
+     * Multiple tooltips can be added to the same {@link net.minecraft.item.ItemStack}.
+     * This is optional, and if not defined will not add any tooltips.
+     *
+     * @param itemStack - The ItemStack form of the block to add the tooltip to.
+     * @param tooltip - The localization key for the tooltip to be added.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder withPartTooltip(IItemStack itemStack, crafttweaker.api.text.ITextComponent tooltip) {
+
+        ItemStack actualStack = CraftTweakerMC.getItemStack(itemStack);
+        ITextComponent tooltipText = CraftTweakerMC.getITextComponent(tooltip);
+
+        tooltipMap.computeIfAbsent(actualStack, $ -> new ArrayList<>()).add(tooltipText);
+
+        return this;
+    }
+
+    /**
+     * A Helper method to clear pre-existing tooltips from Multiblocks.
+     * This is optional, and if not called will default false.
+     *
+     * @param clear - If existing tooltips should be cleared.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder clearTooltips(boolean clear) {
+        this.clearTooltips = clear;
         return this;
     }
 

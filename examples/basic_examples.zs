@@ -13,6 +13,7 @@ import mods.gregtech.MetaTileEntities;
 import mods.gregtech.recipe.RecipeMap;
 
 import crafttweaker.world.IFacing;
+import crafttweaker.text.ITextComponent;
 
 var loc = "multiblock_alloy_smelter";
 var meta = 2000; // Choose something that won't conflict. You'll get a warning in the crafttweaker logs if something goes wrong.
@@ -63,6 +64,7 @@ Builder.start(loc, meta)
             .where("E", MetaTileEntities.ENERGY_INPUT_HATCH[2], IFacing.west())
             .where(" ", IBlockInfo.EMPTY)
             .build())
+    .withPartTooltip(<gregtech:metal_casing:2>, ITextComponent.fromString("Example") as ITextComponent)
     .withRecipeMap(
         RecipeMap.getByName("alloy_smelter")) // Just use an already existing recipe map.
     .buildAndRegister();
