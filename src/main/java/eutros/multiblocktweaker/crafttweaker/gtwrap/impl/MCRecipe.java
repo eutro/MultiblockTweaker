@@ -83,22 +83,25 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public String[] getPropertyKeys() {
-        return inner.getRecipePropertyStorage().getRecipePropertyKeys().toArray(new String[0]);
+        return inner.getPropertyKeys().toArray(new String[0]);
     }
 
     @Override
+    @Deprecated
     public boolean getBooleanProperty(String key) {
-        return inner.getBooleanProperty(key);
+        return (boolean) inner.getPropertyRaw(key);
     }
 
     @Override
+    @Deprecated
     public int getIntegerProperty(String key) {
-        return inner.getIntegerProperty(key);
+        return (int) inner.getPropertyRaw(key);
     }
 
     @Override
+    @Deprecated
     public String getProperty(String key) {
-        return inner.getStringProperty(key);
+        return (String) inner.getPropertyRaw(key);
     }
 
 }

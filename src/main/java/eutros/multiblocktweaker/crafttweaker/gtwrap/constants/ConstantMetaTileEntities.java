@@ -157,7 +157,7 @@ public class ConstantMetaTileEntities {
      *
      */
     @ZenProperty
-    public static final IMetaTileEntity DIESEL_ENGINE = new MCMetaTileEntity(MetaTileEntities.DIESEL_ENGINE);
+    public static final IMetaTileEntity DIESEL_ENGINE = new MCMetaTileEntity(MetaTileEntities.LARGE_COMBUSTION_ENGINE);
     /**
      *
      */
@@ -193,41 +193,6 @@ public class ConstantMetaTileEntities {
      */
     @ZenProperty
     public static final IMetaTileEntity LARGE_TUNGSTENSTEEL_BOILER = new MCMetaTileEntity(MetaTileEntities.LARGE_TUNGSTENSTEEL_BOILER);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity SMALL_WOODEN_CHEST = new MCMetaTileEntity(MetaTileEntities.SMALL_WOODEN_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity WOODEN_CHEST = new MCMetaTileEntity(MetaTileEntities.WOODEN_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity BRONZE_CHEST = new MCMetaTileEntity(MetaTileEntities.BRONZE_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity STEEL_CHEST = new MCMetaTileEntity(MetaTileEntities.STEEL_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity STAINLESS_STEEL_CHEST = new MCMetaTileEntity(MetaTileEntities.STAINLESS_STEEL_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity TITANIUM_CHEST = new MCMetaTileEntity(MetaTileEntities.TITANIUM_CHEST);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity TUNGSTENSTEEL_CHEST = new MCMetaTileEntity(MetaTileEntities.TUNGSTENSTEEL_CHEST);
     /**
      *
      */
@@ -268,11 +233,6 @@ public class ConstantMetaTileEntities {
      */
     @ZenProperty
     public static final IMetaTileEntity WORKBENCH = new MCMetaTileEntity(MetaTileEntities.WORKBENCH);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity TESLA_COIL = new MCMetaTileEntity(MetaTileEntities.TESLA_COIL);
 
     /**
      *
@@ -304,11 +264,6 @@ public class ConstantMetaTileEntities {
      */
     @ZenProperty
     public static final IMetaTileEntity[] ALLOY_SMELTER = Arrays.stream(MetaTileEntities.ALLOY_SMELTER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity[] AMPLIFABRICATOR = Arrays.stream(MetaTileEntities.AMPLIFABRICATOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
      */
@@ -398,16 +353,6 @@ public class ConstantMetaTileEntities {
      *
      */
     @ZenProperty
-    public static final IMetaTileEntity[] FLUID_CANNER = Arrays.stream(MetaTileEntities.FLUID_CANNER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity[] FLUID_EXTRACTOR = Arrays.stream(MetaTileEntities.FLUID_EXTRACTOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
-    /**
-     *
-     */
-    @ZenProperty
     public static final IMetaTileEntity[] FLUID_HEATER = Arrays.stream(MetaTileEntities.FLUID_HEATER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
@@ -433,11 +378,6 @@ public class ConstantMetaTileEntities {
      *
      */
     @ZenProperty
-    public static final IMetaTileEntity[] MICROWAVE = Arrays.stream(MetaTileEntities.MICROWAVE).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
-    /**
-     *
-     */
-    @ZenProperty
     public static final IMetaTileEntity[] MIXER = Arrays.stream(MetaTileEntities.MIXER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
@@ -454,11 +394,6 @@ public class ConstantMetaTileEntities {
      */
     @ZenProperty
     public static final IMetaTileEntity[] UNPACKER = Arrays.stream(MetaTileEntities.UNPACKER).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
-    /**
-     *
-     */
-    @ZenProperty
-    public static final IMetaTileEntity[] PLASMA_ARC_FURNACE = Arrays.stream(MetaTileEntities.PLASMA_ARC_FURNACE).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
      */
@@ -488,7 +423,7 @@ public class ConstantMetaTileEntities {
      *
      */
     @ZenProperty
-    public static final IMetaTileEntity[] DIESEL_GENERATOR = Arrays.stream(MetaTileEntities.DIESEL_GENERATOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
+    public static final IMetaTileEntity[] DIESEL_GENERATOR = Arrays.stream(MetaTileEntities.COMBUSTION_GENERATOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
      */
@@ -548,7 +483,7 @@ public class ConstantMetaTileEntities {
      *
      */
     @ZenProperty
-    public static final IMetaTileEntity[] AIR_COLLECTOR = Arrays.stream(MetaTileEntities.AIR_COLLECTOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
+    public static final IMetaTileEntity[] AIR_COLLECTOR = Arrays.stream(MetaTileEntities.GAS_COLLECTOR).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new);
     /**
      *
      */

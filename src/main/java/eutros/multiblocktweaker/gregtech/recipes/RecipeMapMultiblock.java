@@ -22,7 +22,7 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
     private final int slotsHeight;
 
     public RecipeMapMultiblock(String unlocalizedName, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs, CustomRecipeBuilder defaultRecipe) {
-        super(unlocalizedName, minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultRecipe);
+        super(unlocalizedName, minInputs, maxInputs, minOutputs, maxOutputs, minFluidInputs, maxFluidInputs, minFluidOutputs, maxFluidOutputs, defaultRecipe, false);
 
         slotsHeight = MathHelper.max(
                 64,
@@ -45,8 +45,7 @@ public class RecipeMapMultiblock extends RecipeMap<CustomRecipeBuilder> {
         ModularUI.Builder builder = ModularUI.builder(GuiTextures.BACKGROUND,
                 176,
                 (slotsHeight + (getRecipeList().parallelStream()
-                                        .map(Recipe::getRecipePropertyStorage)
-                                        .map(RecipePropertyStorage::getRecipePropertyKeys)
+                                        .map(Recipe::getPropertyKeys)
                                         .mapToInt(Set::size)
                                         .max()
                                         .orElse(0) + 4) * LINE_DIFF) * 3 / 2); // For some godforsaken reason the JEI category multiplies by 2/3

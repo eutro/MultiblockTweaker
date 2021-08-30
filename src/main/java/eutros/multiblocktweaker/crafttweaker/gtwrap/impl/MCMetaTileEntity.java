@@ -32,7 +32,7 @@ public class MCMetaTileEntity implements IMetaTileEntity {
     }
 
     public long getTimer() {
-        return inner.getTimer();
+        return inner.getOffsetTimer();
     }
 
     public String getMetaName() {

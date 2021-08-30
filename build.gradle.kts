@@ -87,7 +87,8 @@ dependencies {
     deobfProvided("mezz.jei:jei_1.12.2:${properties["jei_ver"]}:api")
     runtime("mezz.jei:jei_1.12.2:${properties["jei_ver"]}")
 
-    deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
+    //deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
+    "provided"(files("libs/gregtech-1.12.2-2.0.0.1257-alpha.jar"))
 
     deobfCompile("codechicken-lib-1-8:CodeChickenLib-1.12.2:${properties["ccl_ver"]}:universal")
 

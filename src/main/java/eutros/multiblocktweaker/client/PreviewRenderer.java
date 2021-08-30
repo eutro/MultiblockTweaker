@@ -10,6 +10,7 @@ import gregtech.api.multiblock.BlockPattern;
 import gregtech.api.multiblock.BlockWorldState;
 import gregtech.api.multiblock.PatternMatchContext;
 import gregtech.api.render.scene.WorldSceneRenderer;
+import gregtech.api.util.RelativeDirection;
 import gregtech.integration.jei.multiblock.MultiblockInfoRecipeWrapper;
 import mezz.jei.api.IRecipeRegistry;
 import mezz.jei.api.recipe.IFocus;
@@ -392,7 +393,7 @@ public class PreviewRenderer {
     }
 
     private static void setActualRelativeOffset(BlockPattern pattern, BlockPos.MutableBlockPos pos, int x, int y, int z, EnumFacing facing) {
-        BlockPattern.RelativeDirection[] structureDir = ReflectionHelper.getPrivate(BlockPattern.class, "structureDir", pattern);
+        RelativeDirection[] structureDir = ReflectionHelper.getPrivate(BlockPattern.class, "structureDir", pattern);
 
         int[] c0 = new int[] { x, y, z }, c1 = new int[3];
         for (int i = 0; i < 3; i++) {

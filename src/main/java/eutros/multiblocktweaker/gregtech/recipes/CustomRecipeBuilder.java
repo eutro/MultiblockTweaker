@@ -57,7 +57,6 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
                         this.chancedOutputs,
                         this.fluidInputs,
                         this.fluidOutputs,
-                        ImmutableMap.copyOf(propertyMap),
                         this.duration,
                         this.EUt,
                         this.hidden));

@@ -71,8 +71,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
                       MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
                       MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
                       recipe.matches(new Random().nextInt(100) <=
-                                     (recipe.getRecipePropertyStorage().getRecipePropertyKeys().contains(CONSUME_CHANCE) ?
-                                             recipe.getIntegerProperty(CONSUME_CHANCE) :
+                                     (recipe.getPropertyKeys().contains(CONSUME_CHANCE) ?
+                                             (int) recipe.getPropertyRaw(CONSUME_CHANCE) :
                                              100),
                               importInventory, importFluids);
 
@@ -164,7 +164,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
             }
         });
     }
-
+/* TODO
     @Override
     protected boolean checkRecipeInputsDirty(IItemHandler inputs, IMultipleTankHandler fluidInputs) {
         boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
@@ -176,7 +176,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         }
         return false;
     }
-
+*/
     // CT EXPOSED
 
     @Override
