@@ -190,8 +190,8 @@ public interface IBlockMatcher {
     @ZenMethod
     static IBlockMatcher controller(String resourceLocation) {
         ResourceLocation loc = new ResourceLocation(resourceLocation);
-        if (loc.getResourceDomain().equals("minecraft")) {
-            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
+        if (loc.getNamespace().equals("minecraft")) {
+            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getPath());
         }
         ResourceLocation finalLoc = loc;
         return toCT(BlockWorldState.wrap(tilePredicate((state, tile) -> tile.metaTileEntityId.equals(finalLoc))));

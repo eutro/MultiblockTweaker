@@ -37,7 +37,7 @@ val minecraft = the<UserBaseExtension>()
 configure<UserBaseExtension> {
     version = properties["forge_ver"] as String
     runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings = "stable_39"
 
     makeObfSourceJar = false
     isUseDepAts = true
@@ -88,7 +88,7 @@ dependencies {
     runtime("mezz.jei:jei_1.12.2:${properties["jei_ver"]}")
 
     //deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
-    "provided"(files("libs/gregtech-1.12.2-2.0.0.1257-alpha.jar"))
+    "provided"(files("libs/gregtech-1.12.2-2.0.0.1256-alpha.jar"))
 
     deobfCompile("codechicken-lib-1-8:CodeChickenLib-1.12.2:${properties["ccl_ver"]}:universal")
 
