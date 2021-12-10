@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import gregtech.api.multiblock.PatternMatchContext;
+import gregtech.api.pattern.PatternMatchContext;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

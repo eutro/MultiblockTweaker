@@ -1,15 +1,14 @@
 package eutros.multiblocktweaker.crafttweaker.predicate;
 
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
-import gregtech.api.multiblock.BlockWorldState;
+import gregtech.api.pattern.TraceabilityPredicate;
 
-import java.util.function.Predicate;
 
 public class MCBlockMatcher implements IBlockMatcher {
 
-    public final Predicate<BlockWorldState> predicate;
+    public final TraceabilityPredicate predicate;
 
-    public MCBlockMatcher(Predicate<BlockWorldState> predicate) {
+    public MCBlockMatcher(TraceabilityPredicate predicate) {
         this.predicate = predicate;
     }
 

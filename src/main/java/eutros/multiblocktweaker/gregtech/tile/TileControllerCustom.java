@@ -13,7 +13,6 @@ import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
-import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -21,19 +20,19 @@ import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.multiblock.BlockPattern;
-import gregtech.api.multiblock.PatternMatchContext;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.render.ICubeRenderer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -150,20 +149,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
-    protected boolean checkStructureComponents(List<IMultiblockPart> parts, Map<MultiblockAbility<Object>, List<Object>> abilities) {
-        int itemInputsCount = (abilities.getOrDefault(MultiblockAbility.IMPORT_ITEMS, Collections.emptyList())).stream()
-                .map(IItemHandler.class::cast).mapToInt(IItemHandler::getSlots).sum();
-        int fluidInputsCount = abilities.getOrDefault(MultiblockAbility.IMPORT_FLUIDS, Collections.emptyList()).size();
-        return itemInputsCount >= this.recipeMap.getMinInputs()
-               && fluidInputsCount >= this.recipeMap.getMinFluidInputs()
-               && (multiblock.noEnergy ||
-                   abilities.containsKey(MultiblockAbility.INPUT_ENERGY) ||
-                   abilities.containsKey(MultiblockAbility.OUTPUT_ENERGY));
-    }
-
-    @Override
     protected BlockPattern createStructurePattern() {
-        return Objects.requireNonNull(MultiblockRegistry.get(metaTileEntityId)).pattern;
+        return multiblock.pattern.build(new MCControllerTile(this)).getInternal();
     }
 
     @Override

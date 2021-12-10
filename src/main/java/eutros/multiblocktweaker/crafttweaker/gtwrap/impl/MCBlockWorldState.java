@@ -7,7 +7,7 @@ import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
-import gregtech.api.multiblock.BlockWorldState;
+import gregtech.api.pattern.BlockWorldState;
 import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
 

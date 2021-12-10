@@ -3,7 +3,9 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.data.IData;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
+import gregtech.api.pattern.TraceabilityPredicate;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -78,5 +80,19 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenGetter("extraData")
     IData getExtraData();
 
+    @ZenMethod
+    @ZenGetter("autoAbilities")
+    CTTraceabilityPredicate autoAbilities();
 
+    @ZenMethod
+    CTTraceabilityPredicate autoAbilities(boolean checkEnergyIn,
+                                        boolean checkMaintainer,
+                                        boolean checkItemIn,
+                                        boolean checkItemOut,
+                                        boolean checkFluidIn,
+                                        boolean checkFluidOut,
+                                        boolean checkMuffler);
+    @ZenMethod
+    @ZenGetter("selfPredicate")
+    CTTraceabilityPredicate selfPredicate();
 }

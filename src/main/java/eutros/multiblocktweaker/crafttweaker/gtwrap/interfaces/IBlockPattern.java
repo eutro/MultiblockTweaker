@@ -5,7 +5,7 @@ import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.pattern.BlockPattern;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;

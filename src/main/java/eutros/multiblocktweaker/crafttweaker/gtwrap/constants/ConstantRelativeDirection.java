@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.constants;
 
 import crafttweaker.annotations.ZenRegister;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.util.RelativeDirection;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenProperty;
 
@@ -10,26 +10,26 @@ import stanhebben.zenscript.annotations.ZenProperty;
 public enum ConstantRelativeDirection {
     /**
      *
-     */@ZenProperty UP(BlockPattern.RelativeDirection.UP),
+     */@ZenProperty UP(RelativeDirection.UP),
     /**
      *
-     */@ZenProperty DOWN(BlockPattern.RelativeDirection.DOWN),
+     */@ZenProperty DOWN(RelativeDirection.DOWN),
     /**
      *
-     */@ZenProperty LEFT(BlockPattern.RelativeDirection.LEFT),
+     */@ZenProperty LEFT(RelativeDirection.LEFT),
     /**
      *
-     */@ZenProperty RIGHT(BlockPattern.RelativeDirection.RIGHT),
+     */@ZenProperty RIGHT(RelativeDirection.RIGHT),
     /**
      *
-     */@ZenProperty FRONT(BlockPattern.RelativeDirection.FRONT),
+     */@ZenProperty FRONT(RelativeDirection.FRONT),
     /**
      *
-     */@ZenProperty BACK(BlockPattern.RelativeDirection.BACK);
+     */@ZenProperty BACK(RelativeDirection.BACK);
 
-    public BlockPattern.RelativeDirection val;
+    public RelativeDirection val;
 
-    ConstantRelativeDirection(BlockPattern.RelativeDirection direction) {
+    ConstantRelativeDirection(RelativeDirection direction) {
         val = direction;
     }
 }

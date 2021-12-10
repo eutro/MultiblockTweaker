@@ -11,7 +11,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockShapeInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import stanhebben.zenscript.annotations.ZenClass;

@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
-import gregtech.api.multiblock.PatternMatchContext;
+import gregtech.api.pattern.PatternMatchContext;
 import org.jetbrains.annotations.NotNull;
 
 public class MCPatternMatchContext implements IPatternMatchContext {

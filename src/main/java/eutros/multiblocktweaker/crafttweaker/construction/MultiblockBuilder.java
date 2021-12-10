@@ -6,16 +6,16 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
 import eutros.multiblocktweaker.gregtech.cuberenderer.SidedCubeRenderer;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.render.ICubeRenderer;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.ItemStackHashStrategy;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,11 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,7 +54,7 @@ public class MultiblockBuilder {
     public boolean clearTooltips = false;
     public gregtech.api.render.ICubeRenderer texture = null;
     public RecipeMap<?> recipeMap = null;
-    public BlockPattern pattern = null;
+    public IPatternBuilderFunction pattern = null;
 
     @NotNull
     public List<MultiblockShapeInfo> designs = new ArrayList<>();
@@ -72,8 +76,8 @@ public class MultiblockBuilder {
     @ZenMethod
     public static MultiblockBuilder start(@NotNull String location, int metaId) {
         ResourceLocation loc = new ResourceLocation(location);
-        if (loc.getResourceDomain().equals("minecraft")) {
-            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
+        if (loc.getNamespace().equals("minecraft")) {
+            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getPath());
         }
         return new MultiblockBuilder(loc, metaId);
     }
@@ -85,8 +89,8 @@ public class MultiblockBuilder {
      * @return This builder, for convenience.
      */
     @ZenMethod
-    public MultiblockBuilder withPattern(@NotNull IBlockPattern pattern) {
-        this.pattern = pattern.getInternal();
+    public MultiblockBuilder withPattern(@NotNull IPatternBuilderFunction pattern) {
+        this.pattern = pattern;
         return this;
     }
 
@@ -174,16 +178,14 @@ public class MultiblockBuilder {
      */
     @ZenMethod
     public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo... designs) {
-        for (IMultiblockShapeInfo info : designs) {
-            this.designs.add(info.getInternal());
-        }
+        this.designs = Arrays.stream(designs).map(IMultiblockShapeInfo::getInternal).collect(Collectors.toList());
         return this;
     }
 
     /**
      * Construct the {@link CustomMultiblock} using the defined features.
      * <p>
-     * Will fail if {@link #withPattern(IBlockPattern)} or {@link #withRecipeMap(RecipeMap)} wasn't called,
+     * Will fail if {@link #withPattern(IPatternBuilderFunction)} or {@link #withRecipeMap(RecipeMap)} wasn't called,
      * or if neither {@link #withTexture(IICubeRenderer)} nor {@link #addDesign(IMultiblockShapeInfo...)} was called.
      *
      * @return The built {@link CustomMultiblock}.
@@ -226,9 +228,6 @@ public class MultiblockBuilder {
 
                 texture = tex.get();
             }
-        }
-        if (designs.isEmpty()) {
-            CraftTweakerAPI.logWarning(String.format("No designs defined for multiblock \"%s\". It will not show up in JEI.", loc));
         }
 
         return new CustomMultiblock(this);

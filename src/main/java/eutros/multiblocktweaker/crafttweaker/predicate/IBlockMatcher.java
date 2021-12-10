@@ -17,8 +17,8 @@ import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.multiblock.BlockWorldState;
-import gregtech.api.multiblock.IPatternCenterPredicate;
+import gregtech.api.pattern.BlockWorldState;
+import gregtech.api.pattern.TraceabilityPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.*;
@@ -63,7 +63,7 @@ public interface IBlockMatcher {
      * Matches any air blocks.
      */
     @ZenProperty
-    IBlockMatcher AIR = a -> MultiblockControllerBase.isAirPredicate().test(a.getInternal());
+    IBlockMatcher AIR = a -> MultiblockControllerBase.air().test(a.getInternal());
     /**
      * Matches anything while inside the JEI preview.
      * <p>
@@ -74,7 +74,7 @@ public interface IBlockMatcher {
     @ZenProperty
     IBlockMatcher IN_PREVIEW = a -> a.getWorld().getDimension() == Integer.MAX_VALUE;
 
-    static Predicate<BlockWorldState> toInternal(IBlockMatcher blockMatcher) {
+    static TraceabilityPredicate toInternal(IBlockMatcher blockMatcher) {
         if (blockMatcher instanceof MCBlockMatcher) {
             return ((MCBlockMatcher) blockMatcher).predicate;
         }
@@ -83,65 +83,6 @@ public interface IBlockMatcher {
 
     static IBlockMatcher toCT(Predicate<BlockWorldState> blockMatcher) {
         return new MCBlockMatcher(blockMatcher);
-    }
-
-    /**
-     * Get an {@link IBlockMatcher} that combines two predicates such that a block must pass both to be valid.
-     * <p>
-     * Can be applied by just {@code &}.
-     * <p>
-     * {@code (matcher_a as IBlockMatcher).and(matcher_b as IBlockMatcher)}
-     * <p>
-     * is equivalent to
-     * <p>
-     * {@code matcher_a as IBlockMatcher & matcher_b as IBlockMatcher}
-     * <p>
-     * which is equivalent to
-     * <p>
-     * {@code function (state as IBlockWorldState) as boolean { return (matcher_a as IBlockMatcher).test(state) && (matcher_b as IBlockMatcher).test(state); } as IBlockMatcher}
-     *
-     * @param other The other predicate, both this and other must succeed.
-     * @return A predicate that succeeds if both this and the other predicate succeed.
-     */
-    @Nonnull
-    @ZenMethod
-    @ZenOperator(OperatorType.AND)
-    default IBlockMatcher and(@Nonnull IBlockMatcher other) {
-        if (isCenterPredicate(this) || isCenterPredicate(other)) {
-            return new MCBlockMatcher(
-                    BlockWorldState.wrap(toInternal(this).and(toInternal(other)))
-            );
-        }
-        return t -> test(t) && other.test(t);
-    }
-
-    /**
-     * Get an {@link IBlockMatcher} that inverts a predicate such that blocks that fail the original pass the new one.
-     * <p>
-     * Can be applied by just {@code !}.
-     * <p>
-     * {@code (matcher as IBlockMatcher).negate()}
-     * <p>
-     * is equivalent to
-     * <p>
-     * {@code !(matcher as IBlockMatcher)}
-     * <p>
-     * which is equivalent to
-     * <p>
-     * {@code function (state as IBlockWorldState) as boolean { return !(matcher as IBlockMatcher).test(state); } as IBlockMatcher}
-     *
-     * @return A predicate that succeeds when this would fail, and fails when this would succeed.
-     */
-    @Nonnull
-    @ZenMethod
-    @ZenOperator(OperatorType.NEG)
-    default IBlockMatcher negate() {
-        if (isCenterPredicate(this)) {
-            return new MCBlockMatcher(
-                    BlockWorldState.wrap(toInternal(this).negate())
-            );
-        }
-        return t -> !test(t);
     }
 
     /**
@@ -288,27 +229,6 @@ public interface IBlockMatcher {
         }
 
         return blockPredicate(list.toArray(new IBlock[0]));
-    }
-
-    /**
-     * An {@link IBlockMatcher} that counts the number of blocks that end up matching this predicate.
-     * <p>
-     * This can be accessed from {@link IPatternMatchContext#getInt(String)}.
-     *
-     * @param key      The key whose value will be incremented when a match occurs.
-     * @param original The {@link IBlockMatcher} to count matches for.
-     * @return An {@link IBlockMatcher} that returns true the same as original, but also counts the matches.
-     */
-    @ZenMethod
-    static IBlockMatcher countMatch(String key, IBlockMatcher original) {
-        return (blockWorldState) -> {
-            if (original.test(blockWorldState)) {
-                blockWorldState.getLayerContext().increment(key, 1);
-                return true;
-            } else {
-                return false;
-            }
-        };
     }
 
 }

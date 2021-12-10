@@ -2,7 +2,12 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import crafttweaker.api.data.IData;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIEnergyContainer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultipleTankHandler;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,6 +77,34 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     @Override
     public IData getExtraData() {
         return getInternal().persistentData;
+    }
+
+    @Override
+    public CTTraceabilityPredicate autoAbilities() {
+        return new CTTraceabilityPredicate(getInternal().autoAbilities());
+    }
+
+    @Override
+    public CTTraceabilityPredicate autoAbilities(boolean checkEnergyIn,
+                                                 boolean checkMaintainer,
+                                                 boolean checkItemIn,
+                                                 boolean checkItemOut,
+                                                 boolean checkFluidIn,
+                                                 boolean checkFluidOut,
+                                                 boolean checkMuffler) {
+        return new CTTraceabilityPredicate(
+                getInternal().autoAbilities(checkEnergyIn,
+                        checkMaintainer,
+                        checkItemIn,
+                        checkItemOut,
+                        checkFluidIn,
+                        checkFluidOut,
+                        checkMuffler));
+    }
+
+    @Override
+    public CTTraceabilityPredicate selfPredicate() {
+        return new CTTraceabilityPredicate(getInternal().selfPredicate());
     }
 
     @Override

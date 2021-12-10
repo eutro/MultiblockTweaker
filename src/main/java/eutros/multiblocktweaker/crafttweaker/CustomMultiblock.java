@@ -3,15 +3,21 @@ package eutros.multiblocktweaker.crafttweaker;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
+import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
-import eutros.multiblocktweaker.crafttweaker.functions.*;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
+import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
+import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -79,7 +85,7 @@ public class CustomMultiblock {
     public boolean noEnergy = false;
 
     public final ResourceLocation loc;
-    public final BlockPattern pattern;
+    public final IPatternBuilderFunction pattern;
     public final gregtech.api.render.ICubeRenderer texture;
     public final List<MultiblockShapeInfo> designs;
 
@@ -161,17 +167,6 @@ public class CustomMultiblock {
     @ZenGetter("loc")
     public String getLocation() {
         return loc.toString();
-    }
-
-    /**
-     * @return The pattern of the multiblock. Set in {@link MultiblockBuilder#withPattern(IBlockPattern)}.
-     *
-     * @zenGetter pattern
-     */
-    @NotNull
-    @ZenGetter("pattern")
-    public IBlockPattern getPattern() {
-        return new MCBlockPattern(pattern);
     }
 
     /**
