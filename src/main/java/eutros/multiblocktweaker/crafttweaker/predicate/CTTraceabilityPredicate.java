@@ -5,6 +5,11 @@ import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockInfo;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockWorldState;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -19,7 +24,6 @@ import gregtech.common.blocks.VariantActiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import org.apache.commons.lang3.ArrayUtils;
 import stanhebben.zenscript.annotations.OperatorType;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenConstructor;
@@ -27,20 +31,15 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenOperator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.tilePredicate;
 
 @ZenClass("mods.gregtech.multiblock.CTPredicate")
 @ZenRegister
@@ -53,6 +52,12 @@ public class CTTraceabilityPredicate {
 
     public CTTraceabilityPredicate(Predicate<BlockWorldState> predicate, Supplier<BlockInfo[]> candidates) {
         this(new TraceabilityPredicate(predicate, candidates));
+    }
+
+    @ZenConstructor
+    public CTTraceabilityPredicate(IPredicate predicate, ICandidates candidates) {
+        this(new TraceabilityPredicate((state) -> predicate.test(new MCBlockWorldState(state)),
+                () -> Arrays.stream(candidates.get()).map(IBlockInfo::getInternal).toArray(BlockInfo[]::new)));
     }
 
     @ZenConstructor
@@ -78,15 +83,16 @@ public class CTTraceabilityPredicate {
         return new CTTraceabilityPredicate(TraceabilityPredicate.HEATING_COILS.get());
     }
 
-    public static CTTraceabilityPredicate tilePredicate(@Nonnull BiFunction<BlockWorldState, MetaTileEntity, Boolean> predicate, @Nullable Supplier<BlockInfo[]> candidates) {
+    @ZenMethod
+    public static CTTraceabilityPredicate mtePredicate(IMTEPredicate predicate, ICandidates candidates) {
         return new CTTraceabilityPredicate(blockWorldState -> {
-            TileEntity tileEntity = blockWorldState.getTileEntity();
+            TileEntity tileEntity = blockWorldState.getInternal().getTileEntity();
             if (!(tileEntity instanceof MetaTileEntityHolder))
                 return false;
             MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tileEntity).getMetaTileEntity();
-            if (predicate.apply(blockWorldState, metaTileEntity)) {
+            if (predicate.apply(blockWorldState, new MCMetaTileEntity(metaTileEntity))) {
                 if (metaTileEntity instanceof IMultiblockPart) {
-                    Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext().getOrCreate("MultiblockParts", HashSet::new);
+                    Set<IMultiblockPart> partsFound = blockWorldState.getInternal().getMatchContext().getOrCreate("MultiblockParts", HashSet::new);
                     partsFound.add((IMultiblockPart) metaTileEntity);
                 }
                 return true;
@@ -100,13 +106,13 @@ public class CTTraceabilityPredicate {
         return ()-> allowedStates.stream().map(state-> new BlockInfo(state, null)).toArray(BlockInfo[]::new);
     }
 
-    private static Supplier<BlockInfo[]> getCandidates(MetaTileEntity... metaTileEntities){
+    private static ICandidates getCandidates(MetaTileEntity... metaTileEntities){
         return ()->Arrays.stream(metaTileEntities).map(tile->{
             MetaTileEntityHolder holder = new MetaTileEntityHolder();
             holder.setMetaTileEntity(tile);
             holder.getMetaTileEntity().setFrontFacing(EnumFacing.SOUTH);
-            return new BlockInfo(MetaBlocks.MACHINE.getDefaultState(), holder);
-        }).toArray(BlockInfo[]::new);
+            return new MCBlockInfo(new BlockInfo(MetaBlocks.MACHINE.getDefaultState(), holder));
+        }).toArray(IBlockInfo[]::new);
     }
 
     /**
@@ -115,7 +121,7 @@ public class CTTraceabilityPredicate {
      * When called with a single parameter, it is equivalent to {@code IBlockState as IBlockMatcher}.
      *
      * @param allowedStates The list of {@link IBlockState}s to match.
-     * @return An {@link IBlockMatcher} that returns true for any of the given blockstates.
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given blockstates.
      */
     @ZenMethod
     public static CTTraceabilityPredicate states(IBlockState... allowedStates) {
@@ -139,7 +145,7 @@ public class CTTraceabilityPredicate {
      * When called with a single parameter, it is equivalent to {@code IBlock as IBlockMatcher}`
      *
      * @param blocks The list of {@link IBlock}s to match.
-     * @return An {@link IBlockMatcher} that returns true for any of the given blocks.
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given blocks.
      */
     @ZenMethod
     public static CTTraceabilityPredicate blocks(IBlock... blocks) {
@@ -157,7 +163,7 @@ public class CTTraceabilityPredicate {
      * When called with a single parameter, it is equivalent to {@code IItemStack as IBlock as IBlockMatcher}`
      *
      * @param stacks The list of {@link IItemStack}s to match.
-     * @return An {@link IBlockMatcher} that returns true for any of the given blocks.
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given blocks.
      */
     @ZenMethod
     public static CTTraceabilityPredicate blocks(IItemStack... stacks) {
@@ -168,21 +174,24 @@ public class CTTraceabilityPredicate {
         }
         return blocks(list.toArray(new IBlock[0]));
     }
-    
+
     /**
      * Match any block that has one of the given {@link IMultiblockAbility}-es.
      *
      * @param allowedAbilities One or multiple {@link IMultiblockAbility}-es to match for.
-     * @return An {@link IBlockMatcher} that matches any blocks with one of the given {@link IMultiblockAbility}-es.
+     * @return An {@link CTTraceabilityPredicate} that matches any blocks with one of the given {@link IMultiblockAbility}-es.
      */
     @ZenMethod
     static CTTraceabilityPredicate abilities(IMultiblockAbility... allowedAbilities) {
         Set<? extends MultiblockAbility<?>> abilities = Arrays.stream(allowedAbilities).map(IMultiblockAbility::getInternal).collect(Collectors.toSet());
+        return mtePredicate((state, tile) -> tile.getInternal() instanceof IMultiblockAbilityPart<?> && abilities.contains(((IMultiblockAbilityPart<?>) tile.getInternal()).getAbility()),
+                getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTER.get(ability).stream()).toArray(MetaTileEntity[]::new)));
+    }
 
-        return tilePredicate((state, tile) -> tile instanceof IMultiblockAbilityPart<?> &&
-                        abilities.contains(((IMultiblockAbilityPart<?>) tile).getAbility()),
-                getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTER.get(ability).stream()).toArray(
-                        MetaTileEntity[]::new)));
+    @ZenMethod
+    static CTTraceabilityPredicate metaTileEntities(IMetaTileEntity... allowedMTEs) {
+        return mtePredicate((state, mte) -> Arrays.stream(allowedMTEs).anyMatch(mte2->mte2.getInternal().metaTileEntityId == mte.getInternal().metaTileEntityId),
+                getCandidates(Arrays.stream(allowedMTEs).map(IMetaTileEntity::getInternal).toArray(MetaTileEntity[]::new)));
     }
 
     @ZenMethod
