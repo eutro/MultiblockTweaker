@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.helper;
 
 import com.google.common.base.Preconditions;
+import crafttweaker.mc1120.CraftTweaker;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.invoke.MethodHandle;
@@ -21,10 +22,22 @@ public class ReflectionHelper {
                     .computeIfAbsent(fieldClass, c -> new HashMap<>())
                     .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
                     .invoke(object);
-        } catch (Error | RuntimeException e) {
-            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            //TODO CTLOG
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, C> T getStatic(Class<? super C> fieldClass, String fieldName) throws ClassCastException {
+        try {
+            return (T) handles
+                    .computeIfAbsent(fieldClass, c -> new HashMap<>())
+                    .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
+                    .invoke(fieldClass);
+        } catch (Throwable e) {
+            //TODO CTLOG
+            return null;
         }
     }
 

@@ -35,6 +35,7 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
+    private boolean isHidden = false;
     public CTRecipeBuilder defaultRecipe = startBuilder();
     private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
@@ -191,6 +192,17 @@ public class RecipeMapBuilder {
     }
 
     /**
+     * Should hide recipes.
+     * @param isHidden isHidden.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public RecipeMapBuilder setHidden(boolean isHidden) {
+        this.isHidden = isHidden;
+        return this;
+    }
+
+    /**
      * Set the default recipe builder, that will be copied in order to add new recipes.
      *
      * @param builder The {@link CTRecipeBuilder} that holds the starting state for any new recipes.
@@ -260,7 +272,8 @@ public class RecipeMapBuilder {
                 maxFluidInputs,
                 minFluidOutputs,
                 maxFluidOutputs,
-                ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"));
+                ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"),
+                isHidden);
 
         for (byte key : slotOverlays.keys()) {
             map.setSlotOverlay((key & 2) != 0, (key & 1) != 0, (key & 4) != 0, slotOverlays.get(key));

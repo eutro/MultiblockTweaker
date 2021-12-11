@@ -137,6 +137,15 @@ public interface IRecipe {
     int getIntegerProperty(String key);
 
     /**
+     * Get the long property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The integer property referenced by the given key.
+     */
+    @ZenMethod
+    long getLongProperty(String key);
+
+    /**
      * Get the string property referenced by the given key.
      *
      * @param key The key to reference.

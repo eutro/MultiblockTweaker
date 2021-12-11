@@ -24,12 +24,12 @@ public interface IBlockWorldState {
     @NotNull
     BlockWorldState getInternal();
 
-    /**
-     * @return The match context of the current layer as opposed to that of the entire structure.
-     */
     @ZenMethod
-    @ZenGetter("layerContext")
-    IPatternMatchContext getLayerContext();
+    @ZenGetter("hasError")
+    boolean hasError();
+
+    @ZenMethod
+    void setError(String error);
 
     /**
      * @return The match context of the entire structure as opposed to that of a single layer.

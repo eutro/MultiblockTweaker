@@ -27,17 +27,17 @@ public class MCBlockPattern implements IBlockPattern {
 
     @Override
     public int getFingerLength() {
-        return internal.getFingerLength();
-    }
+        return 0;
+    } //TODO provide the interface
 
     @Override
     public int getThumbLength() {
-        return internal.getThumbLength();
+        return 0;
     }
 
     @Override
     public int getPalmLength() {
-        return internal.getPalmLength();
+        return 0;
     }
 
     @Override

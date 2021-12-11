@@ -52,36 +52,36 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         this.completeRecipe = completeRecipe;
     }
 
-    @Override
-    protected boolean setupAndConsumeRecipeInputs(Recipe recipe) {
-        TileControllerCustom controller = (TileControllerCustom) this.metaTileEntity;
-        if (!controller.checkRecipe(recipe, false)) {
-            return false;
-        }
-
-        int[] resultOverclock = calculateOverclock(recipe.getEUt(), getMaxVoltage(), recipe.getDuration());
-        int totalEUt = resultOverclock[0] * resultOverclock[1];
-        IItemHandlerModifiable importInventory = getInputInventory();
-        IItemHandlerModifiable exportInventory = getOutputInventory();
-        IMultipleTankHandler importFluids = getInputTank();
-        IMultipleTankHandler exportFluids = getOutputTank();
-        boolean ret = (totalEUt >= 0 ?
-                getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
-                (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
-                      MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
-                      MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
-                      recipe.matches(new Random().nextInt(100) <=
-                                     (recipe.getRecipePropertyStorage().getRecipePropertyKeys().contains(CONSUME_CHANCE) ?
-                                             recipe.getIntegerProperty(CONSUME_CHANCE) :
-                                             100),
-                              importInventory, importFluids);
-
-        if (ret) {
-            controller.checkRecipe(recipe, true);
-        }
-
-        return ret;
-    }
+//    @Override
+//    protected boolean setupAndConsumeRecipeInputs(Recipe recipe) {
+//        TileControllerCustom controller = (TileControllerCustom) this.metaTileEntity;
+//        if (!controller.checkRecipe(recipe, false)) {
+//            return false;
+//        }
+//
+//        int[] resultOverclock = calculateOverclock(recipe.getEUt(), getMaxVoltage(), recipe.getDuration());
+//        int totalEUt = resultOverclock[0] * resultOverclock[1];
+//        IItemHandlerModifiable importInventory = getInputInventory();
+//        IItemHandlerModifiable exportInventory = getOutputInventory();
+//        IMultipleTankHandler importFluids = getInputTank();
+//        IMultipleTankHandler exportFluids = getOutputTank();
+//        boolean ret = (totalEUt >= 0 ?
+//                getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
+//                (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
+//                      MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
+//                      MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
+//                      recipe.matches(new Random().nextInt(100) <=
+//                                     (recipe.getRecipePropertyStorage().getRecipePropertyKeys().contains(CONSUME_CHANCE) ?
+//                                             recipe.getIntegerProperty(CONSUME_CHANCE) :
+//                                             100),
+//                              importInventory, importFluids);
+//
+//        if (ret) {
+//            controller.checkRecipe(recipe, true);
+//        }
+//
+//        return ret;
+//    }
 
     // FUNCTION GETTERS
 
@@ -165,22 +165,22 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         });
     }
 
-    @Override
-    protected boolean checkRecipeInputsDirty(IItemHandler inputs, IMultipleTankHandler fluidInputs) {
-        boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
-        if (ret) return true;
-
-        if (metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
-            // check every 20 ticks, if there is a recipe predicate, they may be checking different things
-            return ((TileControllerCustom) metaTileEntity).multiblock.recipePredicate != null;
-        }
-        return false;
-    }
+//    @Override
+//    protected boolean checkRecipeInputsDirty(IItemHandler inputs, IMultipleTankHandler fluidInputs) {
+//        boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
+//        if (ret) return true;
+//
+//        if (metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
+//            // check every 20 ticks, if there is a recipe predicate, they may be checking different things
+//            return ((TileControllerCustom) metaTileEntity).multiblock.recipePredicate != null;
+//        }
+//        return false;
+//    }
 
     // CT EXPOSED
 
     @Override
-    public IRecipe getPreviousRecipe() {
+    public IRecipe getPreviousIRecipe() {
         return new MCRecipe(previousRecipe);
     }
 

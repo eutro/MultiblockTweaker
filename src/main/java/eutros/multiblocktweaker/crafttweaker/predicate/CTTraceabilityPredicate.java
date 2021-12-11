@@ -185,7 +185,7 @@ public class CTTraceabilityPredicate {
     static CTTraceabilityPredicate abilities(IMultiblockAbility... allowedAbilities) {
         Set<? extends MultiblockAbility<?>> abilities = Arrays.stream(allowedAbilities).map(IMultiblockAbility::getInternal).collect(Collectors.toSet());
         return mtePredicate((state, tile) -> tile.getInternal() instanceof IMultiblockAbilityPart<?> && abilities.contains(((IMultiblockAbilityPart<?>) tile.getInternal()).getAbility()),
-                getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTER.get(ability).stream()).toArray(MetaTileEntity[]::new)));
+                getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTRY.get(ability).stream()).toArray(MetaTileEntity[]::new)));
     }
 
     @ZenMethod

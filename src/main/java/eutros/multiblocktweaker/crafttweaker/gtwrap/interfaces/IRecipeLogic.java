@@ -17,7 +17,7 @@ public interface IRecipeLogic {
 
     @ZenMethod
     @ZenGetter("previousRecipe")
-    IRecipe getPreviousRecipe();
+    IRecipe getPreviousIRecipe();
 
     @ZenGetter("metaTileEntity")
     IControllerTile getMetaTile();

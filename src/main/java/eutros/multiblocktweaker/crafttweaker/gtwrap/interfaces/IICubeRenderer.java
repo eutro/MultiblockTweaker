@@ -12,9 +12,11 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
 import eutros.multiblocktweaker.gregtech.cuberenderer.BasicCubeRenderer;
 import eutros.multiblocktweaker.gregtech.cuberenderer.SidedCubeRenderer;
 import gregtech.api.render.ICubeRenderer;
+import gregtech.api.render.Textures;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -38,18 +40,34 @@ public interface IICubeRenderer {
     ICubeRenderer getInternal();
 
     /**
+     * Get a ICubeRenderer by path from original CEu.
+     *
+     * @param path The PATH of the cube renderer.
+     * @return The cube renderer referenced by the PATH, or null.
+     */
+    @ZenMethod
+    @Nullable
+    static IICubeRenderer byPath(@NotNull String path) {
+        ICubeRenderer renderer = Textures.CUBE_RENDERER_REGISTRY.getOrDefault(path, null);
+        if (renderer != null) {
+            return new MCCubeRenderer(renderer);
+        }
+        return null;
+    }
+
+    /**
      * Get a non-sided {@link IICubeRenderer} (i.e. all sides have the same texture).
      * <p>
      * If the texture at the given location is not already used by something else,
      * this must be registered in preinit. Use {@code #loader preinit} in a separate script
      * and define it there first.
      *
-     * @param loc The resource location pointing to the texture to use.
+     * @param path The resource location pointing to the texture to use.
      * @return An {@link IICubeRenderer} with all sides showing the given texture.
      */
     @ZenMethod
-    static IICubeRenderer nonSided(String loc) {
-        return new MCCubeRenderer(new BasicCubeRenderer(new ResourceLocation(loc)));
+    static IICubeRenderer nonSided(String path) {
+        return new MCCubeRenderer(new BasicCubeRenderer(path));
     }
 
     /**
@@ -115,9 +133,9 @@ public interface IICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer sided(Map<IFacing, String> map) {
-        EnumMap<EnumFacing, ResourceLocation> result = new EnumMap<>(EnumFacing.class);
+        EnumMap<EnumFacing, String> result = new EnumMap<>(EnumFacing.class);
         for (Map.Entry<IFacing, String> e : map.entrySet()) {
-            if (result.put((EnumFacing) e.getKey().getInternal(), new ResourceLocation(e.getValue())) != null) {
+            if (result.put((EnumFacing) e.getKey().getInternal(), e.getValue()) != null) {
                 CraftTweakerAPI.logError("Duplicate key: " + e.getKey().getName());
             }
         }
@@ -153,15 +171,15 @@ public interface IICubeRenderer {
                                 @Optional String west,
                                 @Optional String down) {
 
-        EnumMap<EnumFacing, ResourceLocation> builder = new EnumMap<>(EnumFacing.class);
+        EnumMap<EnumFacing, String> builder = new EnumMap<>(EnumFacing.class);
 
-        builder.put(EnumFacing.UP, new ResourceLocation(up));
+        builder.put(EnumFacing.UP, up);
 
-        if (north != null) builder.put(EnumFacing.NORTH, new ResourceLocation(north));
-        if (east != null) builder.put(EnumFacing.EAST, new ResourceLocation(east));
-        if (west != null) builder.put(EnumFacing.WEST, new ResourceLocation(west));
-        if (south != null) builder.put(EnumFacing.SOUTH, new ResourceLocation(south));
-        if (down != null) builder.put(EnumFacing.DOWN, new ResourceLocation(down));
+        if (north != null) builder.put(EnumFacing.NORTH, north);
+        if (east != null) builder.put(EnumFacing.EAST, east);
+        if (west != null) builder.put(EnumFacing.WEST, west);
+        if (south != null) builder.put(EnumFacing.SOUTH, south);
+        if (down != null) builder.put(EnumFacing.DOWN, down);
 
         return new MCCubeRenderer(new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(builder)));
     }

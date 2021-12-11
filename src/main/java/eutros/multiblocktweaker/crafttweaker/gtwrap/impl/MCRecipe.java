@@ -7,6 +7,7 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
+import scala.Int;
 
 import java.util.Arrays;
 
@@ -83,22 +84,31 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public String[] getPropertyKeys() {
-        return inner.getRecipePropertyStorage().getRecipePropertyKeys().toArray(new String[0]);
+        return inner.getPropertyKeys().toArray(new String[0]);
     }
 
     @Override
     public boolean getBooleanProperty(String key) {
-        return inner.getBooleanProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Boolean ? (Boolean) value : false;
     }
 
     @Override
     public int getIntegerProperty(String key) {
-        return inner.getIntegerProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Integer ? (Integer) value : -1;
+    }
+
+    @Override
+    public long getLongProperty(String key) {
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Long ? (Long) value : -1;
     }
 
     @Override
     public String getProperty(String key) {
-        return inner.getStringProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof String ? (String) value : null;
     }
 
 }
