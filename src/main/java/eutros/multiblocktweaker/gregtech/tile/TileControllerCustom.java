@@ -6,8 +6,10 @@ import crafttweaker.api.formatting.IFormattedText;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
@@ -21,14 +23,18 @@ import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.PatternStringError;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.render.ICubeRenderer;
-import gregtech.api.render.OrientedOverlayRenderer;
+import gregtech.client.renderer.ICubeRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -45,8 +51,10 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     // remove on error
     private IFormStructureFunction formStructureFunction;
     private IDisplayTextFunction displayTextFunction;
+    private IAddInformationFunction addInformationFunction;
     private IRemovalFunction removalFunction;
     private IRecipePredicate recipePredicate;
+    private IPatternBuilderFunction patternBuilderFunction;
 
     @Nullable
     public IData persistentData;
@@ -64,6 +72,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         removalFunction = multiblock.removalFunction;
         recipePredicate = multiblock.recipePredicate;
         formStructureFunction = multiblock.formStructureFunction;
+        addInformationFunction = multiblock.addInformationFunction;
+        patternBuilderFunction = multiblock.pattern;
     }
 
     @Override
@@ -151,19 +161,54 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        if  (addInformationFunction != null) {
+            try {
+                tooltip.addAll(addInformationFunction.addTips(new MCControllerTile(this)));
+            } catch (RuntimeException e) {
+                logFailure("addInformationFunction", e);
+                addInformationFunction = null;
+            }
+        }
+    }
+
+    @Override
     protected BlockPattern createStructurePattern() {
-        return multiblock.pattern.build(new MCControllerTile(this)).getInternal();
+        if (patternBuilderFunction != null) {
+            try {
+                return patternBuilderFunction.build(new MCControllerTile(this)).getInternal();
+            } catch (RuntimeException e) {
+                logFailure("pattern", e);
+                patternBuilderFunction = null;
+            }
+        }
+        return FactoryBlockPattern.start()
+                .aisle("S", "E")
+                .where('E', tilePredicate((worldState, mte) -> {
+                    worldState.setError(new PatternStringError("MBT controller pattern error"));
+                    return false;
+                }, null))
+                .where('S', selfPredicate()).build();
+    }
+
+    @Override
+    public List<MultiblockShapeInfo> getMatchingShapes() {
+        if (multiblock.designs != null && multiblock.designs.size() > 0) {
+            return multiblock.designs;
+        }
+        return super.getMatchingShapes();
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        return multiblock.texture;
+        return multiblock.baseTexture;
     }
 
     @NotNull
     @Override
-    protected OrientedOverlayRenderer getFrontOverlay() {
-        return super.getFrontOverlay();
+    protected ICubeRenderer getFrontOverlay() {
+        return multiblock.frontOverlay == null ? super.getFrontOverlay() : multiblock.frontOverlay;
     }
 
     @Override

@@ -10,22 +10,29 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMemberGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @ZenClass("mods.gregtech.MetaTileEntities")
 @ZenRegister
 public class ConstantMetaTileEntities {
-    Map<String, IMetaTileEntity> cache = new HashMap<>();
+    private final static IMetaTileEntity[] EMPTY = new IMetaTileEntity[0];
+    private final static Map<String, IMetaTileEntity[]> cache = new HashMap<>();
 
     @ZenMethod
     @ZenMemberGetter()
-    IMetaTileEntity get(String member) {
+    public static IMetaTileEntity[] get(String member) {
         if (!cache.containsKey(member)) {
-            MetaTileEntity mte = ReflectionHelper
-                    .getStatic(MetaTileEntities.class, member);
-            cache.put(member, mte == null ? null : new MCMetaTileEntity(mte));
+            Object mte = ReflectionHelper.getStatic(MetaTileEntities.class, member);
+            if (mte instanceof MetaTileEntity) {
+                cache.put(member, new IMetaTileEntity[]{new MCMetaTileEntity((MetaTileEntity)mte)});
+            } else if (mte instanceof MetaTileEntity[]){
+                cache.put(member, Arrays.stream((MetaTileEntity[]) mte).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new));
+            }
+            cache.put(member, EMPTY);
         }
         return cache.get(member);
     }
+
 }

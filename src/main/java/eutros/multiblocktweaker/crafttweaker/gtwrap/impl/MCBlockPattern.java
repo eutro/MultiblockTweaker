@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class MCBlockPattern implements IBlockPattern {
 
     @NotNull
-    private BlockPattern internal;
+    private final BlockPattern internal;
 
     public MCBlockPattern(@NotNull BlockPattern internal) {
         this.internal = internal;
@@ -23,21 +23,6 @@ public class MCBlockPattern implements IBlockPattern {
     @Override
     public BlockPattern getInternal() {
         return internal;
-    }
-
-    @Override
-    public int getFingerLength() {
-        return 0;
-    } //TODO provide the interface
-
-    @Override
-    public int getThumbLength() {
-        return 0;
-    }
-
-    @Override
-    public int getPalmLength() {
-        return 0;
     }
 
     @Override

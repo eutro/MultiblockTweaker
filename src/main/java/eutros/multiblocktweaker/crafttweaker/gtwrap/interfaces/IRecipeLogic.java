@@ -91,4 +91,7 @@ public interface IRecipeLogic {
     @ZenGetter("outputTank")
     IIMultipleTankHandler getOutTank();
 
+    @ZenGetter("evergyHatchr")
+    IIEnergyContainer getEnergyHatch();
+
 }

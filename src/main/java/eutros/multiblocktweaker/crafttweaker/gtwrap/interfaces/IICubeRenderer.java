@@ -8,13 +8,12 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IFacing;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
-import eutros.multiblocktweaker.gregtech.cuberenderer.BasicCubeRenderer;
-import eutros.multiblocktweaker.gregtech.cuberenderer.SidedCubeRenderer;
-import gregtech.api.render.ICubeRenderer;
-import gregtech.api.render.Textures;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMachineRenderer;
+import eutros.multiblocktweaker.gregtech.renderer.BasicCubeRenderer;
+import eutros.multiblocktweaker.gregtech.renderer.SidedCubeRenderer;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.Optional;
@@ -26,18 +25,15 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Used in {@link MultiblockBuilder#withTexture(IICubeRenderer)} to set the texture of the controller,
+ * Used in {@link MultiblockBuilder#withBaseTexture(IICubeRenderer)} to set the texture of the controller,
  * and that of all the components, when the multiblock forms.
  *
  * @zenClass mods.gregtech.render.ICubeRenderer
  * @see MultiblockBuilder
  */
-@ZenClass("mods.gregtech.render.ICubeRenderer")
+@ZenClass("mods.gregtech.render.IRenderer")
 @ZenRegister
-public interface IICubeRenderer {
-
-    @NotNull
-    ICubeRenderer getInternal();
+public interface IICubeRenderer extends ICubeRenderer {
 
     /**
      * Get a ICubeRenderer by path from original CEu.
@@ -50,7 +46,7 @@ public interface IICubeRenderer {
     static IICubeRenderer byPath(@NotNull String path) {
         ICubeRenderer renderer = Textures.CUBE_RENDERER_REGISTRY.getOrDefault(path, null);
         if (renderer != null) {
-            return new MCCubeRenderer(renderer);
+            return new MCMachineRenderer(renderer);
         }
         return null;
     }
@@ -66,8 +62,8 @@ public interface IICubeRenderer {
      * @return An {@link IICubeRenderer} with all sides showing the given texture.
      */
     @ZenMethod
-    static IICubeRenderer nonSided(String path) {
-        return new MCCubeRenderer(new BasicCubeRenderer(path));
+    static IICubeRenderer full(String path) {
+        return new BasicCubeRenderer(path);
     }
 
     /**
@@ -82,7 +78,7 @@ public interface IICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromBlock(IBlock block) {
-        return new MCCubeRenderer(new SidedCubeRenderer(CraftTweakerMC.getBlock(block).getDefaultState()));
+        return new SidedCubeRenderer(CraftTweakerMC.getBlock(block).getDefaultState());
     }
 
     /**
@@ -97,7 +93,7 @@ public interface IICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromBlock(IItemStack stack) {
-        return new MCCubeRenderer(new SidedCubeRenderer(CraftTweakerMC.getBlock(stack).getDefaultState()));
+        return new SidedCubeRenderer(CraftTweakerMC.getBlock(stack).getDefaultState());
     }
 
     /**
@@ -112,7 +108,7 @@ public interface IICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromState(IBlockState state) {
-        return new MCCubeRenderer(new SidedCubeRenderer(CraftTweakerMC.getBlockState(state)));
+        return new SidedCubeRenderer(CraftTweakerMC.getBlockState(state));
     }
 
     /**
@@ -139,7 +135,7 @@ public interface IICubeRenderer {
                 CraftTweakerAPI.logError("Duplicate key: " + e.getKey().getName());
             }
         }
-        return new MCCubeRenderer(new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(result)));
+        return new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(result));
     }
 
     /**
@@ -181,7 +177,7 @@ public interface IICubeRenderer {
         if (south != null) builder.put(EnumFacing.SOUTH, south);
         if (down != null) builder.put(EnumFacing.DOWN, down);
 
-        return new MCCubeRenderer(new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(builder)));
+        return new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(builder));
     }
 
 }

@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.helper;
 
 import com.google.common.base.Preconditions;
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.mc1120.CraftTweaker;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -23,7 +24,7 @@ public class ReflectionHelper {
                     .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
                     .invoke(object);
         } catch (Throwable e) {
-            //TODO CTLOG
+            CraftTweakerAPI.logError(String.format("No field \"%s\" found", fieldName));
             return null;
         }
     }
@@ -36,7 +37,7 @@ public class ReflectionHelper {
                     .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
                     .invoke(fieldClass);
         } catch (Throwable e) {
-            //TODO CTLOG
+            CraftTweakerAPI.logError(String.format("No static field \"%s\" found", fieldName));
             return null;
         }
     }

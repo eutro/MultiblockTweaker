@@ -83,4 +83,18 @@ public class MCIEnergyContainer implements IIEnergyContainer {
         return inner.getInputVoltage();
     }
 
+    @Override
+    public long getInputPerSec() {
+        return inner.getInputPerSec();
+    }
+
+    @Override
+    public long getOutputPerSec() {
+        return inner.getOutputPerSec();
+    }
+
+    @Override
+    public boolean isOneProbeHidden() {
+        return inner.isOneProbeHidden();
+    }
 }

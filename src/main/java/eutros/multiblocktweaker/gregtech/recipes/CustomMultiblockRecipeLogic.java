@@ -7,6 +7,7 @@ import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIEnergyContainer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIItemHandlerModifiable;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultipleTankHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
@@ -109,6 +110,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     public void update() {
+        super.update();
         getUpdate().ifPresent(u -> {
             try {
                 u.run(this);
@@ -234,4 +236,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         return new MCIMultipleTankHandler(super.getOutputTank());
     }
 
+    @Override
+    public IIEnergyContainer getEnergyHatch() {
+        return new MCIEnergyContainer(super.getEnergyContainer());
+    }
 }

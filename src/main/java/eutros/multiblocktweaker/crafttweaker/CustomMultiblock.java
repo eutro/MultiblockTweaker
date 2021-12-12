@@ -2,9 +2,8 @@ package eutros.multiblocktweaker.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
-import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
+import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
@@ -14,13 +13,12 @@ import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMachineRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
-import net.minecraft.item.ItemStack;
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -28,7 +26,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * A representation of a custom GregTech Multiblock.
@@ -60,33 +57,10 @@ public class CustomMultiblock {
     @ZenProperty
     public final RecipeMap<?> recipeMap;
 
-    /**
-     * The default zoom level of the multiblock. Set in {@link MultiblockBuilder#withZoom(float)}
-     */
-    @ZenProperty
-    public final float zoom;
-
-    /**
-     * The Tooltip map for the multiblock components. Set in {@link MultiblockBuilder#withPartTooltip(IItemStack, crafttweaker.api.text.ITextComponent)}
-     */
-    @ZenProperty
-    public final Map<ItemStack, List<ITextComponent>> tooltipMap;
-
-    /**
-     * If the existing tooltip map for the multiblock should be cleared. Set in {@link MultiblockBuilder#clearTooltips(boolean)}
-     */
-    @ZenProperty
-    public final boolean clearTooltips;
-
-    /**
-     * Set to true if the multiblock should not check for energy inputs/outputs before forming.
-     */
-    @ZenProperty
-    public boolean noEnergy = false;
-
     public final ResourceLocation loc;
     public final IPatternBuilderFunction pattern;
-    public final gregtech.api.render.ICubeRenderer texture;
+    public final ICubeRenderer baseTexture;
+    public final ICubeRenderer frontOverlay;
     public final List<MultiblockShapeInfo> designs;
 
     /**
@@ -145,16 +119,21 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public IFormStructureFunction formStructureFunction;
+    /**
+     * The {@link IAddInformationFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IAddInformationFunction addInformationFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
         loc = builder.loc;
-        zoom = builder.zoom;
-        tooltipMap = builder.tooltipMap;
-        clearTooltips = builder.clearTooltips;
         pattern = builder.pattern;
         recipeMap = builder.recipeMap;
-        texture = builder.texture;
+        baseTexture = builder.baseTexture;
+        frontOverlay = builder.frontOverlay;
         designs = builder.designs;
     }
 
@@ -170,14 +149,14 @@ public class CustomMultiblock {
     }
 
     /**
-     * @return The texture of the multiblock. Optionally set in {@link MultiblockBuilder#withTexture(IICubeRenderer)}.
+     * @return The texture of the multiblock. Optionally set in {@link MultiblockBuilder#withBaseTexture(IICubeRenderer)}.
      *
      * @zenGetter texture
      */
     @NotNull
     @ZenGetter("texture")
-    public IICubeRenderer getTexture() {
-        return new MCCubeRenderer(texture);
+    public IICubeRenderer getBaseTexture() {
+        return new MCMachineRenderer(baseTexture);
     }
 
     /**

@@ -59,4 +59,16 @@ public interface IIEnergyContainer {
     @ZenGetter("inputVoltage")
     long getInputVoltage();
 
+    @ZenMethod
+    @ZenGetter("inputPerSec")
+    long getInputPerSec();
+
+    @ZenMethod
+    @ZenGetter("outputPerSec")
+    long getOutputPerSec();
+
+    @ZenMethod
+    @ZenGetter("isOneProbeHidden")
+    boolean isOneProbeHidden();
+
 }

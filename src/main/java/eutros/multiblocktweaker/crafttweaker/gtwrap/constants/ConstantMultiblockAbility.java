@@ -15,11 +15,11 @@ import java.util.Map;
 @ZenClass("mods.gregtech.multiblock.MultiblockAbility")
 @ZenRegister
 public class ConstantMultiblockAbility {
-    Map<String, IMultiblockAbility> cache = new HashMap<>();
+    private final static Map<String, IMultiblockAbility> cache = new HashMap<>();
 
     @ZenMethod
     @ZenMemberGetter()
-    IMultiblockAbility get(String member) {
+    private static IMultiblockAbility get(String member) {
         if (!cache.containsKey(member)) {
             MultiblockAbility<?> ability = ReflectionHelper.getStatic(MultiblockAbility.class, member);
             cache.put(member, ability == null ? null : new MCMultiblockAbility<>(ability));

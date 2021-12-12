@@ -25,27 +25,6 @@ public interface IBlockPattern {
     BlockPattern getInternal();
 
     /**
-     * @return The finger length of the pattern, which is along the Z axis.
-     */
-    @ZenMethod
-    @ZenGetter("fingerLength")
-    int getFingerLength();
-
-    /**
-     * @return The thumb length of the pattern, which is along the Y axis.
-     */
-    @ZenMethod
-    @ZenGetter("thumbLength")
-    int getThumbLength();
-
-    /**
-     * @return The palm length of the pattern, which is along the X axis.
-     */
-    @ZenMethod
-    @ZenGetter("palmLength")
-    int getPalmLength();
-
-    /**
      * Check whether the pattern matches a structure.
      * <p>
      * Returns {@code null} if there is no match found.
