@@ -18,6 +18,11 @@ public class MCIItemHandlerModifiable implements IIItemHandlerModifiable {
     }
 
     @Override
+    public IItemHandlerModifiable getInner() {
+        return inner;
+    }
+
+    @Override
     public void setStackInSlot(int slot, IItemStack itemStack) {
         inner.setStackInSlot(slot, CraftTweakerMC.getItemStack(itemStack));
     }

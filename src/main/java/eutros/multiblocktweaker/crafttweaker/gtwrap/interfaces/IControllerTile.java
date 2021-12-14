@@ -93,6 +93,5 @@ public interface IControllerTile extends IMetaTileEntity {
                                         boolean checkFluidOut,
                                         boolean checkMuffler);
     @ZenMethod
-    @ZenGetter("selfPredicate")
-    CTTraceabilityPredicate selfPredicate();
+    CTTraceabilityPredicate self();
 }

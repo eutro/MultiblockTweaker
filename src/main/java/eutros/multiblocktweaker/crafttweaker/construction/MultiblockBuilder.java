@@ -4,16 +4,15 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.MultiblockRegistry;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
+import gregtech.api.GTValues;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.util.ItemStackHashStrategy;
 import gregtech.client.renderer.ICubeRenderer;
-import it.unimi.dsi.fastutil.Hash;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -43,6 +42,7 @@ public class MultiblockBuilder {
     public RecipeMap<?> recipeMap;
     public IPatternBuilderFunction pattern;
     public List<MultiblockShapeInfo> designs;
+    private static int AUTO_ID = 32000;
 
     private MultiblockBuilder(ResourceLocation loc, int metaId) {
         this.loc = loc;
@@ -55,7 +55,7 @@ public class MultiblockBuilder {
      * @param location The resource location of the multiblock.
      *                 Used for getting the recipe map again.
      *                 If no namespace is defined, it defaults to this mod's mod id.
-     * @param metaId   The metadata the resulting multiblock will be registered as.
+     * @param metaId   (optional) The metadata the resulting multiblock will be registered as. A non-used ID is automatically registered if metaId is empty.
      * @return A multiblock builder instance, that should be used to set the properties of the multiblock.
      */
     @ZenMethod
@@ -65,6 +65,22 @@ public class MultiblockBuilder {
             loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getPath());
         }
         return new MultiblockBuilder(loc, metaId);
+    }
+
+    /**
+     * Create a multiblock builder from a resource location.
+     *
+     * @param location The resource location of the multiblock.
+     *                 Used for getting the recipe map again.
+     *                 If no namespace is defined, it defaults to this mod's mod id.
+     * @return A multiblock builder instance, that should be used to set the properties of the multiblock.
+     */
+    @ZenMethod
+    public static MultiblockBuilder start(@NotNull String location) {
+        while (!(MultiblockRegistry.get(AUTO_ID) == null)) {
+            AUTO_ID++;
+        }
+        return start(location, AUTO_ID++);
     }
 
     /**

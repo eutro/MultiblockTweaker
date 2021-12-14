@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -16,6 +17,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.gregtech.recipe.IRecipe")
 @ZenRegister
 public interface IRecipe {
+
+    Recipe getInner();
 
     /**
      * Check whether the recipe matches the given ingredients.

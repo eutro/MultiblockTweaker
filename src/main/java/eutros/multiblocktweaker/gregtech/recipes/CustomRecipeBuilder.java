@@ -21,20 +21,6 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
         return new CustomRecipeBuilder(this);
     }
 
-    @NotNull
-    protected EnumValidationResult validate() {
-        if (this.EUt == 0) {
-            int eUt = EUt;
-            EUt = 1;
-            super.validate();
-            EUt = eUt;
-        } else {
-            super.validate();
-        }
-
-        return this.recipeStatus;
-    }
-
     @Override
     @NotNull
     public ValidationResult<Recipe> build() {

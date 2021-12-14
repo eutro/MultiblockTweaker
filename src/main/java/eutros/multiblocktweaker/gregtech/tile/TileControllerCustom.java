@@ -9,10 +9,12 @@ import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultiblockPart;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
@@ -31,6 +33,7 @@ import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -55,6 +58,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     private IRemovalFunction removalFunction;
     private IRecipePredicate recipePredicate;
     private IPatternBuilderFunction patternBuilderFunction;
+    private IGetBaseTextureFunction getBaseTextureFunction;
 
     @Nullable
     public IData persistentData;
@@ -74,6 +78,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         formStructureFunction = multiblock.formStructureFunction;
         addInformationFunction = multiblock.addInformationFunction;
         patternBuilderFunction = multiblock.pattern;
+        getBaseTextureFunction = multiblock.getBaseTextureFunction;
     }
 
     @Override
@@ -194,7 +199,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public List<MultiblockShapeInfo> getMatchingShapes() {
-        if (multiblock.designs != null && multiblock.designs.size() > 0) {
+        if (multiblock.designs != null) {
             return multiblock.designs;
         }
         return super.getMatchingShapes();
@@ -202,6 +207,14 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
+        if (getBaseTextureFunction != null) {
+            try {
+                return getBaseTextureFunction.get(part == null ? null : new MCIMultiblockPart(part));
+            } catch (RuntimeException e) {
+                logFailure("getBaseTextureFunction", e);
+                getBaseTextureFunction = null;
+            }
+        }
         return multiblock.baseTexture;
     }
 
@@ -233,4 +246,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         persistentData = CraftTweakerMC.getIData(data.getTag(TAG_PERSISTENT));
     }
 
+    @Override
+    public boolean canRenderInLayer(BlockRenderLayer renderLayer) {
+        return getBaseTexture(null).canRenderInLayer(renderLayer) || getFrontOverlay().canRenderInLayer(renderLayer);
+    }
 }

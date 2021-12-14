@@ -103,7 +103,7 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     }
 
     @Override
-    public CTTraceabilityPredicate selfPredicate() {
+    public CTTraceabilityPredicate self() {
         return new CTTraceabilityPredicate(getInternal().selfPredicate());
     }
 

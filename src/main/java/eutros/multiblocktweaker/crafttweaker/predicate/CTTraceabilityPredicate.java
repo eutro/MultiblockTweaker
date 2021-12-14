@@ -66,20 +66,17 @@ public class CTTraceabilityPredicate {
     }
 
     @ZenMethod
-    @ZenGetter("ANY")
-    public static CTTraceabilityPredicate ANY() {
+    public static CTTraceabilityPredicate any() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.ANY.get());
     }
 
     @ZenMethod
-    @ZenGetter("AIR")
-    public static CTTraceabilityPredicate AIR() {
+    public static CTTraceabilityPredicate air() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.AIR.get());
     }
 
     @ZenMethod
-    @ZenGetter("HEATING_COILS")
-    public static CTTraceabilityPredicate HEATING_COILS() {
+    public static CTTraceabilityPredicate coils() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.HEATING_COILS.get());
     }
 
@@ -275,6 +272,6 @@ public class CTTraceabilityPredicate {
     }
 
     public TraceabilityPredicate toInternal() {
-        return null;
+        return internal;
     }
 }

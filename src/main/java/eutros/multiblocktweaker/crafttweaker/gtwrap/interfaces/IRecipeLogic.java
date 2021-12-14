@@ -1,10 +1,13 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import gregtech.api.recipes.RecipeMap;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
+
+import java.util.List;
 
 /**
  * Used to perform the recipe logic.
@@ -14,6 +17,14 @@ import stanhebben.zenscript.annotations.ZenSetter;
 @ZenClass("mods.gregtech.recipe.IRecipeLogic")
 @ZenRegister
 public interface IRecipeLogic {
+
+    @ZenMethod
+    @ZenGetter("lastRecipeIndex")
+    int getLastRecipeIndex();
+
+    @ZenMethod
+    @ZenSetter("lastRecipeIndex")
+    void setLstRecipeIndex(int index);
 
     @ZenMethod
     @ZenGetter("previousRecipe")
@@ -59,6 +70,9 @@ public interface IRecipeLogic {
     boolean isHasNotEnoughEnergy();
 
     @ZenMethod
+    long getEnergyInputPerSecond();
+
+    @ZenMethod
     long getEnergyStored();
 
     @ZenMethod
@@ -71,13 +85,46 @@ public interface IRecipeLogic {
     void update();
 
     @ZenMethod
+    void invalidate();
+
+    @ZenMethod
     void trySearchNewRecipe();
+
+    @ZenMethod
+    void trySearchNewRecipeCombined();
+
+    @ZenMethod
+    void trySearchNewRecipeDistinct();
+
+    @ZenMethod
+    void invalidateInputs();
+
+    @ZenMethod
+    boolean checkPreviousRecipeDistinct(IIItemHandlerModifiable previousBus);
+
+    @ZenMethod
+    boolean prepareRecipeDistinct(IRecipe recipe);
+
+    @ZenMethod
+    void performMaintenanceMufflerOperations();
 
     @ZenMethod
     void forceRecipeRecheck();
 
     @ZenMethod
+    RecipeMap<?> getRecipeMap();
+
+    @ZenMethod
     long getMaxVoltage();
+
+    @ZenGetter("currentDistinctInputBus")
+    IIItemHandlerModifiable getCurrentDistinctInputBus();
+
+    @ZenGetter("invalidatedInputList")
+    List<IIItemHandlerModifiable> getInvalidatedInputList();
+
+    @ZenGetter("inputBus")
+    List<IIItemHandlerModifiable> getInputBus();
 
     @ZenGetter("inputInventory")
     IIItemHandlerModifiable getInInventory();

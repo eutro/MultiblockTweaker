@@ -7,13 +7,14 @@ import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMachineRenderer;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
@@ -126,6 +127,13 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public IAddInformationFunction addInformationFunction;
+    /**
+     * The {@link IGetBaseTextureFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IGetBaseTextureFunction getBaseTextureFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
@@ -156,7 +164,7 @@ public class CustomMultiblock {
     @NotNull
     @ZenGetter("texture")
     public IICubeRenderer getBaseTexture() {
-        return new MCMachineRenderer(baseTexture);
+        return new MCICubeRenderer(baseTexture);
     }
 
     /**

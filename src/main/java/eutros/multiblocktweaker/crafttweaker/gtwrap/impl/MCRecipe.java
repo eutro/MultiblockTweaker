@@ -19,6 +19,10 @@ public class MCRecipe implements IRecipe {
         this.inner = inner;
     }
 
+    public Recipe getInner() {
+        return inner;
+    }
+
     @Override
     public boolean matches(boolean consumeIfSuccessful, IItemStack[] inputs, ILiquidStack[] fluidInputs) {
         return inner.matches(consumeIfSuccessful,

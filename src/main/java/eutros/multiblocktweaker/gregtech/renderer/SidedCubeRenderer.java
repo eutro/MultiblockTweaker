@@ -9,6 +9,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import gregtech.api.gui.resources.ResourceHelper;
 import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
+import gregtech.client.utils.BloomEffectUtil;
 import gregtech.common.ConfigHolder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,8 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -107,14 +110,7 @@ public class SidedCubeRenderer implements IICubeRenderer {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void preStitch(TextureStitchEvent.Pre evt) {
-        for (EnumFacing facing : EnumFacing.values()) {
-            sprites.put(facing, evt.getMap().registerSprite(new ResourceLocation(paths.get(facing))));
-            ResourceLocation emissiveLocation = new ResourceLocation(paths.get(facing) + "_emissive");
-            if (ResourceHelper.isTextureExist(emissiveLocation)) {
-                spritesEmissive.put(facing, evt.getMap().registerSprite(emissiveLocation));
-            }
-        }
-        particles = sprites.get(EnumFacing.UP);
+        registerIcons(evt.getMap());
     }
 
     @SideOnly(Side.CLIENT)
@@ -125,12 +121,12 @@ public class SidedCubeRenderer implements IICubeRenderer {
 
     @Override
     public void renderOrientedState(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, Cuboid6 bounds, EnumFacing side, boolean b, boolean b1) {
-        Textures.renderFace(renderState, translation, pipeline, side, bounds, sprites.get(side));
+        Textures.renderFace(renderState, translation, pipeline, side, bounds, sprites.get(side), BlockRenderLayer.CUTOUT_MIPPED);
         if (spritesEmissive.get(side) != null) {
             if (ConfigHolder.client.machinesEmissiveTextures) {
                 IVertexOperation[] lightPipeline = ArrayUtils.add(pipeline, new LightMapOperation(240, 240));
-                Textures.renderFaceBloom(renderState, translation, lightPipeline, side, bounds, spritesEmissive.get(side));
-            } else Textures.renderFace(renderState, translation, pipeline, side, bounds, spritesEmissive.get(side));
+                Textures.renderFace(renderState, translation, lightPipeline, side, bounds, spritesEmissive.get(side), BloomEffectUtil.getRealBloomLayer());
+            } else Textures.renderFace(renderState, translation, pipeline, side, bounds, spritesEmissive.get(side), BlockRenderLayer.CUTOUT_MIPPED);
         }
     }
 
@@ -142,4 +138,15 @@ public class SidedCubeRenderer implements IICubeRenderer {
         }
     }
 
+    @Override
+    public void registerIcons(TextureMap textureMap) {
+        for (EnumFacing facing : EnumFacing.values()) {
+            sprites.put(facing, textureMap.registerSprite(new ResourceLocation(paths.get(facing))));
+            ResourceLocation emissiveLocation = new ResourceLocation(paths.get(facing) + "_emissive");
+            if (ResourceHelper.isTextureExist(emissiveLocation)) {
+                spritesEmissive.put(facing, textureMap.registerSprite(emissiveLocation));
+            }
+        }
+        particles = sprites.get(EnumFacing.UP);
+    }
 }

@@ -272,7 +272,7 @@ public class RecipeMapBuilder {
                 maxFluidInputs,
                 minFluidOutputs,
                 maxFluidOutputs,
-                ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"),
+                (CustomRecipeBuilder) defaultRecipe.backingBuilder,
                 isHidden);
 
         for (byte key : slotOverlays.keys()) {

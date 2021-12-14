@@ -15,7 +15,7 @@ import java.util.List;
  * @zenClass mods.gregtech.multiblock.functions.IDisplayTextFunction
  */
 @FunctionalInterface
-@ZenClass("mods.gregtech.multiblock.functions.IDisplayTextFunction")
+@ZenClass("mods.gregtech.multiblock.functions.IAddInformationFunction")
 @ZenRegister
 public interface IAddInformationFunction {
 
