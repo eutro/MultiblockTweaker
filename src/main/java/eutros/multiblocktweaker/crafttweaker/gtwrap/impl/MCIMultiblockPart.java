@@ -39,4 +39,9 @@ public class MCIMultiblockPart extends MCMetaTileEntity implements IIMultiblockP
         return inner.isAttachedToMultiBlock();
     }
 
+    @Override
+    public int getTier() {
+        return inner.getTier();
+    }
+
 }

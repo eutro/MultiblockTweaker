@@ -42,6 +42,8 @@ public class MultiblockBuilder {
     public RecipeMap<?> recipeMap;
     public IPatternBuilderFunction pattern;
     public List<MultiblockShapeInfo> designs;
+    public Boolean hasMaintenanceMechanics;
+    public Boolean hasMufflerMechanics;
     private static int AUTO_ID = 32000;
 
     private MultiblockBuilder(ResourceLocation loc, int metaId) {
@@ -132,6 +134,30 @@ public class MultiblockBuilder {
     @ZenMethod
     public MultiblockBuilder withFrontOverlay(@NotNull IICubeRenderer texture) {
         this.frontOverlay = texture;
+        return this;
+    }
+
+    /**
+     * Set hasMaintenanceMechanics of the controller.
+     *
+     * @param hasMaintenanceMechanics whether hasMaintenanceMechanics. If no value is specified, the default value is used from CEu.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder withMaintenance(boolean hasMaintenanceMechanics) {
+        this.hasMaintenanceMechanics = hasMaintenanceMechanics;
+        return this;
+    }
+
+    /**
+     * Set hasMufflerMechanics of the controller.
+     *
+     * @param hasMufflerMechanics whether hasMufflerMechanics. If no value is specified, the default value is used from CEu.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockBuilder withMuffler(boolean hasMufflerMechanics) {
+        this.hasMufflerMechanics = hasMufflerMechanics;
         return this;
     }
 

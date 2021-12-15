@@ -1,19 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.world.IBlockPos;
-import crafttweaker.api.world.IFacing;
-import crafttweaker.api.world.IWorld;
-import eutros.multiblocktweaker.MultiblockTweaker;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMetaTileEntities;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -54,4 +42,8 @@ public interface IIMultiblockPart extends IMetaTileEntity{
      */
     @ZenMethod
     boolean isAttachedToMultiBlock();
+
+    @ZenMethod
+    @ZenGetter("tier")
+    int getTier();
 }

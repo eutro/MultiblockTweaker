@@ -8,10 +8,12 @@ import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IInvalidateStructure;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFormedValid;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCICubeRenderer;
@@ -63,6 +65,8 @@ public class CustomMultiblock {
     public final ICubeRenderer baseTexture;
     public final ICubeRenderer frontOverlay;
     public final List<MultiblockShapeInfo> designs;
+    public final Boolean hasMaintenanceMechanics;
+    public final Boolean hasMufflerMechanics;
 
     /**
      * The {@link IUpdateFunction} this multiblock has.
@@ -134,6 +138,20 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public IGetBaseTextureFunction getBaseTextureFunction;
+    /**
+     * The {@link IUpdateFormedValid} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IUpdateFormedValid updateFormedValidFunction;
+    /**
+     * The {@link IInvalidateStructure} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IInvalidateStructure invalidateStructureFunction;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
@@ -143,6 +161,8 @@ public class CustomMultiblock {
         baseTexture = builder.baseTexture;
         frontOverlay = builder.frontOverlay;
         designs = builder.designs;
+        hasMufflerMechanics = builder.hasMufflerMechanics;
+        hasMaintenanceMechanics = builder.hasMaintenanceMechanics;
     }
 
     /**

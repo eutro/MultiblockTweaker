@@ -12,6 +12,7 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.AdvCCRSConsumer;
 import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.FacadeBlockAccess;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -19,13 +20,12 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.pipeline.VertexLighterFlat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,16 +34,22 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class IBlockStateRenderer implements IICubeRenderer {
+    private static final Map<IBlockState, IBlockStateRenderer> CACHE = new Object2ObjectOpenHashMap<>();
     public final IBlockState state;
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite particle;
     @SideOnly(Side.CLIENT)
     EnumMap<EnumFacing, List<CCQuad>> itemQuads;
 
-    public IBlockStateRenderer(IBlockState state) {
+    private IBlockStateRenderer(IBlockState state) {
         this.state = state;
+    }
+
+    public static IBlockStateRenderer create(IBlockState state) {
+        return CACHE.computeIfAbsent(state, IBlockStateRenderer::new);
     }
 
     @SideOnly(Side.CLIENT)
@@ -61,7 +67,7 @@ public class IBlockStateRenderer implements IICubeRenderer {
                 itemQuads = new EnumMap<>(EnumFacing.class);
                 Minecraft minecraft = Minecraft.getMinecraft();
                 RenderItem renderItem = minecraft.getRenderItem();
-                ItemStack renderStack = ItemBlock.getItemFromBlock(state.getBlock()).getDefaultInstance();
+                ItemStack renderStack = new ItemStack(Item.getItemFromBlock(state.getBlock()), 1, state.getBlock().damageDropped(state));
                 IBakedModel itemModel = renderItem.getItemModelWithOverrides(renderStack, null, null);
                 for (EnumFacing side : EnumFacing.values()) {
                     List<BakedQuad> quads = new ArrayList<>();

@@ -12,9 +12,11 @@ import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IInvalidateStructure;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
 import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
+import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFormedValid;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultiblockPart;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
@@ -64,6 +66,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     private IRecipePredicate recipePredicate;
     private IPatternBuilderFunction patternBuilderFunction;
     private IGetBaseTextureFunction getBaseTextureFunction;
+    private IUpdateFormedValid updateFormedValidFunction;
+    private IInvalidateStructure invalidateStructureFunction;
 
     @Nullable
     public IData persistentData;
@@ -84,6 +88,8 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         addInformationFunction = multiblock.addInformationFunction;
         patternBuilderFunction = multiblock.pattern;
         getBaseTextureFunction = multiblock.getBaseTextureFunction;
+        updateFormedValidFunction = multiblock.updateFormedValidFunction;
+        invalidateStructureFunction = multiblock.invalidateStructureFunction;
     }
 
     @Override
@@ -147,6 +153,19 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        if (invalidateStructureFunction != null) {
+            try {
+                invalidateStructureFunction.run(new MCControllerTile(this));
+            } catch (RuntimeException e) {
+                logFailure("invalidateStructureFunction", e);
+                invalidateStructureFunction = null;
+            }
+        }
+    }
+
+    @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
         if (recipePredicate == null) return true;
 
@@ -206,6 +225,14 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public void updateFormedValid() {
         super.updateFormedValid();
+        if (updateFormedValidFunction != null) {
+            try {
+                updateFormedValidFunction.run(new MCControllerTile(this));
+            } catch (RuntimeException e) {
+                logFailure("updateFormedValidFunction", e);
+                updateFormedValidFunction = null;
+            }
+        }
     }
 
     @Override
@@ -289,5 +316,15 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public List<IBlockPos> getVariantActiveBlocks() {
         return variantActiveBlocks.stream().map(MCBlockPos::new).collect(
                 Collectors.toList());
+    }
+
+    @Override
+    public boolean hasMaintenanceMechanics() {
+        return multiblock.hasMaintenanceMechanics == null ? super.hasMaintenanceMechanics() : multiblock.hasMaintenanceMechanics;
+    }
+
+    @Override
+    public boolean hasMufflerMechanics() {
+        return multiblock.hasMufflerMechanics == null ? super.hasMufflerMechanics() : multiblock.hasMufflerMechanics;
     }
 }

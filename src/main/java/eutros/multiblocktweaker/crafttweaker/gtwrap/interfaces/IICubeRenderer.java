@@ -194,7 +194,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromBlock(IBlock block) {
-        return new IBlockStateRenderer(CraftTweakerMC.getBlock(block).getDefaultState());
+        return IBlockStateRenderer.create(CraftTweakerMC.getBlock(block).getDefaultState());
     }
 
     /**
@@ -209,7 +209,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromBlock(IItemStack stack) {
-        return new IBlockStateRenderer(CraftTweakerMC.getBlock(stack).getDefaultState());
+        return IBlockStateRenderer.create(CraftTweakerMC.getBlock(stack).getDefaultState());
     }
 
     /**
@@ -224,7 +224,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer fromState(IBlockState state) {
-        return new IBlockStateRenderer(CraftTweakerMC.getBlockState(state));
+        return IBlockStateRenderer.create(CraftTweakerMC.getBlockState(state));
     }
 
     @Override

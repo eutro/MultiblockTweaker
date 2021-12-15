@@ -4,6 +4,8 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidDefinition;
+import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockWorldState;
@@ -27,7 +29,6 @@ import net.minecraft.util.EnumFacing;
 import stanhebben.zenscript.annotations.OperatorType;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenConstructor;
-import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenOperator;
 
@@ -159,17 +160,25 @@ public class CTTraceabilityPredicate {
      * <p>
      * When called with a single parameter, it is equivalent to {@code IItemStack as IBlock as IBlockMatcher}`
      *
-     * @param stacks The list of {@link IItemStack}s to match.
+     * @param itemStacks The list of {@link IItemStack}s to match.
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given blocks.
      */
     @ZenMethod
-    public static CTTraceabilityPredicate blocks(IItemStack... stacks) {
-        List<IBlock> list = new ArrayList<>();
-        for (IItemStack stack : stacks) {
-            IBlock asBlock = stack.asBlock();
-            list.add(asBlock);
-        }
-        return blocks(list.toArray(new IBlock[0]));
+    public static CTTraceabilityPredicate items(IItemStack... itemStacks) {
+        return blocks(Arrays.stream(itemStacks).map(IItemStack::asBlock).toArray(IBlock[]::new));
+    }
+
+    /**
+     * Match any blockstate with one of the given {@link ILiquidStack}s.
+     * <p>
+     * When called with a single parameter, it is equivalent to {@code ILiquidStack as IBlock as IBlockMatcher}`
+     *
+     * @param liquidStacks The list of {@link IItemStack}s to match.
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given blocks.
+     */
+    @ZenMethod
+    public static CTTraceabilityPredicate liquids(ILiquidStack... liquidStacks) {
+        return blocks(Arrays.stream(liquidStacks).map(ILiquidStack::getDefinition).map(ILiquidDefinition::getBlock).toArray(IBlock[]::new));
     }
 
     /**

@@ -5,12 +5,10 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
-import crafttweaker.mc1120.CraftTweaker;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIFluidHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -29,6 +27,11 @@ public class MCMetaTileEntity implements IMetaTileEntity {
     @Override
     public MetaTileEntity getInternal() {
         return inner;
+    }
+
+    @Override
+    public String getMetaTileEntityId() {
+        return inner.metaTileEntityId.toString();
     }
 
     public IWorld getWorld() {

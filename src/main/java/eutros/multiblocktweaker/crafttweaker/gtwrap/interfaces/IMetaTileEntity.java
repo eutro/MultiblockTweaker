@@ -6,7 +6,7 @@ import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.MultiblockTweaker;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMetaTileEntities;
+import eutros.multiblocktweaker.crafttweaker.brackethandler.MetaTileEntityBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
  * A GregTech meta tile entity.
  *
  * @zenClass mods.gregtech.IMetaTileEntity
- * @see ConstantMetaTileEntities
+ * @see MetaTileEntityBracketHandler
  */
 @ZenClass("mods.gregtech.IMetaTileEntity")
 @ZenRegister
@@ -53,6 +54,13 @@ public interface IMetaTileEntity {
 
         return null;
     }
+
+    /**
+     * @return The meta id of this mte.
+     */
+    @ZenMethod
+    @ZenGetter("metaTileEntityId")
+    String getMetaTileEntityId();
 
     /**
      * @return The world the meta tile entity is in.
