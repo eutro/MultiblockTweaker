@@ -37,7 +37,9 @@ import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
+import javafx.embed.swt.CustomTransferBuilder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -59,15 +61,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public static final String TAG_PERSISTENT = MultiblockTweaker.MOD_ID + ":persistent";
     public final CustomMultiblock multiblock;
     // remove on error
-    private IFormStructureFunction formStructureFunction;
-    private IDisplayTextFunction displayTextFunction;
-    private IAddInformationFunction addInformationFunction;
-    private IRemovalFunction removalFunction;
-    private IRecipePredicate recipePredicate;
     private IPatternBuilderFunction patternBuilderFunction;
-    private IGetBaseTextureFunction getBaseTextureFunction;
-    private IUpdateFormedValid updateFormedValidFunction;
-    private IInvalidateStructure invalidateStructureFunction;
 
     @Nullable
     public IData persistentData;
@@ -81,15 +75,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                 multiblock.setupRecipe,
                 multiblock.completeRecipe
         );
-        displayTextFunction = multiblock.displayTextFunction;
-        removalFunction = multiblock.removalFunction;
-        recipePredicate = multiblock.recipePredicate;
-        formStructureFunction = multiblock.formStructureFunction;
-        addInformationFunction = multiblock.addInformationFunction;
         patternBuilderFunction = multiblock.pattern;
-        getBaseTextureFunction = multiblock.getBaseTextureFunction;
-        updateFormedValidFunction = multiblock.updateFormedValidFunction;
-        invalidateStructureFunction = multiblock.invalidateStructureFunction;
     }
 
     @Override
@@ -104,10 +90,10 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
             }
         }
 
-        if (displayTextFunction == null) return;
+        if (multiblock.displayTextFunction == null) return;
 
         try {
-            List<IFormattedText> added = displayTextFunction.addDisplayText(new MCControllerTile(this));
+            List<IFormattedText> added = multiblock.displayTextFunction.addDisplayText(new MCControllerTile(this));
             if (added != null) {
                 for (IFormattedText component : added) {
                     textList.add(new TextComponentString(component.getText()));
@@ -115,7 +101,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
             }
         } catch (RuntimeException e) {
             logFailure("displayTextFunction", e);
-            displayTextFunction = null;
+            multiblock.displayTextFunction = null;
         }
 
     }
@@ -142,42 +128,42 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
             }
         }
 
-        if (formStructureFunction == null) return;
+        if (multiblock.formStructureFunction == null) return;
 
         try {
-            formStructureFunction.formStructure(new MCControllerTile(this), new MCPatternMatchContext(context));
+            multiblock.formStructureFunction.formStructure(new MCControllerTile(this), new MCPatternMatchContext(context));
         } catch (RuntimeException e) {
             logFailure("formStructureFunction", e);
-            formStructureFunction = null;
+            multiblock.formStructureFunction = null;
         }
     }
 
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
-        if (invalidateStructureFunction != null) {
+        if (multiblock.invalidateStructureFunction != null) {
             try {
-                invalidateStructureFunction.run(new MCControllerTile(this));
+                multiblock.invalidateStructureFunction.run(new MCControllerTile(this));
             } catch (RuntimeException e) {
                 logFailure("invalidateStructureFunction", e);
-                invalidateStructureFunction = null;
+                multiblock.invalidateStructureFunction = null;
             }
         }
     }
 
     @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
-        if (recipePredicate == null) return true;
+        if (multiblock.recipePredicate == null) return true;
 
         try {
-            return recipePredicate.test(
+            return multiblock.recipePredicate.test(
                     new MCControllerTile(this),
                     new MCRecipe(recipe),
                     consumeIfSuccess
             );
         } catch (RuntimeException e) {
             logFailure("recipePredicate", e);
-            recipePredicate = null;
+            multiblock.recipePredicate = null;
         }
         return true;
     }
@@ -195,13 +181,13 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public void onRemoval() {
         super.onRemoval();
 
-        if (removalFunction == null) return;
+        if (multiblock.removalFunction == null) return;
 
         try {
-            removalFunction.onRemoval(new MCControllerTile(this));
+            multiblock.removalFunction.onRemoval(new MCControllerTile(this));
         } catch (RuntimeException e) {
             logFailure("removalFunction", e);
-            removalFunction = null;
+            multiblock.removalFunction = null;
         }
     }
 
@@ -212,12 +198,12 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        if  (addInformationFunction != null) {
+        if  (multiblock.addInformationFunction != null) {
             try {
-                tooltip.addAll(addInformationFunction.addTips(new MCControllerTile(this)));
+                tooltip.addAll(multiblock.addInformationFunction.addTips(new MCControllerTile(this)));
             } catch (RuntimeException e) {
                 logFailure("addInformationFunction", e);
-                addInformationFunction = null;
+                multiblock.addInformationFunction = null;
             }
         }
     }
@@ -225,12 +211,12 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public void updateFormedValid() {
         super.updateFormedValid();
-        if (updateFormedValidFunction != null) {
+        if (multiblock.updateFormedValidFunction != null) {
             try {
-                updateFormedValidFunction.run(new MCControllerTile(this));
+                multiblock.updateFormedValidFunction.run(new MCControllerTile(this));
             } catch (RuntimeException e) {
                 logFailure("updateFormedValidFunction", e);
-                updateFormedValidFunction = null;
+                multiblock.updateFormedValidFunction = null;
             }
         }
     }
@@ -269,12 +255,12 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
-        if (getBaseTextureFunction != null) {
+        if (multiblock.getBaseTextureFunction != null) {
             try {
-                return getBaseTextureFunction.get(part instanceof MetaTileEntityMultiblockPart ? new MCIMultiblockPart((MetaTileEntityMultiblockPart) part) : null);
+                return multiblock.getBaseTextureFunction.get(part instanceof MetaTileEntityMultiblockPart ? new MCIMultiblockPart((MetaTileEntityMultiblockPart) part) : null);
             } catch (RuntimeException e) {
                 logFailure("getBaseTextureFunction", e);
-                getBaseTextureFunction = null;
+                multiblock.getBaseTextureFunction = null;
             }
         }
         return multiblock.baseTexture;
@@ -326,5 +312,15 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     @Override
     public boolean hasMufflerMechanics() {
         return multiblock.hasMufflerMechanics == null ? super.hasMufflerMechanics() : multiblock.hasMufflerMechanics;
+    }
+
+    @Override
+    protected boolean allowSameFluidFillForOutputs() {
+        return multiblock.allowSameFluidFillForOutputs == null ? super.allowSameFluidFillForOutputs() : multiblock.allowSameFluidFillForOutputs;
+    }
+
+    @Override
+    public boolean canBeDistinct() {
+        return multiblock.canBeDistinct == null ? super.canBeDistinct() : multiblock.canBeDistinct;
     }
 }

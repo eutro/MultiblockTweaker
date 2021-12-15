@@ -23,7 +23,7 @@ public interface IInvalidateStructure {
      * <p>
      * Implement this with a function.
      *
-     * @param logic The {@link IRecipeLogic} of the multiblock from which this is run.
+     * @param controller The {@link IControllerTile} of the multiblock from which this is run.
      */
     @ZenMethod
     void run(@Nonnull IControllerTile controller);

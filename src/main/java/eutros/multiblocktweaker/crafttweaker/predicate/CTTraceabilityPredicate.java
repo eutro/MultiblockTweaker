@@ -19,13 +19,17 @@ import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.pattern.BlockWorldState;
+import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.util.BlockInfo;
+import gregtech.common.blocks.BlockWireCoil;
+import gregtech.common.blocks.BlockWireCoil2;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.blocks.VariantActiveBlock;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import org.apache.commons.lang3.ArrayUtils;
 import stanhebben.zenscript.annotations.OperatorType;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenConstructor;
@@ -78,7 +82,36 @@ public class CTTraceabilityPredicate {
 
     @ZenMethod
     public static CTTraceabilityPredicate COILS() {
-        return new CTTraceabilityPredicate(TraceabilityPredicate.HEATING_COILS.get());
+        return new CTTraceabilityPredicate(new TraceabilityPredicate(blockWorldState -> {
+            net.minecraft.block.state.IBlockState blockState = blockWorldState.getBlockState();
+            if ((blockState.getBlock() instanceof BlockWireCoil)) {
+                BlockWireCoil blockWireCoil = (BlockWireCoil) blockState.getBlock();
+                BlockWireCoil.CoilType coilType = blockWireCoil.getState(blockState);
+                Object currentCoilType = blockWorldState.getMatchContext().getOrPut("CoilType", coilType);
+                blockWorldState.getMatchContext().getOrPut("coils_temperature", coilType.getCoilTemperature());
+                if (!currentCoilType.toString().equals(coilType.getName())) {
+                    blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.coils"));
+                    return false;
+                }
+                blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
+                return true;
+            } else if ((blockState.getBlock() instanceof BlockWireCoil2)) {
+                BlockWireCoil2 blockWireCoil = (BlockWireCoil2) blockState.getBlock();
+                BlockWireCoil2.CoilType2 coilType = blockWireCoil.getState(blockState);
+                Object currentCoilType = blockWorldState.getMatchContext().getOrPut("CoilType", coilType);
+                blockWorldState.getMatchContext().getOrPut("coils_temperature", coilType.getCoilTemperature());
+                if (!currentCoilType.toString().equals(coilType.getName())) {
+                    blockWorldState.setError(new PatternStringError("gregtech.multiblock.pattern.error.coils"));
+                    return false;
+                }
+                blockWorldState.getMatchContext().getOrPut("VABlock", new LinkedList<>()).add(blockWorldState.getPos());
+                return true;
+            }
+            return false;
+        }, ()-> ArrayUtils.addAll(
+                Arrays.stream(BlockWireCoil.CoilType.values()).map(type->new BlockInfo(MetaBlocks.WIRE_COIL.getState(type), null)).toArray(BlockInfo[]::new),
+                Arrays.stream(BlockWireCoil2.CoilType2.values()).map(type->new BlockInfo(MetaBlocks.WIRE_COIL2.getState(type), null)).toArray(BlockInfo[]::new)))
+                .addTooltips("gregtech.multiblock.pattern.error.coils"));
     }
 
     @ZenMethod

@@ -44,9 +44,12 @@ val magic_miner = Builder.start(loc) // automatic allocation ID
             .maxFluidInputs(1)
             .build())
     .withBaseTexture(<cube_renderer:FROST_PROOF_CASING>) // Looking for existing renderers in CEu. but yeah, you can also use <metastate:gregtech:metal_casing:3> here
-    .withMaintenance(false)
-    .withMuffler(true)
     .buildAndRegister();
+
+// set optional properties
+magic_miner.hasMaintenanceMechanics = false;
+magic_miner.hasMufflerMechanics = true;
+magic_miner.frontOverlay = <cube_renderer:COKE_OVEN_OVERLAY>;
 
 // add a simple recipe for our magic_miner RecipeMap.
 magic_miner // The Bracket Handler can also be used to refer to it. (<multiblock:mbt:magic_miner>)

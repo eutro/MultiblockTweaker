@@ -3,21 +3,7 @@ package eutros.multiblocktweaker.crafttweaker;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
-import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IInvalidateStructure;
-import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
-import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFormedValid;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCICubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
+import eutros.multiblocktweaker.crafttweaker.functions.*;
 import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.client.renderer.ICubeRenderer;
@@ -54,19 +40,42 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public final int metaId;
+    @ZenProperty
+    public final ICubeRenderer baseTexture;
     /**
      * The recipe map the multiblock uses. Set in {@link MultiblockBuilder#withRecipeMap(RecipeMap)}.
      */
     @ZenProperty
     public final RecipeMap<?> recipeMap;
-
     public final ResourceLocation loc;
     public final IPatternBuilderFunction pattern;
-    public final ICubeRenderer baseTexture;
-    public final ICubeRenderer frontOverlay;
     public final List<MultiblockShapeInfo> designs;
-    public final Boolean hasMaintenanceMechanics;
-    public final Boolean hasMufflerMechanics;
+
+    /**
+     * Set hasMaintenanceMechanics of the controller.
+     */
+    @ZenProperty
+    public Boolean hasMaintenanceMechanics;
+    /**
+     * Set hasMufflerMechanics of the controller.
+     */
+    @ZenProperty
+    public Boolean hasMufflerMechanics;
+    /**
+     * Set the overlay texture for the front of the controller.
+     */
+    @ZenProperty
+    public ICubeRenderer frontOverlay;
+    /**
+     * Set allow same fluid fill for outputs.
+     */
+    @ZenProperty
+    public Boolean allowSameFluidFillForOutputs;
+    /**
+     * Can be distinct.
+     */
+    @ZenProperty
+    public Boolean canBeDistinct;
 
     /**
      * The {@link IUpdateFunction} this multiblock has.
@@ -158,11 +167,8 @@ public class CustomMultiblock {
         loc = builder.loc;
         pattern = builder.pattern;
         recipeMap = builder.recipeMap;
-        baseTexture = builder.baseTexture;
-        frontOverlay = builder.frontOverlay;
         designs = builder.designs;
-        hasMufflerMechanics = builder.hasMufflerMechanics;
-        hasMaintenanceMechanics = builder.hasMaintenanceMechanics;
+        baseTexture = builder.baseTexture;
     }
 
     /**
@@ -174,17 +180,6 @@ public class CustomMultiblock {
     @ZenGetter("loc")
     public String getLocation() {
         return loc.toString();
-    }
-
-    /**
-     * @return The texture of the multiblock. Optionally set in {@link MultiblockBuilder#withBaseTexture(IICubeRenderer)}.
-     *
-     * @zenGetter texture
-     */
-    @NotNull
-    @ZenGetter("texture")
-    public IICubeRenderer getBaseTexture() {
-        return new MCICubeRenderer(baseTexture);
     }
 
     /**

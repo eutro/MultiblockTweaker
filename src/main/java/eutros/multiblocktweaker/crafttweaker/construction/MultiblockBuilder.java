@@ -38,12 +38,9 @@ public class MultiblockBuilder {
     public ResourceLocation loc;
     public int metaId;
     public ICubeRenderer baseTexture;
-    public ICubeRenderer frontOverlay;
     public RecipeMap<?> recipeMap;
     public IPatternBuilderFunction pattern;
     public List<MultiblockShapeInfo> designs;
-    public Boolean hasMaintenanceMechanics;
-    public Boolean hasMufflerMechanics;
     private static int AUTO_ID = 32000;
 
     private MultiblockBuilder(ResourceLocation loc, int metaId) {
@@ -124,43 +121,6 @@ public class MultiblockBuilder {
         return this;
     }
 
-
-    /**
-     * Set the overlay texture for the front of the controller.
-     *
-     * @param texture The texture to use.
-     * @return This builder, for convenience.
-     */
-    @ZenMethod
-    public MultiblockBuilder withFrontOverlay(@NotNull IICubeRenderer texture) {
-        this.frontOverlay = texture;
-        return this;
-    }
-
-    /**
-     * Set hasMaintenanceMechanics of the controller.
-     *
-     * @param hasMaintenanceMechanics whether hasMaintenanceMechanics. If no value is specified, the default value is used from CEu.
-     * @return This builder, for convenience.
-     */
-    @ZenMethod
-    public MultiblockBuilder withMaintenance(boolean hasMaintenanceMechanics) {
-        this.hasMaintenanceMechanics = hasMaintenanceMechanics;
-        return this;
-    }
-
-    /**
-     * Set hasMufflerMechanics of the controller.
-     *
-     * @param hasMufflerMechanics whether hasMufflerMechanics. If no value is specified, the default value is used from CEu.
-     * @return This builder, for convenience.
-     */
-    @ZenMethod
-    public MultiblockBuilder withMuffler(boolean hasMufflerMechanics) {
-        this.hasMufflerMechanics = hasMufflerMechanics;
-        return this;
-    }
-
     /**
      * Add a design to be shown in JEI or structure previews. Can be called multiple times.
      * <p>
@@ -193,6 +153,10 @@ public class MultiblockBuilder {
         }
         if (recipeMap == null) {
             CraftTweakerAPI.logError(String.format("No recipeMap defined for multiblock \"%s\"", loc));
+            return null;
+        }
+        if (baseTexture == null) {
+            CraftTweakerAPI.logError(String.format("No baseTexture defined for multiblock \"%s\"", loc));
             return null;
         }
 

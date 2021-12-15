@@ -41,8 +41,10 @@ val copy_distillation_tower = Builder.start(loc) // automatic allocation ID
                  } as IPatternBuilderFunction)
     .withRecipeMap(<recipemap:distillation_tower>)
     .withBaseTexture(<metastate:gregtech:metal_casing:5>)
-    .withMaintenance(true)
     .buildAndRegister();
+
+// set optional properties
+copy_distillation_tower.allowSameFluidFillForOutputs = false;
 
 // These are best specified in .lang files, since these may not work properly.
 game.setLocalization(
