@@ -35,8 +35,8 @@ Builder.start(loc)
                                "CCC")
                            .where("K", CTPredicate.states(<blockstate:minecraft:grass>).or(controller.autoAbilities))
                            .where("C", <blockstate:minecraft:grass>)
-                           .where("S", controller.self())
-                           .where(" ", CTPredicate.any())
+                           .where("S", controller.SELF())
+                           .where(" ", CTPredicate.ANY())
                            .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(RecipeMap.getByName("bender")) // Just use an already existing recipe map.

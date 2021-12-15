@@ -66,17 +66,17 @@ public class CTTraceabilityPredicate {
     }
 
     @ZenMethod
-    public static CTTraceabilityPredicate any() {
+    public static CTTraceabilityPredicate ANY() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.ANY.get());
     }
 
     @ZenMethod
-    public static CTTraceabilityPredicate air() {
+    public static CTTraceabilityPredicate AIR() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.AIR.get());
     }
 
     @ZenMethod
-    public static CTTraceabilityPredicate coils() {
+    public static CTTraceabilityPredicate COILS() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.HEATING_COILS.get());
     }
 
@@ -179,14 +179,14 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that matches any blocks with one of the given {@link IMultiblockAbility}-es.
      */
     @ZenMethod
-    static CTTraceabilityPredicate abilities(IMultiblockAbility... allowedAbilities) {
+    public static CTTraceabilityPredicate abilities(IMultiblockAbility... allowedAbilities) {
         Set<? extends MultiblockAbility<?>> abilities = Arrays.stream(allowedAbilities).map(IMultiblockAbility::getInternal).collect(Collectors.toSet());
         return mtePredicate((state, tile) -> tile.getInternal() instanceof IMultiblockAbilityPart<?> && abilities.contains(((IMultiblockAbilityPart<?>) tile.getInternal()).getAbility()),
                 getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTRY.get(ability).stream()).toArray(MetaTileEntity[]::new)));
     }
 
     @ZenMethod
-    static CTTraceabilityPredicate metaTileEntities(IMetaTileEntity... allowedMTEs) {
+    public static CTTraceabilityPredicate metaTileEntities(IMetaTileEntity... allowedMTEs) {
         return mtePredicate((state, mte) -> Arrays.stream(allowedMTEs).anyMatch(mte2->mte2.getInternal().metaTileEntityId == mte.getInternal().metaTileEntityId),
                 getCandidates(Arrays.stream(allowedMTEs).map(IMetaTileEntity::getInternal).toArray(MetaTileEntity[]::new)));
     }

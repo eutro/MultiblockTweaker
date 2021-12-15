@@ -37,7 +37,7 @@ public class ConstantMultiblockAbilities implements IBracketHandler {
     
     @ZenMethod
     @ZenMemberGetter()
-    private static IMultiblockAbility get(String member) {
+    public static IMultiblockAbility get(String member) {
         if (!cache.containsKey(member)) {
             MultiblockAbility<?> ability = ReflectionHelper.getStatic(MultiblockAbility.class, member);
             cache.put(member, ability == null ? null : new MCMultiblockAbility<>(ability));

@@ -4,6 +4,8 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.data.IData;
 import crafttweaker.api.formatting.IFormattedText;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.api.world.IBlockPos;
+import crafttweaker.mc1120.world.MCBlockPos;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
@@ -18,6 +20,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultiblockPart;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.gregtech.recipes.CustomMultiblockRecipeLogic;
+import eutros.multiblocktweaker.gregtech.renderer.IBlockStateRenderer;
+import gregtech.api.block.machines.BlockMachine;
 import gregtech.api.capability.impl.EnergyContainerList;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -31,9 +35,10 @@ import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -110,7 +115,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
-    protected void formStructure(PatternMatchContext context) {
+    public void formStructure(PatternMatchContext context) {
         super.formStructure(context);
         this.energyContainer = new EnergyContainerList(
                 Stream.of(MultiblockAbility.INPUT_ENERGY,
@@ -119,6 +124,17 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList())
         );
+        for (IMultiblockPart part : getMultiblockParts()) {
+            if (part instanceof MetaTileEntity) {
+                ICubeRenderer renderer = getBaseTexture(part);
+                if (renderer instanceof IBlockStateRenderer && !((IBlockStateRenderer) renderer).state.isOpaqueCube()) {
+                    IBlockState blockState = getWorld().getBlockState(((MetaTileEntity) part).getPos());
+                    if (blockState.getValue(BlockMachine.OPAQUE)) {
+                        getWorld().setBlockState(((MetaTileEntity) part).getPos(), blockState.withProperty(BlockMachine.OPAQUE, false));
+                    }
+                }
+            }
+        }
 
         if (formStructureFunction == null) return;
 
@@ -145,6 +161,15 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
             recipePredicate = null;
         }
         return true;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        ICubeRenderer renderer = getBaseTexture(null);
+        if (renderer instanceof IBlockStateRenderer) {
+            return ((IBlockStateRenderer) renderer).state.isOpaqueCube();
+        }
+        return super.isOpaqueCube();
     }
 
     @Override
@@ -179,7 +204,17 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
-    protected BlockPattern createStructurePattern() {
+    public void updateFormedValid() {
+        super.updateFormedValid();
+    }
+
+    @Override
+    public void causeMaintenanceProblems() {
+        super.causeMaintenanceProblems();
+    }
+
+    @Override
+    public BlockPattern createStructurePattern() {
         if (patternBuilderFunction != null) {
             try {
                 return patternBuilderFunction.build(new MCControllerTile(this)).getInternal();
@@ -209,7 +244,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
         if (getBaseTextureFunction != null) {
             try {
-                return getBaseTextureFunction.get(part == null ? null : new MCIMultiblockPart(part));
+                return getBaseTextureFunction.get(part instanceof MetaTileEntityMultiblockPart ? new MCIMultiblockPart((MetaTileEntityMultiblockPart) part) : null);
             } catch (RuntimeException e) {
                 logFailure("getBaseTextureFunction", e);
                 getBaseTextureFunction = null;
@@ -220,7 +255,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @NotNull
     @Override
-    protected ICubeRenderer getFrontOverlay() {
+    public ICubeRenderer getFrontOverlay() {
         return multiblock.frontOverlay == null ? super.getFrontOverlay() : multiblock.frontOverlay;
     }
 
@@ -247,7 +282,12 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     }
 
     @Override
-    public boolean canRenderInLayer(BlockRenderLayer renderLayer) {
-        return getBaseTexture(null).canRenderInLayer(renderLayer) || getFrontOverlay().canRenderInLayer(renderLayer);
+    public void replaceVariantBlocksActive(boolean isActive) {
+        super.replaceVariantBlocksActive(isActive);
+    }
+
+    public List<IBlockPos> getVariantActiveBlocks() {
+        return variantActiveBlocks.stream().map(MCBlockPos::new).collect(
+                Collectors.toList());
     }
 }

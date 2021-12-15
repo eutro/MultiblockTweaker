@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.List;
 
 /**
  * A GregTech meta tile entity.
@@ -67,7 +70,7 @@ public interface IMetaTileEntity {
      * @return How long the meta tile entity has been in the world for.
      */
     @ZenMethod
-    long getTimer();
+    long getOffsetTimer();
 
     /**
      * @return The unlocalized name of the machine, excluding {@code .name} at the end.
@@ -87,4 +90,116 @@ public interface IMetaTileEntity {
     @ZenMethod
     IFacing getFrontFacing();
 
+    @ZenMethod
+    void markDirty();
+
+    @ZenMethod
+    boolean isFirstTick();
+
+    @ZenMethod
+    int getInputRedstoneSignal(IFacing side, boolean ignoreCover);
+
+    @ZenMethod
+    boolean isBlockRedstonePowered();
+
+    @ZenMethod
+    int getActualLightValue();
+
+    @ZenMethod
+    void update();
+
+    @ZenMethod
+    IItemStack getStackForm(int amount);
+
+    /**
+     * Whether this tile entity represents completely opaque cube
+     *
+     * @return true if machine is opaque
+     */
+    @ZenMethod
+    boolean isOpaqueCube();
+
+    @ZenMethod
+    int getLightOpacity();
+
+    /**
+     * @return tool required to dismantle this meta tile entity properly
+     */
+    @ZenMethod
+    String getHarvestTool();
+
+    /**
+     * @return minimal level of tool required to dismantle this meta tile entity properly
+     */
+    @ZenMethod
+    int getHarvestLevel();
+
+    @ZenMethod
+    int getOutputRedstoneSignal(IFacing side);
+
+    @ZenMethod
+    void setOutputRedstoneSignal(IFacing side, int strength);
+
+    @ZenMethod
+    void notifyBlockUpdate();
+
+    @ZenMethod
+    void scheduleRenderUpdate();
+
+    @ZenMethod
+    void setFrontFacing(IFacing frontFacing);
+
+    @ZenMethod
+    void setPaintingColor(int paintingColor);
+
+    @ZenMethod
+    void setFragile(boolean fragile);
+
+    @ZenMethod
+    boolean isValidFrontFacing(IFacing facing);
+
+    @ZenMethod
+    boolean hasFrontFacing();
+
+    @ZenMethod
+    boolean isValid();
+
+    @ZenMethod
+    int getPaintingColor();
+
+    @ZenMethod
+    IIItemHandlerModifiable getImportItems();
+
+    @ZenMethod
+    IIItemHandlerModifiable getExportItems();
+
+    @ZenMethod
+    IIFluidHandler getImportFluids();
+
+    @ZenMethod
+    IIFluidHandler getExportFluids();
+
+    @ZenMethod
+    List<IIItemHandlerModifiable> getNotifiedItemOutputList();
+
+    @ZenMethod
+    List<IIItemHandlerModifiable> getNotifiedItemInputList();
+
+    @ZenMethod
+    List<IIFluidHandler> getNotifiedFluidInputList();
+
+    @ZenMethod
+    List<IIFluidHandler> getNotifiedFluidOutputList();
+
+    @ZenMethod
+    boolean isFragile();
+
+    @ZenMethod
+    boolean shouldDropWhenDestroyed();
+
+    @ZenMethod
+    void toggleMuffled();
+
+    @ZenMethod
+    boolean isMuffled();
 }

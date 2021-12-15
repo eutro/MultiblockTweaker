@@ -2,15 +2,18 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.data.IData;
+import crafttweaker.api.world.IBlockPos;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
-import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.RecipeMap;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
+
+import java.util.List;
 
 @ZenClass("mods.gregtech.IControllerTile")
 @ZenRegister
@@ -26,31 +29,46 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenGetter("multiblock")
     CustomMultiblock getMultiblock();
 
+    // **********************MultiblockControllerBase
     @ZenMethod
-    @ZenGetter("energyContainer")
-    IIEnergyContainer getEnergyContainer();
+    @ZenGetter("multiblockParts")
+    List<IIMultiblockPart> getMultiblockParts();
 
     @ZenMethod
-    @ZenGetter("inputInventory")
-    IIItemHandlerModifiable getInputInventory();
+    @ZenGetter("canShare")
+    boolean canShare();
 
     @ZenMethod
-    @ZenGetter("outputInventory")
-    IIItemHandlerModifiable getOutputInventory();
+    @ZenGetter("matchingShapes")
+    List<IMultiblockShapeInfo> getMatchingShapes();
 
     @ZenMethod
-    @ZenGetter("inputFluidInventory")
-    IIMultipleTankHandler getInputFluidInventory();
+    @ZenGetter("frontOverlay")
+    IICubeRenderer getFrontOverlay();
 
     @ZenMethod
-    @ZenGetter("outputFluidInventory")
-    IIMultipleTankHandler getOutputFluidInventory();
+    IBlockPattern createStructurePattern();
+
+    @ZenMethod
+    boolean shouldRenderOverlay(IIMultiblockPart sourcePart);
+
+    @ZenMethod
+    IICubeRenderer getBaseTexture(IIMultiblockPart part);
+
+    @ZenMethod
+    void checkStructurePattern();
+
+    @ZenMethod
+    void formStructure(IPatternMatchContext context);
+
+    @ZenMethod
+    int getLightValueForPart(IIMultiblockPart sourcePart);
 
     @ZenMethod
     void invalidateStructure();
 
     @ZenMethod
-    void update();
+    void updateFormedValid();
 
     @ZenMethod
     Object[] getAbilities(IMultiblockAbility ability);
@@ -93,5 +111,133 @@ public interface IControllerTile extends IMetaTileEntity {
                                         boolean checkFluidOut,
                                         boolean checkMuffler);
     @ZenMethod
-    CTTraceabilityPredicate self();
+    CTTraceabilityPredicate SELF();
+
+    // ***********************************MultiblockWithDisplayBase
+
+
+    /**
+     * Sets the maintenance problem corresponding to index to fixed
+     *
+     * @param index of the maintenance problem
+     */
+    @ZenMethod
+    void setMaintenanceFixed(int index);
+
+    /**
+     * Used to cause a single random maintenance problem
+     */
+    @ZenMethod
+    void causeMaintenanceProblems();
+
+    /**
+     * @return the byte value representing the maintenance problems
+     */
+    @ZenMethod
+    byte getMaintenanceProblems();
+
+    /**
+     * @return the amount of maintenance problems the multiblock has
+     */
+    @ZenMethod
+    int getNumMaintenanceProblems();
+
+    /**
+     * @return whether the multiblock has any maintenance problems
+     */
+    @ZenMethod
+    boolean hasMaintenanceProblems();
+
+    /**
+     * @return whether this multiblock has maintenance mechanics
+     */
+    @ZenMethod
+    boolean hasMaintenanceMechanics();
+
+    @ZenMethod
+    boolean hasMufflerMechanics();
+
+    /**
+     * Stores the taped state of the maintenance hatch
+     *
+     * @param isTaped is whether the maintenance hatch is taped or not
+     */
+    @ZenMethod
+    void storeTaped(boolean isTaped);
+
+    /**
+     * Outputs the recovery items into the muffler hatch
+     */
+    @ZenMethod
+    void outputRecoveryItems();
+
+    @ZenMethod
+    void outputRecoveryItems(int parallel);
+
+    /**
+     * @return whether the muffler hatch's front face is free
+     */
+    @ZenMethod
+    boolean isMufflerFaceFree();
+
+    /**
+     * @return whether the current multiblock is active or not
+     */
+    @ZenMethod
+    boolean isActive();
+
+    // **********************************RecipeMapMultiblockController
+
+    @ZenMethod
+    @ZenGetter("energyContainer")
+    IIEnergyContainer getEnergyContainer();
+
+    @ZenMethod
+    @ZenGetter("inputInventory")
+    IIItemHandlerModifiable getInputInventory();
+
+    @ZenMethod
+    @ZenGetter("outputInventory")
+    IIItemHandlerModifiable getOutputInventory();
+
+    @ZenMethod
+    @ZenGetter("inputFluidInventory")
+    IIMultipleTankHandler getInputFluidInventory();
+
+    @ZenMethod
+    @ZenGetter("outputFluidInventory")
+    IIMultipleTankHandler getOutputFluidInventory();
+
+    @ZenMethod
+    boolean checkRecipe(IRecipe recipe, boolean consumeIfSuccess);
+
+    @ZenMethod
+    void replaceVariantBlocksActive(boolean isActive);
+
+    @ZenMethod
+    boolean canBeDistinct();
+
+    @ZenMethod
+    boolean isDistinct();
+
+    @ZenMethod
+    boolean canCreateSound();
+
+    @ZenMethod
+    RecipeMap<?>[] getAvailableRecipeMaps();
+
+    @ZenMethod
+    int getRecipeMapIndex();
+
+    @ZenMethod
+    void addRecipeMaps(RecipeMap<?>... recipeMaps);
+
+    @ZenMethod
+    void setRecipeMapIndex(int index);
+
+    @ZenMethod
+    RecipeMap<?> getCurrentRecipeMap();
+
+    @ZenMethod
+    List<IBlockPos> getVariantActiveBlocks();
 }

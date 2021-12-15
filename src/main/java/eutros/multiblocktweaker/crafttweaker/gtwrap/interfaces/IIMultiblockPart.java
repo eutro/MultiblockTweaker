@@ -11,6 +11,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +29,10 @@ import javax.annotation.Nullable;
  */
 @ZenClass("mods.gregtech.multiblock.IIMultiblockPart")
 @ZenRegister
-public interface IIMultiblockPart {
+public interface IIMultiblockPart extends IMetaTileEntity{
 
     @NotNull
-    IMultiblockPart getInternal();
+    MetaTileEntityMultiblockPart getInternal();
 
     /**
      * Ability of this part.

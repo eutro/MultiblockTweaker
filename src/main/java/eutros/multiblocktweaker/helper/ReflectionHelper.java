@@ -1,64 +1,57 @@
 package eutros.multiblocktweaker.helper;
 
-import com.google.common.base.Preconditions;
 import crafttweaker.CraftTweakerAPI;
-import crafttweaker.mc1120.CraftTweaker;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class ReflectionHelper {
 
-    private static Map<Class<?>, Map<String, MethodHandle>> handles = new IdentityHashMap<>();
+    private static final Map<Class<?>, Map<String, Optional<Field>>> handles = new IdentityHashMap<>();
 
     @SuppressWarnings("unchecked")
     public static <T, C> T getPrivate(Class<? super C> fieldClass, String fieldName, C object) throws ClassCastException {
-        try {
-            return (T) handles
-                    .computeIfAbsent(fieldClass, c -> new HashMap<>())
-                    .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
-                    .invoke(object);
-        } catch (Throwable e) {
-            CraftTweakerAPI.logError(String.format("No field \"%s\" found", fieldName));
-            return null;
-        }
+        return (T) handles
+                .computeIfAbsent(fieldClass, c -> new HashMap<>())
+                .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
+                .map(f-> {
+                    try {
+                        return f.get(object);
+                    } catch (IllegalAccessException e) {
+                        CraftTweakerAPI.logError(String.format("No static field \"%s\" found", fieldName));
+                    }
+                    return null;
+                }).orElse(null);
     }
 
     @SuppressWarnings("unchecked")
     public static <T, C> T getStatic(Class<? super C> fieldClass, String fieldName) throws ClassCastException {
-        try {
-            return (T) handles
-                    .computeIfAbsent(fieldClass, c -> new HashMap<>())
-                    .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
-                    .invoke(fieldClass);
-        } catch (Throwable e) {
-            CraftTweakerAPI.logError(String.format("No static field \"%s\" found", fieldName));
-            return null;
-        }
+        return (T) handles
+                .computeIfAbsent(fieldClass, c -> new HashMap<>())
+                .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
+                .map(f-> {
+                    try {
+                        return f.get(fieldClass);
+                    } catch (IllegalAccessException e) {
+                        CraftTweakerAPI.logError(String.format("No static field \"%s\" found", fieldName));
+                    }
+                    return null;
+                }).orElse(null);
     }
 
-    private static <C> Function<String, MethodHandle> computeHandle(Class<? super C> fieldClass, String fieldName) {
+    private static <C> Function<String, Optional<Field>> computeHandle(Class<? super C> fieldClass, String fieldName) {
         return p -> {
             try {
-                return MethodHandles.publicLookup()
-                        .unreflectGetter(
-                                Preconditions.checkNotNull(
-                                        FieldUtils.getField(
-                                                fieldClass,
-                                                fieldName,
-                                                true
-                                        ),
-                                        "Couldn't find field %s of %s.",
-                                        fieldName, fieldClass
-                                )
-                        );
-            } catch (IllegalAccessException e) {
-                throw new IllegalStateException(String.format("Couldn't access field %s of %s", fieldName, fieldClass), e);
+                Field field = fieldClass.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return Optional.of(field);
+            } catch (NoSuchFieldException e) {
+                CraftTweakerAPI.logError(String.format("Couldn't access field %s of %s", fieldName, fieldClass), e);
+                return Optional.empty();
             }
         };
     }

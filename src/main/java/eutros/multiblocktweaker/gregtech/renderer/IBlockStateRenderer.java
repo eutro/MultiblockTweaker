@@ -10,6 +10,7 @@ import gregtech.client.renderer.CubeRendererState;
 import gregtech.client.renderer.handler.FacadeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.AdvCCRSConsumer;
+import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.FacadeBlockAccess;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.pipeline.VertexLighterFlat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,7 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class IBlockStateRenderer implements IICubeRenderer {
-    private final IBlockState state;
+    public final IBlockState state;
     @SideOnly(Side.CLIENT)
     private TextureAtlasSprite particle;
     @SideOnly(Side.CLIENT)
@@ -76,37 +78,45 @@ public class IBlockStateRenderer implements IICubeRenderer {
             }
             return;
         }
-        if (canRenderInLayer(rendererState.layer)) { // block
-            BlockPos pos = new BlockPos(translation.m03, translation.m13, translation.m23);
-            if (!state.shouldSideBeRendered(rendererState.world, pos, face)) return;
-            IBlockAccess coverAccess = new FacadeBlockAccess(rendererState.world, pos, face, state);
-            BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
-            IBlockState state = this.state;
-            try {
-                state = state.getActualState(coverAccess, pos);
-            } catch (Exception ignored) { }
-            IBakedModel model = brd.getModelForState(state);
+        BlockRenderLayer[] layers;
+        if (rendererState.layer == BlockRenderLayer.CUTOUT_MIPPED) {
+            layers = new BlockRenderLayer[]{BlockRenderLayer.SOLID, BlockRenderLayer.CUTOUT_MIPPED, BlockRenderLayer.CUTOUT};
+        } else if (rendererState.layer == BlockRenderLayer.TRANSLUCENT) {
+            layers = new BlockRenderLayer[]{BlockRenderLayer.TRANSLUCENT};
+        } else if (rendererState.layer == BloomEffectUtil.BLOOM) {
+            layers = new BlockRenderLayer[]{BloomEffectUtil.BLOOM};
+        } else layers = new BlockRenderLayer[0];
+        for (BlockRenderLayer layer : layers) {
+            if (state.getBlock().canRenderInLayer(state, layer)) { // block
+                BlockPos pos = new BlockPos(translation.m03, translation.m13, translation.m23);
+                if (!state.shouldSideBeRendered(rendererState.world, pos, face)) return;
+                IBlockAccess coverAccess = new FacadeBlockAccess(rendererState.world, pos, face, state);
+                BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
+                IBlockState state = this.state;
+                try {
+                    state = state.getActualState(coverAccess, pos);
+                } catch (Exception ignored) { }
+                IBakedModel model = brd.getModelForState(state);
 
-            try {
-                state = state.getBlock().getExtendedState(state, coverAccess, pos);
-            } catch (Exception ignored) { }
+                try {
+                    state = state.getBlock().getExtendedState(state, coverAccess, pos);
+                } catch (Exception ignored) { }
 
-            long posRand = net.minecraft.util.math.MathHelper.getPositionRandom(pos);
-            List<BakedQuad> bakedQuads = new LinkedList<>(model.getQuads(state, null, posRand));
+                long posRand = net.minecraft.util.math.MathHelper.getPositionRandom(pos);
+                List<BakedQuad> bakedQuads = new LinkedList<>(model.getQuads(state, null, posRand));
 
-            bakedQuads.addAll(model.getQuads(state, face, posRand));
+                bakedQuads.addAll(model.getQuads(state, face, posRand));
 
-            List<CCQuad> quads = CCQuad.fromArray(bakedQuads);
+                List<CCQuad> quads = CCQuad.fromArray(bakedQuads);
 
-            if (!quads.isEmpty()) {
-                VertexLighterFlat lighter = FacadeRenderer.setupLighter(renderState, translation, state, coverAccess, pos, model);
-                FacadeRenderer.renderBlockQuads(lighter, coverAccess, state, quads, pos);
+                if (!quads.isEmpty()) {
+                    VertexLighterFlat lighter = FacadeRenderer.setupLighter(renderState, translation, state, coverAccess, pos, model);
+                    FacadeRenderer.renderBlockQuads(lighter, coverAccess, state, quads, pos);
+                }
+                return;
             }
         }
+
     }
 
-    @Override
-    public boolean canRenderInLayer(BlockRenderLayer layer) {
-        return state.getBlock().canRenderInLayer(state, layer);
-    }
 }
