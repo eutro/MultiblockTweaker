@@ -149,6 +149,15 @@ public interface IRecipe {
     long getLongProperty(String key);
 
     /**
+     * Get the float property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The integer property referenced by the given key.
+     */
+    @ZenMethod
+    float getFloatProperty(String key);
+
+    /**
      * Get the string property referenced by the given key.
      *
      * @param key The key to reference.

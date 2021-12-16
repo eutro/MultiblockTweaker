@@ -2,8 +2,10 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMoveType;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ISound;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
 import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeBuilder;
+import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeProperty;
 import eutros.multiblocktweaker.gregtech.recipes.RecipeMapMultiblock;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -11,7 +13,7 @@ import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.crafttweaker.CTRecipeBuilder;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.util.SoundEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -26,7 +28,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 public class RecipeMapBuilder {
 
-    private String name;
+    private final String name;
     private int minInputs = 0;
     private int maxInputs = 0;
     private int minOutputs = 0;
@@ -36,10 +38,11 @@ public class RecipeMapBuilder {
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
     private boolean isHidden = false;
-    public CTRecipeBuilder defaultRecipe = startBuilder();
-    private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
+    public CTRecipeBuilder defaultRecipe;
+    private final TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
+    private SoundEvent sound;
 
     /**
      * Create a new, blank {@link CTRecipeBuilder} that will be the base recipe for any new ones.
@@ -47,12 +50,13 @@ public class RecipeMapBuilder {
      * @return A blank {@link CTRecipeBuilder}.
      */
     @ZenMethod
-    public static CTRecipeBuilder startBuilder() {
-        return new CTRecipeBuilder(new CustomRecipeBuilder());
+    public static CTRecipeBuilder startBuilder(CustomRecipeProperty...recipeProperties) {
+        return new CTRecipeBuilder(new CustomRecipeBuilder(recipeProperties));
     }
 
-    public RecipeMapBuilder(String name) {
+    public RecipeMapBuilder(String name, CustomRecipeProperty...recipeProperties) {
         this.name = name;
+        this.defaultRecipe = startBuilder(recipeProperties);
     }
 
     /**
@@ -64,8 +68,8 @@ public class RecipeMapBuilder {
      * @return The initialized builder.
      */
     @ZenMethod
-    public static RecipeMapBuilder start(String name) {
-        return new RecipeMapBuilder(name);
+    public static RecipeMapBuilder start(String name, CustomRecipeProperty...recipeProperties) {
+        return new RecipeMapBuilder(name, recipeProperties);
     }
 
     /**
@@ -257,6 +261,17 @@ public class RecipeMapBuilder {
     }
 
     /**
+     *
+     * @param sound
+     * @return
+     */
+    @ZenMethod
+    public RecipeMapBuilder setSound(ISound sound) {
+        this.sound = sound == null ? null : sound.getInternal();
+        return this;
+    }
+
+    /**
      * Construct the {@link RecipeMap}.
      *
      * @return The built recipe map.
@@ -274,7 +289,9 @@ public class RecipeMapBuilder {
                 maxFluidOutputs,
                 (CustomRecipeBuilder) defaultRecipe.backingBuilder,
                 isHidden);
-
+        if (sound != null) {
+            map.setSound(sound);
+        }
         for (byte key : slotOverlays.keys()) {
             map.setSlotOverlay((key & 2) != 0, (key & 1) != 0, (key & 4) != 0, slotOverlays.get(key));
         }

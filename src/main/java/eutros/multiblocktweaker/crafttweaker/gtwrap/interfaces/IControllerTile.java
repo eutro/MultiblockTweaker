@@ -2,17 +2,24 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.data.IData;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
+import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.recipes.RecipeMap;
+import net.minecraft.tileentity.TileEntity;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 @ZenClass("mods.gregtech.IControllerTile")
@@ -28,6 +35,22 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenMethod
     @ZenGetter("multiblock")
     CustomMultiblock getMultiblock();
+
+    /**
+     * get {@link IControllerTile} from world.
+     * @param world world
+     * @param pos blockpos
+     * @return mte;
+     */
+    @ZenMethod
+    default IControllerTile fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
+        TileEntity te = CraftTweakerMC.getWorld(world).getTileEntity(CraftTweakerMC.getBlockPos(pos));
+        if (te instanceof MetaTileEntityHolder && ((MetaTileEntityHolder) te).isValid()) {
+            MetaTileEntity mte = ((MetaTileEntityHolder) te).getMetaTileEntity();
+            return mte instanceof TileControllerCustom ? new MCControllerTile((TileControllerCustom)mte) : null;
+        }
+        return null;
+    }
 
     // **********************MultiblockControllerBase
     @ZenMethod

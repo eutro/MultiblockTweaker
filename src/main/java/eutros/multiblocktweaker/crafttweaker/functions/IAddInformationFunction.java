@@ -26,6 +26,6 @@ public interface IAddInformationFunction {
      * @return A list of tips {@link List<String>} to add to the item.
      */
     @ZenMethod
-    List<String> addTips(@Nonnull IControllerTile controller);
+    String[] addTips(@Nonnull IControllerTile controller);
 
 }

@@ -1,13 +1,14 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.world.IBlockPos;
 import gregtech.api.pattern.PatternMatchContext;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
- * The context of a match. Can be obtained from {@link IBlockWorldState#getMatchContext()} or {@link IBlockWorldState#getLayerContext()}.
+ * The context of a match. Can be obtained from {@link IBlockWorldState#getMatchContext()}.
  *
  * @zenClass mods.gregtech.multiblock.IPatternMatchContext
  */
@@ -89,4 +90,16 @@ public interface IPatternMatchContext {
     @ZenMethod
     String getOrPut(String key, String initialValue);
 
+    /**
+     * Some blocks that extends of {@link gregtech.common.blocks.VariantActiveBlock} can change texture based on the multi-block working state.
+     * Their position need to be collected during pattern checking.
+     * <p>
+     *     Below are the blocks in CEu that have this feature, and don't forget to collect them when you manually set the predicate:
+     * </p>
+     * <p>
+     * {@code <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:transparent_casing> <gregtech:fusion_casing> <gregtech:multiblock_casing> <gregtech:wire_coil> <gregtech:wire_coil2>}
+     * @param pos blockpos
+     */
+    @ZenMethod
+    void addVBBlock(IBlockPos pos);
 }

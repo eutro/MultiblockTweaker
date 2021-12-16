@@ -9,7 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 @BracketHandler
-@ZenClass("mods.gregtech.render.CubeRenderers")
 @ZenRegister
 public class CubeRendererBracketHandler implements IBracketHandler {
     private final static Map<String, IICubeRenderer> cache = new HashMap<>();
@@ -37,7 +35,15 @@ public class CubeRendererBracketHandler implements IBracketHandler {
     public static IICubeRenderer get(String member) {
         if (!cache.containsKey(member)) {
             ICubeRenderer cubeRenderer = ReflectionHelper.getStatic(Textures.class, member);
-            cache.put(member, cubeRenderer == null ? null : new MCICubeRenderer(cubeRenderer));
+            if (cubeRenderer == null) {
+                if (IICubeRenderer.byPath(member) != null) {
+                    cache.put(member, IICubeRenderer.byPath(member));
+                } else {
+                    cache.put(member, null);
+                }
+            } else {
+                cache.put(member, new MCICubeRenderer(cubeRenderer));
+            }
         }
         return cache.get(member);
     }

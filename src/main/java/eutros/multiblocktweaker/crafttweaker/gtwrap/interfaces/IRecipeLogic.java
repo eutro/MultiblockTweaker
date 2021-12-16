@@ -1,6 +1,8 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import gregtech.api.capability.impl.AbstractRecipeLogic;
+import gregtech.api.capability.impl.HeatingCoilRecipeLogic;
 import gregtech.api.recipes.RecipeMap;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -17,6 +19,16 @@ import java.util.List;
 @ZenClass("mods.gregtech.recipe.IRecipeLogic")
 @ZenRegister
 public interface IRecipeLogic {
+
+    @ZenMethod
+    static int[] heatingCoilOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, int currentTemp, int recipeRequiredTemp) {
+        return HeatingCoilRecipeLogic.heatingCoilOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, currentTemp, recipeRequiredTemp);
+    }
+
+    @ZenMethod
+    static int[] standardOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, double durationDivisor, double voltageMultiplier, int maxOverclocks) {
+        return AbstractRecipeLogic.standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, durationDivisor, voltageMultiplier, maxOverclocks);
+    }
 
     @ZenMethod
     @ZenGetter("lastRecipeIndex")

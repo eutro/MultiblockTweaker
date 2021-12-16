@@ -8,7 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockAbility;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMemberGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 @BracketHandler
-@ZenClass("mods.gregtech.multiblock.MultiblockAbilities")
 @ZenRegister
 public class MultiblockAbilityBracketHandler implements IBracketHandler {
     private final static Map<String, IMultiblockAbility> cache = new HashMap<>();
@@ -40,7 +38,15 @@ public class MultiblockAbilityBracketHandler implements IBracketHandler {
     public static IMultiblockAbility get(String member) {
         if (!cache.containsKey(member)) {
             MultiblockAbility<?> ability = ReflectionHelper.getStatic(MultiblockAbility.class, member);
-            cache.put(member, ability == null ? null : new MCMultiblockAbility<>(ability));
+            if (ability == null) {
+                if (IMultiblockAbility.byName(member) != null) {
+                    cache.put(member, IMultiblockAbility.byName(member));
+                } else {
+                    cache.put(member, null);
+                }
+            } else {
+                cache.put(member, new MCMultiblockAbility<>(ability));
+            }
         }
         return cache.get(member);
     }

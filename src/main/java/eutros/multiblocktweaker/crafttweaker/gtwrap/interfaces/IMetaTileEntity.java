@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
@@ -10,6 +11,8 @@ import eutros.multiblocktweaker.crafttweaker.brackethandler.MetaTileEntityBracke
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.MetaTileEntityHolder;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +20,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -52,6 +56,21 @@ public interface IMetaTileEntity {
         if (te != null)
             return new MCMetaTileEntity(te);
 
+        return null;
+    }
+
+    /**
+     * get {@link IMetaTileEntity} from world.
+     * @param world world
+     * @param pos blockpos
+     * @return mte;
+     */
+    @ZenMethod
+    default IMetaTileEntity fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
+        TileEntity te = CraftTweakerMC.getWorld(world).getTileEntity(CraftTweakerMC.getBlockPos(pos));
+        if (te instanceof MetaTileEntityHolder && ((MetaTileEntityHolder) te).isValid()) {
+            return new MCMetaTileEntity(((MetaTileEntityHolder) te).getMetaTileEntity());
+        }
         return null;
     }
 

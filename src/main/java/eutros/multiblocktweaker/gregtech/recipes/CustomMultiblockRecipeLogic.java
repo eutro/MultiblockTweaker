@@ -2,26 +2,15 @@ package eutros.multiblocktweaker.gregtech.recipes;
 
 
 import crafttweaker.CraftTweakerAPI;
-import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IRunOverclockingLogicFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIEnergyContainer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIItemHandlerModifiable;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultipleTankHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
+import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -30,46 +19,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     /**
      * This property will set the chance of the inputs being consumed when a recipe is started.
      */
-    public static final String CONSUME_CHANCE = "consumeChance";
-    @Nullable
-    private IUpdateFunction update;
-    @Nullable
-    private IUpdateWorktableFunction updateWorktable;
-    @Nullable
-    private ISetupRecipeFunction setupRecipe;
-    @Nullable
-    private ICompleteRecipeFunction completeRecipe;
-    @Nullable
-    private IRunOverclockingLogicFunction runOverclockingLogic;
+    public final CustomMultiblock multiblock;
 
-    public CustomMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity,
-                                       @Nullable IUpdateFunction update,
-                                       @Nullable IUpdateWorktableFunction updateWorktable,
-                                       @Nullable ISetupRecipeFunction setupRecipe,
-                                       @Nullable ICompleteRecipeFunction completeRecipe) {
-        super(tileEntity);
-        this.update = update;
-        this.updateWorktable = updateWorktable;
-        this.setupRecipe = setupRecipe;
-        this.completeRecipe = completeRecipe;
-    }
-
-    // FUNCTION GETTERS
-
-    public Optional<IUpdateFunction> getUpdate() {
-        return Optional.ofNullable(update);
-    }
-
-    public Optional<IUpdateWorktableFunction> getUpdateWorktable() {
-        return Optional.ofNullable(updateWorktable);
-    }
-
-    public Optional<ISetupRecipeFunction> getSetupRecipe() {
-        return Optional.ofNullable(setupRecipe);
-    }
-
-    public Optional<ICompleteRecipeFunction> getCompleteRecipe() {
-        return Optional.ofNullable(completeRecipe);
+    public CustomMultiblockRecipeLogic(TileControllerCustom controller) {
+        super(controller);
+        this.multiblock = controller.multiblock;
     }
 
     // FUNCTIONS
@@ -81,24 +35,24 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     public void update() {
         super.update();
-        getUpdate().ifPresent(u -> {
+        if (multiblock.update != null) {
             try {
-                u.run(this);
+                multiblock.update.run(this);
             } catch (RuntimeException t) {
                 logFailure("update", t);
-                update = null;
+                multiblock.update = null;
             }
-        });
+        }
     }
 
     @Override
     protected int[] runOverclockingLogic(@NotNull Recipe recipe, boolean negativeEU, int maxOverclocks) {
-        if (runOverclockingLogic != null) {
+        if (multiblock.runOverclockingLogic != null) {
             try {
-                return runOverclockingLogic.run(new MCRecipe(recipe), negativeEU, maxOverclocks);
+                return multiblock.runOverclockingLogic.run(this, new MCRecipe(recipe), negativeEU, maxOverclocks);
             } catch (RuntimeException t) {
                 logFailure("runOverclockingLogic", t);
-                runOverclockingLogic = null;
+                multiblock.runOverclockingLogic = null;
             }
         }
         return super.runOverclockingLogic(recipe, negativeEU, maxOverclocks);
@@ -137,15 +91,16 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     public void updateWorkable() {
-        if (getUpdateWorktable().map(u -> {
+        boolean result = true;
+        if (multiblock.updateWorktable != null) {
             try {
-                return u.run(this);
+                result = multiblock.updateWorktable.run(this);
             } catch (RuntimeException t) {
                 logFailure("updateWorktable", t);
-                updateWorktable = null;
-                return true;
+                multiblock.updateWorktable = null;
             }
-        }).orElse(true)) {
+        }
+        if (result) {
             super.updateWorkable();
         }
     }
@@ -153,27 +108,27 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     protected void setupRecipe(Recipe recipe) {
         super.setupRecipe(recipe);
-        getSetupRecipe().ifPresent(s -> {
+        if (multiblock.setupRecipe != null) {
             try {
-                s.run(this, new MCRecipe(recipe));
+                multiblock.setupRecipe.run(this, new MCRecipe(recipe));
             } catch (RuntimeException t) {
                 logFailure("setupRecipe", t);
-                setupRecipe = null;
+                multiblock.setupRecipe = null;
             }
-        });
+        }
     }
 
     @Override
     protected void completeRecipe() {
         super.completeRecipe();
-        getCompleteRecipe().ifPresent(c -> {
+        if (multiblock.completeRecipe != null) {
             try {
-                c.run(this);
+                multiblock.completeRecipe.run(this);
             } catch (RuntimeException t) {
                 logFailure("completeRecipe", t);
-                completeRecipe = null;
+                multiblock.completeRecipe = null;
             }
-        });
+        }
     }
 
     // CT EXPOSED

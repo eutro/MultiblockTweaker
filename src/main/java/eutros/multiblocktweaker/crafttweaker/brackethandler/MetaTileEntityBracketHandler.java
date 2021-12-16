@@ -9,7 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.common.metatileentities.MetaTileEntities;
-import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMemberGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
@@ -19,13 +18,9 @@ import stanhebben.zenscript.parser.Token;
 import stanhebben.zenscript.symbols.IZenSymbol;
 import stanhebben.zenscript.type.natives.IJavaMethod;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @BracketHandler
-@ZenClass("mods.gregtech.MetaTileEntities")
 @ZenRegister
 public class MetaTileEntityBracketHandler implements IBracketHandler {
     private final static IMetaTileEntity[] EMPTY = new IMetaTileEntity[0];
@@ -46,9 +41,15 @@ public class MetaTileEntityBracketHandler implements IBracketHandler {
             if (mte instanceof MetaTileEntity) {
                 cache.put(member, new IMetaTileEntity[]{new MCMetaTileEntity((MetaTileEntity)mte)});
             } else if (mte instanceof MetaTileEntity[]){
-                cache.put(member, Arrays.stream((MetaTileEntity[]) mte).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new));
+                cache.put(member, Arrays.stream((MetaTileEntity[]) mte).filter(Objects::nonNull).map(MCMetaTileEntity::new).toArray(IMetaTileEntity[]::new));
+            } else {
+                mte = IMetaTileEntity.byId(member);
+                if (mte instanceof MetaTileEntity) {
+                    cache.put(member, new IMetaTileEntity[]{new MCMetaTileEntity((MetaTileEntity)mte)});
+                } else {
+                    cache.put(member, EMPTY);
+                }
             }
-            cache.put(member, EMPTY);
         }
         return cache.get(member);
     }

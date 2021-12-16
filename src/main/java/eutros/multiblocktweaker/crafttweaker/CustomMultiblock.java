@@ -29,7 +29,7 @@ import java.util.List;
  * @see IUpdateWorktableFunction
  * @see ISetupRecipeFunction
  * @see ICompleteRecipeFunction
- * @see IRecipePredicate
+ * @see ICheckRecipeFunction
  */
 @ZenClass("mods.gregtech.multiblock.Multiblock")
 @ZenRegister
@@ -106,12 +106,12 @@ public class CustomMultiblock {
     @ZenProperty
     public ICompleteRecipeFunction completeRecipe;
     /**
-     * The {@link IRecipePredicate} this multiblock has.
+     * The {@link ICheckRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IRecipePredicate recipePredicate;
+    public ICheckRecipeFunction checkRecipeFunction;
     /**
      * The {@link IRemovalFunction} this multiblock has.
      * <p>
@@ -148,19 +148,26 @@ public class CustomMultiblock {
     @ZenProperty
     public IGetBaseTextureFunction getBaseTextureFunction;
     /**
-     * The {@link IUpdateFormedValid} this multiblock has.
+     * The {@link IUpdateFormedValidFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IUpdateFormedValid updateFormedValidFunction;
+    public IUpdateFormedValidFunction updateFormedValidFunction;
     /**
-     * The {@link IInvalidateStructure} this multiblock has.
+     * The {@link IInvalidateStructureFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IInvalidateStructure invalidateStructureFunction;
+    public IInvalidateStructureFunction invalidateStructureFunction;
+    /**
+     * The {@link IRunOverclockingLogicFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IRunOverclockingLogicFunction runOverclockingLogic;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;

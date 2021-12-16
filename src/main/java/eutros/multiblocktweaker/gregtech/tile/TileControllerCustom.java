@@ -8,15 +8,7 @@ import crafttweaker.api.world.IBlockPos;
 import crafttweaker.mc1120.world.MCBlockPos;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.crafttweaker.functions.IAddInformationFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IDisplayTextFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IFormStructureFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IGetBaseTextureFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IInvalidateStructure;
 import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IRecipePredicate;
-import eutros.multiblocktweaker.crafttweaker.functions.IRemovalFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFormedValid;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultiblockPart;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCPatternMatchContext;
@@ -37,9 +29,7 @@ import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
-import javafx.embed.swt.CustomTransferBuilder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,12 +60,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public TileControllerCustom(@Nonnull CustomMultiblock multiblock) {
         super(multiblock.loc, multiblock.recipeMap);
         this.multiblock = multiblock;
-        this.recipeMapWorkable = new CustomMultiblockRecipeLogic(this,
-                multiblock.update,
-                multiblock.updateWorktable,
-                multiblock.setupRecipe,
-                multiblock.completeRecipe
-        );
+        this.recipeMapWorkable = new CustomMultiblockRecipeLogic(this);
         patternBuilderFunction = multiblock.pattern;
     }
 
@@ -93,7 +79,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         if (multiblock.displayTextFunction == null) return;
 
         try {
-            List<IFormattedText> added = multiblock.displayTextFunction.addDisplayText(new MCControllerTile(this));
+            IFormattedText[] added = multiblock.displayTextFunction.addDisplayText(new MCControllerTile(this));
             if (added != null) {
                 for (IFormattedText component : added) {
                     textList.add(new TextComponentString(component.getText()));
@@ -153,17 +139,17 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
 
     @Override
     public boolean checkRecipe(Recipe recipe, boolean consumeIfSuccess) {
-        if (multiblock.recipePredicate == null) return true;
+        if (multiblock.checkRecipeFunction == null) return true;
 
         try {
-            return multiblock.recipePredicate.test(
+            return multiblock.checkRecipeFunction.test(
                     new MCControllerTile(this),
                     new MCRecipe(recipe),
                     consumeIfSuccess
             );
         } catch (RuntimeException e) {
             logFailure("recipePredicate", e);
-            multiblock.recipePredicate = null;
+            multiblock.checkRecipeFunction = null;
         }
         return true;
     }
@@ -200,7 +186,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         super.addInformation(stack, player, tooltip, advanced);
         if  (multiblock.addInformationFunction != null) {
             try {
-                tooltip.addAll(multiblock.addInformationFunction.addTips(new MCControllerTile(this)));
+                tooltip.addAll(Arrays.stream(multiblock.addInformationFunction.addTips(new MCControllerTile(this))).collect(Collectors.toList()));
             } catch (RuntimeException e) {
                 logFailure("addInformationFunction", e);
                 multiblock.addInformationFunction = null;

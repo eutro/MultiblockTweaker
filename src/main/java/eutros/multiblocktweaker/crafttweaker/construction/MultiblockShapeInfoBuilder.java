@@ -5,17 +5,22 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlock;
 import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IFacing;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockShapeInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
 import gregtech.api.pattern.MultiblockShapeInfo;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.Map;
 
 /**
  * Used to create a design to show in JEI or as an in-world preview.
@@ -30,9 +35,11 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class MultiblockShapeInfoBuilder {
 
     private MultiblockShapeInfo.Builder inner;
+    private final Map<Character, MCBlockInfo.ControllerInfo> proxy_mte;
 
     public MultiblockShapeInfoBuilder() {
         inner = MultiblockShapeInfo.builder();
+        proxy_mte = new Char2ObjectOpenHashMap<>();
     }
 
     /**
@@ -84,8 +91,13 @@ public class MultiblockShapeInfoBuilder {
     @ZenMethod
     public MultiblockShapeInfoBuilder where(String symbol, IBlockInfo value) {
         char c = getSymbol(symbol);
-        if (c != '\0')
-            inner = inner.where(c, value.getInternal());
+        if (c != '\0') {
+            if (value instanceof MCBlockInfo.ControllerInfo) {
+                proxy_mte.put(c, (MCBlockInfo.ControllerInfo) value);
+            } else {
+                inner = inner.where(c, value.getInternal());
+            }
+        }
         return this;
     }
 
@@ -135,6 +147,18 @@ public class MultiblockShapeInfoBuilder {
     /**
      * Define a symbol.
      *
+     * @param symbol     The character that will represent this value in {@link #aisle(String...)}.
+     * @param liquidStack The liquid to show in the preview.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public MultiblockShapeInfoBuilder where(String symbol, ILiquidStack liquidStack) {
+        return this.where(symbol, liquidStack.getDefinition().getBlock());
+    }
+
+    /**
+     * Define a symbol.
+     *
      * @param symbol    The character that will represent this value in {@link #aisle(String...)}.
      * @param te        The machine tile entity to show in the preview.
      * @param frontSide The side the tile entity is facing.
@@ -155,6 +179,7 @@ public class MultiblockShapeInfoBuilder {
      */
     @ZenMethod
     public IMultiblockShapeInfo build() {
+        proxy_mte.forEach((k, v)-> inner.where(k, v.copy().getInternal()));
         return new MCMultiblockShapeInfo(inner.build());
     }
 

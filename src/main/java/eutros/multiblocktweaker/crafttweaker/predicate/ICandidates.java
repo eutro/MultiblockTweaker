@@ -7,7 +7,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @FunctionalInterface
-@ZenClass("mods.gregtech.energy.IBlockInfo")
+@ZenClass("mods.gregtech.predicate.ICandidates")
 @ZenRegister
 public interface ICandidates {
     IBlockInfo[] get();

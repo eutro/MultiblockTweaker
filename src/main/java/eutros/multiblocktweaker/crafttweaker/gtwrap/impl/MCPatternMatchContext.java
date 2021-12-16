@@ -1,8 +1,12 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.api.world.IBlockPos;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
 import gregtech.api.pattern.PatternMatchContext;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
 
 public class MCPatternMatchContext implements IPatternMatchContext {
 
@@ -59,4 +63,8 @@ public class MCPatternMatchContext implements IPatternMatchContext {
         return inner.getOrPut(key, initialValue);
     }
 
+    @Override
+    public void addVBBlock(IBlockPos pos) {
+        inner.getOrPut("VABlock", new LinkedList<>()).add(CraftTweakerMC.getBlockPos(pos));
+    }
 }

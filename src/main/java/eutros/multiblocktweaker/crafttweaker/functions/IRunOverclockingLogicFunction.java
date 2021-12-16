@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.functions;
 
 import crafttweaker.annotations.ZenRegister;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -18,14 +19,7 @@ import javax.annotation.Nonnull;
 @ZenRegister
 public interface IRunOverclockingLogicFunction {
 
-    /**
-     * Called every time a recipe completes.
-     * <p>
-     * Implement this with a function.
-     *
-     * @param logic The {@link IRecipeLogic} of the multiblock from which this is run.
-     */
     @ZenMethod
-    int[] run(@Nonnull IRecipe recipe, boolean negativeEU, int maxOverclocks);
+    int[] run(@Nonnull IRecipeLogic recipeLogic, @Nonnull IRecipe recipe, boolean negativeEU, int maxOverclocks);
 
 }

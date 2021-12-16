@@ -6,7 +6,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @FunctionalInterface
-@ZenClass("mods.gregtech.energy.IPredicate")
+@ZenClass("mods.gregtech.predicate.IPredicate")
 @ZenRegister
 public interface IPredicate {
     boolean test(IBlockWorldState blockWorldState);
