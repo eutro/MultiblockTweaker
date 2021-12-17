@@ -8,8 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockAbility;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import stanhebben.zenscript.annotations.ZenMemberGetter;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -33,8 +31,6 @@ public class MultiblockAbilityBracketHandler implements IBracketHandler {
                 MultiblockAbilityBracketHandler.class, "get", String.class);
     }
     
-    @ZenMethod
-    @ZenMemberGetter()
     public static IMultiblockAbility get(String member) {
         if (!cache.containsKey(member)) {
             MultiblockAbility<?> ability = ReflectionHelper.getStatic(MultiblockAbility.class, member);

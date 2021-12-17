@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.functions;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.formatting.IFormattedText;
 import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeProperty;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -12,9 +13,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
  * @zenClass mods.gregtech.recipe.functions.IDrawInfoFunction
  */
 @FunctionalInterface
-@ZenClass("mods.gregtech.recipe.functions.IDrawInfoFunction")
+@ZenClass("mods.gregtech.recipe.functions.IGetRealValueFunction")
 @ZenRegister
-public interface IDrawInfoFunction {
+public interface IGetRealValueFunction {
 
     /**
      * Implement this with a function.
@@ -22,6 +23,6 @@ public interface IDrawInfoFunction {
      * @param recipeProperty The Recipe Property.
      */
     @ZenMethod
-    void drawInfo(CustomRecipeProperty recipeProperty, int x, int y, int color, Object value);
+    IFormattedText map(CustomRecipeProperty recipeProperty, String value);
 
 }

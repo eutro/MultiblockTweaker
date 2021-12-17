@@ -4,13 +4,7 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.BracketHandler;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.zenscript.IBracketHandler;
-import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCICubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeProperty;
-import eutros.multiblocktweaker.helper.ReflectionHelper;
-import gregtech.client.renderer.texture.Textures;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -33,7 +27,6 @@ public class RecipePropertyBracketHandler implements IBracketHandler {
         this.method = CraftTweakerAPI.getJavaMethod(RecipePropertyBracketHandler.class, "get", String.class);
     }
 
-    @ZenMethod
     public static CustomRecipeProperty get(String member) {
         if (!cache.containsKey(member)) {
             cache.put(member, new CustomRecipeProperty(member));

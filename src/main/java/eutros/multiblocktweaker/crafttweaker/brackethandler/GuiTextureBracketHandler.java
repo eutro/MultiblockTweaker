@@ -9,7 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.resources.TextureArea;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -32,7 +31,6 @@ public class GuiTextureBracketHandler implements IBracketHandler {
         this.method = CraftTweakerAPI.getJavaMethod(GuiTextureBracketHandler.class, "get", String.class);
     }
 
-    @ZenMethod
     public static ITextureArea get(String member) {
         if (!cache.containsKey(member)) {
             TextureArea textureArea = ReflectionHelper.getStatic(GuiTextures.class, member);

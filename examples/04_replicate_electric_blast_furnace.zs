@@ -31,6 +31,8 @@ import crafttweaker.formatting.IFormattedText;
 
 import mods.gregtech.recipe.functions.IRunOverclockingLogicFunction;
 import mods.gregtech.recipe.IRecipeLogic;
+import mods.gregtech.recipe.functions.IGetRealValueFunction;
+import mods.gregtech.recipe.CustomRecipeProperty;
 
 /** 
 // This example is one of the most difficult to customize. We learn how to build a machine exactly like CEu's EBF.
@@ -43,15 +45,14 @@ import mods.gregtech.recipe.IRecipeLogic;
 var loc = "copy_electric_blast_furnace";
 
 val wire_coil_temperature_map = {
-    "gregtech:wire_coil0" : 1800,
-    "gregtech:wire_coil1" : 2700,
-    "gregtech:wire_coil2" : 3600,
-    "gregtech:wire_coil3" : 4500,
-    "gregtech:wire_coil4" : 5400,
-    "gregtech:wire_coil5" : 7200,
-    "gregtech:wire_coil6" : 9001,
-    "gregtech:wire_coil7" : 10800,
-    "gregtech:wire_coil20" : 12600
+    "gregtech:wire_coil:0" : 1800,
+    "gregtech:wire_coil:1" : 2700,
+    "gregtech:wire_coil:2" : 3600,
+    "gregtech:wire_coil:3" : 4500,
+    "gregtech:wire_coil:4" : 5400,
+    "gregtech:wire_coil:5" : 7200,
+    "gregtech:wire_coil:6" : 9001,
+    "gregtech:wire_coil:7" : 10800,
 } as int[string];
 
 //********** patter + shaps builder **********//
@@ -60,9 +61,8 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                     // block pos checking + write temperature to context
                     val coilPredicate = function(blockWorldState as IBlockWorldState) as bool {
                         val blockState as IBlockState = blockWorldState.state;
-                        if (blockState.block.definition.id == "gregtech:wire_coil" 
-                                || blockState.block.definition.id == "gregtech:wire_coil2") { // check whether the block is the coil.
-                            val id as string = blockState.block.definition.id + blockState.withProperty("active", "false").meta;
+                        if (blockState.block.definition.id == "gregtech:wire_coil") { // check whether the block is the coil.
+                            val id as string = blockState.block.definition.id + ":" + blockState.withProperty("active", "false").meta;
                             if (id != blockWorldState.matchContext.getOrDefault("CoilType", id)) { // check if all coils are of the same type
                                 blockWorldState.setError("all coils should be the same type"); // set the error info if failed. btw, you'd better use the lang.files
                                 return false;
@@ -72,7 +72,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             }
                             // Some blocks that extends of {@link VariantActiveBlock} can change texture based on the multi-block working state.
                             // If you want to keep this effect (e.g., emissive active blocks), their position need to be collected during pattern checking.
-                            // VBBlock in CEu: <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:transparent_casing> <gregtech:fusion_casing> <gregtech:multiblock_casing> <gregtech:wire_coil> <gregtech:wire_coil2>
+                            // VBBlock in CEu: <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:transparent_casing> <gregtech:fusion_casing> <gregtech:multiblock_casing> <gregtech:wire_coil>
                             blockWorldState.matchContext.addVBBlock(blockWorldState.pos);
                             return true;
                         }
@@ -88,8 +88,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             <metastate:gregtech:wire_coil:4>,
                             <metastate:gregtech:wire_coil:5>,
                             <metastate:gregtech:wire_coil:6>,
-                            <metastate:gregtech:wire_coil:7>,
-                            <metastate:gregtech:wire_coil2:0>
+                            <metastate:gregtech:wire_coil:7>
                         ];
                         return candidates;
                     } as ICandidates;
@@ -112,7 +111,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                  } as IPatternBuilderFunction)
     // .withRecipeMap(<recipemap:electric_blast_furnace>) 
     .withRecipeMap(
-        FactoryRecipeMap.start("copy_electric_blast_furnace", <recipe_property:temperature>) // define our own RecipeMap. And define a recipe_property with the key tempurature (<recipe_property:key>).
+        FactoryRecipeMap.start("copy_electric_blast_furnace", <recipe_property:ebf_temperature>) // define our own RecipeMap. And define a recipe property with the key tempurature (<recipe_property:key>).
             // .setDefaultRecipe(<recipemap:electric_blast_furnace>.recipeBuilder) // Set the default recipe builder, that will be copied in order to add new recipes.
             .minInputs(1)
             .maxInputs(3)
@@ -148,7 +147,6 @@ val copy_electric_blast_furnace =multiblockBuild
     .addDesign(shapeBuilder.where('C', <metastate:gregtech:wire_coil:5>).build())
     .addDesign(shapeBuilder.where('C', <metastate:gregtech:wire_coil:6>).build())
     .addDesign(shapeBuilder.where('C', <metastate:gregtech:wire_coil:7>).build())
-    .addDesign(shapeBuilder.where('C', <metastate:gregtech:wire_coil2:0>).build())
     .buildAndRegister();
 
 //********** set optional properties **********//
@@ -186,7 +184,7 @@ copy_electric_blast_furnace.invalidateStructureFunction = function (controller a
 // check current recipe available
 copy_electric_blast_furnace.checkRecipeFunction = function(controller as IControllerTile, recipe as IRecipe, consumeIfSuccess as bool) as bool {
     val blastFurnaceTemperature as int = controller.getExtraData().asInt();
-    val recipeTemperature = recipe.getIntegerProperty("temperature");
+    val recipeTemperature = recipe.getIntegerProperty("ebf_temperature"); // read temperature from <recipe_property:ebf_temperature>
     return blastFurnaceTemperature >= recipeTemperature;
 } as ICheckRecipeFunction;
 
@@ -207,11 +205,20 @@ copy_electric_blast_furnace.runOverclockingLogic = function(recipeLogic as IReci
     val maxVoltage as long = recipeLogic.getMaxVoltage();
     val dur as int = recipe.getDuration();
     val temperature as int = recipeLogic.metaTileEntity.getExtraData().asInt();
-    val recipe_temperature as int = recipe.getIntegerProperty("temperature");
+    val recipe_temperature as int = recipe.getIntegerProperty("ebf_temperature"); // read temperature from <recipe_property:ebf_temperature>
     // To avoid the complexity of the code, the built-in function is called here.
     // heatingCoilOverclockingLogic() and standardOverclockingLogic() are two built-in overclocking functions of CEu.
     return IRecipeLogic.heatingCoilOverclockingLogic(recipeEU, maxVoltage, dur, maxOverclocks, temperature, recipe_temperature);
 } as IRunOverclockingLogicFunction;
+
+//********** set Recipe Property **********//
+// set tips in JEI
+<recipe_property:ebf_temperature>.isHidden = false; // is hidden in JEI.
+<recipe_property:ebf_temperature>.color = -1; // set color
+<recipe_property:ebf_temperature>.getRealValueFunction = function (recipeProperty as CustomRecipeProperty, value as string) as IFormattedText {
+    // val temperature = (value as IData)asInt(); // this can be used to convert type
+    return format.red(value);
+} as IGetRealValueFunction;
 
 //********** add recipes **********//
 // add a simple recipe for our magic_miner RecipeMap.
@@ -220,20 +227,20 @@ copy_electric_blast_furnace
 	.recipeBuilder()
     .duration(500)
     .EUt(500)
-    .inputs(<minecraft:chest>)
-    .fluidInputs(<liquid:water> * 8000)
-    .outputs(<gregtech:ore_cassiterite_0:3> * 64,
-             <gregtech:ore_redstone_0> * 64,
-             <gregtech:ore_nickel_0> * 64,
-             <gregtech:ore_rutile_0> * 64,
-             <gregtech:ore_rutile_0> * 64,
-             <gregtech:ore_uraninite_0:3> * 64,
-             <gregtech:ore_galena_0> * 64,
-             <gregtech:ore_galena_0> * 64,
-             <gregtech:ore_salt_0> * 64)
+    .inputs(<metaitem:dustChalcopyrite>, 
+            <metaitem:dustSiliconDioxide> * 3)
+    .fluidInputs(<liquid:oxygen> * 3000)
+    .outputs(<metaitem:dustCupricOxide>,
+             <metaitem:dustFerrosilite>)
+    .fluidOutputs(<liquid:sulfur_dioxide> * 3000)
+    .property("ebf_temperature", 4321) // key as the <recipe_property:ebf_temperature> defined
     .buildAndRegister();
 
 // These are best specified in .lang files, since these may not work properly.
+game.setLocalization(
+    "gregtech.recipe.ebf_temperature",
+    "Temperature: %sK"
+);
 game.setLocalization(
     "multiblocktweaker.machine.copy_electric_blast_furnace.name",
     "Copy Electric Blast Furnace"

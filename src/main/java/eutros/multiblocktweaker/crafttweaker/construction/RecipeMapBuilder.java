@@ -72,31 +72,18 @@ public class RecipeMapBuilder {
         return new RecipeMapBuilder(name, recipeProperties);
     }
 
+
     /**
-     * Start construction, setting all of the constructor values at the start.
+     * Start construction, with the given name. This will be used for localisation and later referencing.
+     * <p>
+     * Equivalent to {@code start(name, 0, 0, 0, 0, 0, 0, 0, 0)}.
      *
-     * @param name            The unlocalized name for the recipe map.
-     * @param minInputs       The minimum item inputs a recipe can have.
-     * @param maxInputs       The maximum item inputs a recipe can have.
-     * @param minOutputs      The minimum item outputs a recipe can have.
-     * @param maxOutputs      The maximum item outputs a recipe can have.
-     * @param minFluidInputs  The minimum fluid inputs a recipe can have.
-     * @param maxFluidInputs  The maximum fluid inputs a recipe can have.
-     * @param minFluidOutputs The minimum fluid outputs a recipe can have.
-     * @param maxFluidOutputs The maximum fluid outputs a recipe can have.
+     * @param name The unlocalized name for the recipe map.
      * @return The initialized builder.
      */
     @ZenMethod
-    public static RecipeMapBuilder start(String name, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs) {
-        return start(name)
-                .minInputs(minInputs)
-                .maxInputs(maxInputs)
-                .minOutputs(minOutputs)
-                .maxOutputs(maxOutputs)
-                .minFluidInputs(minFluidInputs)
-                .maxFluidInputs(maxFluidInputs)
-                .minFluidOutputs(minFluidOutputs)
-                .maxFluidOutputs(maxFluidOutputs);
+    public static RecipeMapBuilder start(String name) {
+        return new RecipeMapBuilder(name);
     }
 
     /**

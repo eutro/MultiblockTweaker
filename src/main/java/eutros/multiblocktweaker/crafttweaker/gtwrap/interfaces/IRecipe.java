@@ -156,6 +156,15 @@ public interface IRecipe {
      */
     @ZenMethod
     float getFloatProperty(String key);
+    
+    /**
+     * Get the itemStack property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The itemStack property referenced by the given key.
+     */
+    @ZenMethod
+    IItemStack getItemStackProperty(String key);
 
     /**
      * Get the string property referenced by the given key.

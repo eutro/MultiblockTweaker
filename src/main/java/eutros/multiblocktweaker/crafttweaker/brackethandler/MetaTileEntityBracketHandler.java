@@ -9,8 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.common.metatileentities.MetaTileEntities;
-import stanhebben.zenscript.annotations.ZenMemberGetter;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -32,9 +30,7 @@ public class MetaTileEntityBracketHandler implements IBracketHandler {
         this.method = CraftTweakerAPI.getJavaMethod(
                 MetaTileEntityBracketHandler.class, "get", String.class);
     }
-    
-    @ZenMethod
-    @ZenMemberGetter()
+
     public static IMetaTileEntity[] get(String member) {
         if (!cache.containsKey(member)) {
             Object mte = ReflectionHelper.getStatic(MetaTileEntities.class, member);

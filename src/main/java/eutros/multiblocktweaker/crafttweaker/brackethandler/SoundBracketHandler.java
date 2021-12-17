@@ -5,7 +5,6 @@ import crafttweaker.annotations.BracketHandler;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.zenscript.IBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ISound;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -24,7 +23,6 @@ public class SoundBracketHandler implements IBracketHandler {
         this.method = CraftTweakerAPI.getJavaMethod(SoundBracketHandler.class, "get", String.class);
     }
 
-    @ZenMethod
     public static ISound get(String member) {
         return ISound.byName(member);
     }

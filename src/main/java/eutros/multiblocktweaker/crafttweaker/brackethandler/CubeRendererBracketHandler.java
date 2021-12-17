@@ -9,7 +9,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
-import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.compiler.IEnvironmentGlobal;
 import stanhebben.zenscript.expression.ExpressionCallStatic;
 import stanhebben.zenscript.expression.ExpressionString;
@@ -31,7 +30,6 @@ public class CubeRendererBracketHandler implements IBracketHandler {
         this.method = CraftTweakerAPI.getJavaMethod(CubeRendererBracketHandler.class, "get", String.class);
     }
 
-    @ZenMethod
     public static IICubeRenderer get(String member) {
         if (!cache.containsKey(member)) {
             ICubeRenderer cubeRenderer = ReflectionHelper.getStatic(Textures.class, member);

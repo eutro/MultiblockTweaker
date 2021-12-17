@@ -7,6 +7,7 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
+import net.minecraft.item.ItemStack;
 import scala.Int;
 
 import java.util.Arrays;
@@ -113,6 +114,12 @@ public class MCRecipe implements IRecipe {
     public float getFloatProperty(String key) {
         Object value = inner.getPropertyRaw(key);
         return value instanceof Number ? ((Number) value).floatValue() : -1;
+    }
+
+    @Override
+    public IItemStack getItemStackProperty(String key) {
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof ItemStack ? CraftTweakerMC.getIItemStack((ItemStack) value) : null;
     }
 
     @Override
