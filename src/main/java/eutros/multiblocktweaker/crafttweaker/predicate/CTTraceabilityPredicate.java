@@ -69,12 +69,12 @@ public class CTTraceabilityPredicate {
 
     @ZenMethod
     public static CTTraceabilityPredicate ANY() {
-        return new CTTraceabilityPredicate(TraceabilityPredicate.ANY.get());
+        return new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
     }
 
     @ZenMethod
     public static CTTraceabilityPredicate AIR() {
-        return new CTTraceabilityPredicate(TraceabilityPredicate.AIR.get());
+        return new CTTraceabilityPredicate(TraceabilityPredicate.AIR);
     }
 
     @ZenMethod

@@ -21,6 +21,8 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.Optional;
@@ -228,5 +230,6 @@ public interface IICubeRenderer extends ICubeRenderer {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     default void registerIcons(TextureMap textureMap) {}
 }

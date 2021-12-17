@@ -1,12 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import eutros.multiblocktweaker.MultiblockTweaker;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCSound;
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;

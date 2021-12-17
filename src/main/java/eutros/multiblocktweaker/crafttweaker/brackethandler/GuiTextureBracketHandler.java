@@ -47,7 +47,7 @@ public class GuiTextureBracketHandler implements IBracketHandler {
     @Override
     public IZenSymbol resolve(IEnvironmentGlobal environment, List<Token> tokens) {
         if ((tokens.size() < 3)) return null;
-        if (!tokens.get(0).getValue().equalsIgnoreCase("gt_texture")) return null;
+        if (!tokens.get(0).getValue().equalsIgnoreCase("texture_area")) return null;
         if (!tokens.get(1).getValue().equals(":")) return null;
         StringBuilder nameBuilder = new StringBuilder();
         for (int i = 2; i < tokens.size(); i++) {

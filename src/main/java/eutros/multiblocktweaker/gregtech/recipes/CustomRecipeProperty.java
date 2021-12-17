@@ -6,6 +6,8 @@ import eutros.multiblocktweaker.crafttweaker.functions.IGetRealValueFunction;
 import gregtech.api.recipes.recipeproperties.RecipeProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -34,6 +36,7 @@ public class CustomRecipeProperty extends RecipeProperty<Object> {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void drawInfo(Minecraft minecraft, int x, int y, int color, Object value) {
         String result = value.toString();
         if (getRealValueFunction != null) {
