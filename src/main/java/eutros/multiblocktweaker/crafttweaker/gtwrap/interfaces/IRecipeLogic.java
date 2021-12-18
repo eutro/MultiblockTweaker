@@ -1,6 +1,8 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.capability.impl.HeatingCoilRecipeLogic;
 import gregtech.api.recipes.RecipeMap;
@@ -30,22 +32,93 @@ public interface IRecipeLogic {
         return AbstractRecipeLogic.standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, durationDivisor, voltageMultiplier, maxOverclocks);
     }
 
+    // super method
     @ZenMethod
+    void superSetupRecipe(IRecipe recipe);
+
+    @ZenMethod
+    void superCompleteRecipe();
+
+    @ZenMethod
+    void superUpdateWorkable();
+
+    /////////
+
+    @ZenGetter
+    int parallelRecipesPerformed();
+
+    @ZenSetter
+    void ParallelRecipesPerformed(int amount);
+
+    @ZenGetter
+    long overclockVoltage();
+
+    @ZenSetter
+    void overclockVoltage(long overclockVoltage);
+
+    @ZenGetter
+    int progressTime();
+
+    @ZenSetter
+    void progressTime(int progressTime);
+
+    @ZenGetter
+    int maxProgressTime();
+
+    @ZenSetter
+    void maxProgressTime(int maxProgressTime);
+
+    @ZenGetter
+    int recipeEUt();
+
+    @ZenSetter
+    void recipeEUt(int eut);
+
+    @ZenGetter
+    List<ILiquidStack> fluidOutputs();
+
+    @ZenSetter
+    void fluidOutputs(List<ILiquidStack> fluidOutputs);
+
+    @ZenGetter
+    List<IItemStack> itemOutputs();
+
+    @ZenSetter
+    void itemOutputs(List<IItemStack> itemOutputs);
+
+    @ZenGetter
+    boolean wasActiveAndNeedsUpdate();
+
+    @ZenSetter
+    void wasActiveAndNeedsUpdate(boolean wasActiveAndNeedsUpdate);
+
+    @ZenGetter
+    boolean isOutputsFull();
+
+    @ZenSetter
+    void isOutputsFull(boolean isOutputsFull);
+
+    @ZenGetter
+    boolean invalidInputsForRecipes();
+
+    @ZenSetter
+    void invalidInputsForRecipes(boolean invalidInputsForRecipes);
+
     @ZenGetter("lastRecipeIndex")
     int getLastRecipeIndex();
 
-    @ZenMethod
     @ZenSetter("lastRecipeIndex")
     void setLstRecipeIndex(int index);
 
-    @ZenMethod
     @ZenGetter("previousRecipe")
     IRecipe getPreviousIRecipe();
+
+    @ZenSetter("previousRecipe")
+    void setPreviousIRecipe(IRecipe previousRecipe);
 
     @ZenGetter("metaTileEntity")
     IControllerTile getMetaTile();
 
-    @ZenMethod
     @ZenGetter("workingEnabled")
     boolean isWorkingEnabled();
 
@@ -70,25 +143,46 @@ public interface IRecipeLogic {
     void setMaxProgress(int val);
 
     @ZenMethod
+    @ZenGetter
     boolean isActive();
 
     @ZenMethod
+    @ZenSetter("isActive")
+    void setActive(boolean active);
+
+    @ZenMethod
+    @ZenSetter("isAllowOverclocking")
     void setAllowOverclocking(boolean val);
 
     @ZenMethod
+    @ZenGetter
+    boolean isWorking();
+
+    @ZenMethod
+    @ZenGetter()
     boolean isAllowOverclocking();
 
     @ZenMethod
-    boolean isHasNotEnoughEnergy();
+    @ZenGetter
+    boolean hasNotEnoughEnergy();
 
     @ZenMethod
+    @ZenSetter
+    void hasNotEnoughEnergy(boolean hasNotEnoughEnergy);
+
+    @ZenMethod
+    @ZenGetter("energyInputPerSecond")
     long getEnergyInputPerSecond();
 
     @ZenMethod
+    @ZenGetter("energyStored")
     long getEnergyStored();
 
-    @ZenMethod
+    @ZenGetter("energyCapacity")
     long getEnergyCapacity();
+
+    @ZenMethod
+    int[] calculateOverclock(IRecipe recipe);
 
     @ZenMethod
     boolean drawEnergy(int recipeEUt);
@@ -124,9 +218,11 @@ public interface IRecipeLogic {
     void forceRecipeRecheck();
 
     @ZenMethod
+    @ZenGetter("recipeMap")
     RecipeMap<?> getRecipeMap();
 
     @ZenMethod
+    @ZenGetter("maxVoltage")
     long getMaxVoltage();
 
     @ZenGetter("currentDistinctInputBus")

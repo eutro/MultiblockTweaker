@@ -27,6 +27,6 @@ public interface ISetupRecipeFunction {
      * @param recipe The recipe about to be run.
      */
     @ZenMethod
-    void run(@Nonnull IRecipeLogic logic, @Nonnull IRecipe recipe);
+    boolean run(@Nonnull IRecipeLogic logic, @Nonnull IRecipe recipe);
 
 }

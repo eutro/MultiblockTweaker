@@ -64,6 +64,10 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         patternBuilderFunction = multiblock.pattern;
     }
 
+    public CustomMultiblockRecipeLogic getRecipeLogic(){
+        return (CustomMultiblockRecipeLogic) recipeMapWorkable;
+    }
+
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);

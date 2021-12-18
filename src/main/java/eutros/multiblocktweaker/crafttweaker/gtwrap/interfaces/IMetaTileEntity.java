@@ -85,18 +85,21 @@ public interface IMetaTileEntity {
      * @return The world the meta tile entity is in.
      */
     @ZenMethod
+    @ZenGetter("world")
     IWorld getWorld();
 
     /**
      * @return The position the meta tile entity is in.
      */
     @ZenMethod
+    @ZenGetter("pos")
     IBlockPos getPos();
 
     /**
      * @return How long the meta tile entity has been in the world for.
      */
     @ZenMethod
+    @ZenGetter("offsetTimer")
     long getOffsetTimer();
 
     /**
@@ -115,6 +118,7 @@ public interface IMetaTileEntity {
      * @return The direction the meta tile entity is facing.
      */
     @ZenMethod
+    @ZenGetter("frontFacing")
     IFacing getFrontFacing();
 
     @ZenMethod

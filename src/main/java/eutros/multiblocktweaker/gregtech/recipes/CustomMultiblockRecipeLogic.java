@@ -2,12 +2,16 @@ package eutros.multiblocktweaker.gregtech.recipes;
 
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
+import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,19 +34,6 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     private void logFailure(String func, Throwable t) {
         CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, getMetaTile().getMultiblock()), t);
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (multiblock.update != null) {
-            try {
-                multiblock.update.run(this);
-            } catch (RuntimeException t) {
-                logFailure("update", t);
-                multiblock.update = null;
-            }
-        }
     }
 
     @Override
@@ -88,16 +79,15 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         super.performMaintenanceMufflerOperations();
     }
 
-
     @Override
     public void updateWorkable() {
         boolean result = true;
-        if (multiblock.updateWorktable != null) {
+        if (multiblock.updateWorktableFunction != null) {
             try {
-                result = multiblock.updateWorktable.run(this);
+                result = multiblock.updateWorktableFunction.run(this);
             } catch (RuntimeException t) {
                 logFailure("updateWorktable", t);
-                multiblock.updateWorktable = null;
+                multiblock.updateWorktableFunction = null;
             }
         }
         if (result) {
@@ -107,31 +97,153 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     protected void setupRecipe(Recipe recipe) {
-        super.setupRecipe(recipe);
-        if (multiblock.setupRecipe != null) {
+        boolean result = true;
+        if (multiblock.setupRecipeFunction != null) {
             try {
-                multiblock.setupRecipe.run(this, new MCRecipe(recipe));
+                result = multiblock.setupRecipeFunction.run(this, new MCRecipe(recipe));
             } catch (RuntimeException t) {
                 logFailure("setupRecipe", t);
-                multiblock.setupRecipe = null;
+                multiblock.setupRecipeFunction = null;
             }
+        }
+        if (result) {
+            super.setupRecipe(recipe);
         }
     }
 
     @Override
     protected void completeRecipe() {
-        super.completeRecipe();
-        if (multiblock.completeRecipe != null) {
+        boolean result = true;
+        if (multiblock.completeRecipeFunction != null) {
             try {
-                multiblock.completeRecipe.run(this);
+                result = multiblock.completeRecipeFunction.run(this);
             } catch (RuntimeException t) {
                 logFailure("completeRecipe", t);
-                multiblock.completeRecipe = null;
+                multiblock.completeRecipeFunction = null;
             }
+        }
+        if (result) {
+            super.completeRecipe();
         }
     }
 
     // CT EXPOSED
+
+    @Override
+    public void superSetupRecipe(IRecipe recipe) {
+        super.setupRecipe(recipe.getInner());
+    }
+
+    @Override
+    public void superCompleteRecipe() {
+        super.completeRecipe();
+    }
+
+    @Override
+    public void superUpdateWorkable() {
+        super.updateWorkable();
+    }
+
+    @Override
+    public int parallelRecipesPerformed() {
+        return parallelRecipesPerformed;
+    }
+
+    @Override
+    public void ParallelRecipesPerformed(int amount) {
+        setParallelRecipesPerformed(amount);
+    }
+
+    @Override
+    public long overclockVoltage() {
+        return getOverclockVoltage();
+    }
+
+    @Override
+    public void overclockVoltage(long overclockVoltage) {
+        setOverclockVoltage(overclockVoltage);
+    }
+
+    @Override
+    public int progressTime() {
+        return progressTime;
+    }
+
+    @Override
+    public void progressTime(int progressTime) {
+        this.progressTime = progressTime;
+    }
+
+    @Override
+    public int maxProgressTime() {
+        return getMaxProgress();
+    }
+
+    @Override
+    public void maxProgressTime(int maxProgressTime) {
+        setMaxProgress(maxProgressTime);
+    }
+
+    @Override
+    public int recipeEUt() {
+        return getRecipeEUt();
+    }
+
+    @Override
+    public void recipeEUt(int eut) {
+        this.recipeEUt = eut;
+    }
+
+    @Override
+    public List<ILiquidStack> fluidOutputs() {
+        return this.fluidOutputs.stream().map(CraftTweakerMC::getILiquidStack).collect(Collectors.toList());
+    }
+
+    @Override
+    public void fluidOutputs(List<ILiquidStack> fluidOutputs) {
+        this.fluidOutputs = fluidOutputs.stream().map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IItemStack> itemOutputs() {
+        return this.itemOutputs.stream().map(CraftTweakerMC::getIItemStack).collect(Collectors.toList());
+    }
+
+    @Override
+    public void itemOutputs(List<IItemStack> itemOutputs) {
+        this.itemOutputs = NonNullList.create();
+        itemOutputs.stream().map(CraftTweakerMC::getItemStack).forEach(this.itemOutputs::add);
+    }
+
+    @Override
+    public boolean wasActiveAndNeedsUpdate() {
+        return wasActiveAndNeedsUpdate;
+    }
+
+    @Override
+    public void wasActiveAndNeedsUpdate(boolean wasActiveAndNeedsUpdate) {
+        this.wasActiveAndNeedsUpdate = wasActiveAndNeedsUpdate;
+    }
+
+    @Override
+    public boolean isOutputsFull() {
+        return this.isOutputsFull;
+    }
+
+    @Override
+    public void isOutputsFull(boolean isOutputsFull) {
+        this.isOutputsFull = isOutputsFull;
+    }
+
+    @Override
+    public boolean invalidInputsForRecipes() {
+        return this.invalidInputsForRecipes;
+    }
+
+    @Override
+    public void invalidInputsForRecipes(boolean invalidInputsForRecipes) {
+        this.invalidInputsForRecipes = invalidInputsForRecipes;
+    }
 
     @Override
     public int getLastRecipeIndex() {
@@ -149,6 +261,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
+    public void setPreviousIRecipe(IRecipe previousRecipe) {
+        this.previousRecipe = previousRecipe.getInner();
+    }
+
+    @Override
     public IControllerTile getMetaTile() {
         return new MCControllerTile((TileControllerCustom) metaTileEntity);
     }
@@ -156,6 +273,21 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     public void setProgress(int val) {
         progressTime = val;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+    }
+
+    @Override
+    public boolean hasNotEnoughEnergy() {
+        return isHasNotEnoughEnergy();
+    }
+
+    @Override
+    public void hasNotEnoughEnergy(boolean hasNotEnoughEnergy) {
+        this.hasNotEnoughEnergy = hasNotEnoughEnergy;
     }
 
     @Override
@@ -171,6 +303,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     @Override
     public long getEnergyCapacity() {
         return super.getEnergyCapacity();
+    }
+
+    @Override
+    public int[] calculateOverclock(IRecipe recipe) {
+        return super.calculateOverclock(recipe.getInner());
     }
 
     @Override

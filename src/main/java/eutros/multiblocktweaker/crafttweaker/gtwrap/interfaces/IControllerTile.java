@@ -97,6 +97,7 @@ public interface IControllerTile extends IMetaTileEntity {
     Object[] getAbilities(IMultiblockAbility ability);
 
     @ZenMethod
+    @ZenGetter
     boolean isStructureFormed();
 
     /**
@@ -169,15 +170,18 @@ public interface IControllerTile extends IMetaTileEntity {
      * @return whether the multiblock has any maintenance problems
      */
     @ZenMethod
+    @ZenGetter
     boolean hasMaintenanceProblems();
 
     /**
      * @return whether this multiblock has maintenance mechanics
      */
     @ZenMethod
+    @ZenGetter
     boolean hasMaintenanceMechanics();
 
     @ZenMethod
+    @ZenGetter
     boolean hasMufflerMechanics();
 
     /**
@@ -201,12 +205,14 @@ public interface IControllerTile extends IMetaTileEntity {
      * @return whether the muffler hatch's front face is free
      */
     @ZenMethod
+    @ZenGetter
     boolean isMufflerFaceFree();
 
     /**
      * @return whether the current multiblock is active or not
      */
     @ZenMethod
+    @ZenGetter
     boolean isActive();
 
     // **********************************RecipeMapMultiblockController
@@ -232,35 +238,42 @@ public interface IControllerTile extends IMetaTileEntity {
     IIMultipleTankHandler getOutputFluidInventory();
 
     @ZenMethod
+    @ZenGetter("recipeLogic")
+    IRecipeLogic getRecipeLogic();
+
+    @ZenMethod
     boolean checkRecipe(IRecipe recipe, boolean consumeIfSuccess);
 
     @ZenMethod
     void replaceVariantBlocksActive(boolean isActive);
 
     @ZenMethod
+    @ZenGetter
     boolean canBeDistinct();
 
     @ZenMethod
+    @ZenGetter
     boolean isDistinct();
 
     @ZenMethod
+    @ZenGetter
     boolean canCreateSound();
 
     @ZenMethod
     RecipeMap<?>[] getAvailableRecipeMaps();
 
-    @ZenMethod
+    @ZenGetter("reipeMapIndex")
     int getRecipeMapIndex();
+
+    @ZenSetter("recipeMapIndex")
+    void setRecipeMapIndex(int index);
 
     @ZenMethod
     void addRecipeMaps(RecipeMap<?>... recipeMaps);
 
-    @ZenMethod
-    void setRecipeMapIndex(int index);
-
-    @ZenMethod
+    @ZenGetter("currentRecipeMap")
     RecipeMap<?> getCurrentRecipeMap();
 
-    @ZenMethod
+    @ZenGetter("variantActiveBlocks")
     List<IBlockPos> getVariantActiveBlocks();
 }

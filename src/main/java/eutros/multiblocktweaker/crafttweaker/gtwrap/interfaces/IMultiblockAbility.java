@@ -1,14 +1,9 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.brackethandler.MultiblockAbilityBracketHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockAbility;
-import gregtech.api.GregTechAPI;
-import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import stanhebben.zenscript.annotations.ZenClass;

@@ -25,6 +25,6 @@ public interface ICompleteRecipeFunction {
      * @param logic The {@link IRecipeLogic} of the multiblock from which this is run.
      */
     @ZenMethod
-    void run(@Nonnull IRecipeLogic logic);
+    boolean run(@Nonnull IRecipeLogic logic);
 
 }

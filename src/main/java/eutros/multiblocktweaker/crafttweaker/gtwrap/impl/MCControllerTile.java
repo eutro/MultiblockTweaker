@@ -17,6 +17,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbilit
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
 import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -68,6 +69,11 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     @Override
     public IIMultipleTankHandler getOutputFluidInventory() {
         return new MCIMultipleTankHandler(getInternal().getOutputFluidInventory());
+    }
+
+    @Override
+    public IRecipeLogic getRecipeLogic() {
+        return getInternal().getRecipeLogic();
     }
 
     @Override

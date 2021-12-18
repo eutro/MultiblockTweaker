@@ -19,6 +19,7 @@ import mods.gregtech.multiblock.IMultiblockShapeInfo;
 import mods.gregtech.multiblock.FactoryMultiblockShapeInfo;
 import mods.gregtech.multiblock.IBlockInfo;
 import crafttweaker.world.IFacing;
+import mods.gregtech.render.MoveType;
 
 import crafttweaker.data.IData;
 import mods.gregtech.multiblock.functions.IInvalidateStructureFunction;
@@ -119,6 +120,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
             .maxOutputs(2)
             .maxFluidInputs(1)
             .maxFluidOutputs(1)
+            .setProgressBar(<texture_area:PROGRESS_BAR_COMPRESS>, MoveType.HORIZONTAL) // Let's try a different texture.
             .setSound(<sound:gregtech:tick.furnace>) // CEu sound is reused here. mods.gregtech.ISound.registerSound("modid:xxxxx") to register the sound in #loader preinit.
             .build())
     .withBaseTexture(<metastate:gregtech:metal_casing:2>);
@@ -202,7 +204,7 @@ copy_electric_blast_furnace.displayTextFunction = function(controller as IContro
 // set overclocking according to the temperature
 copy_electric_blast_furnace.runOverclockingLogic = function(recipeLogic as IRecipeLogic, recipe as IRecipe, negativeEU as bool, maxOverclocks as int) as int[] {
     val recipeEU as int = recipe.getEUt();
-    val maxVoltage as long = recipeLogic.getMaxVoltage();
+    val maxVoltage as long = recipeLogic.maxVoltage;
     val dur as int = recipe.getDuration();
     val temperature as int = recipeLogic.metaTileEntity.getExtraData().asInt();
     val recipe_temperature as int = recipe.getIntegerProperty("ebf_temperature"); // read temperature from <recipe_property:ebf_temperature>

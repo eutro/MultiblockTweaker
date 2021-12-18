@@ -25,11 +25,6 @@ import java.util.List;
  *
  * @zenClass mods.gregtech.multiblock.Multiblock
  * @see MultiblockBuilder
- * @see IUpdateFunction
- * @see IUpdateWorktableFunction
- * @see ISetupRecipeFunction
- * @see ICompleteRecipeFunction
- * @see ICheckRecipeFunction
  */
 @ZenClass("mods.gregtech.multiblock.Multiblock")
 @ZenRegister
@@ -78,33 +73,26 @@ public class CustomMultiblock {
     public Boolean canBeDistinct;
 
     /**
-     * The {@link IUpdateFunction} this multiblock has.
-     * <p>
-     * Should be set using the ZenSetter.
-     */
-    @ZenProperty
-    public IUpdateFunction update;
-    /**
      * The {@link IUpdateWorktableFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IUpdateWorktableFunction updateWorktable;
+    public IUpdateWorktableFunction updateWorktableFunction;
     /**
      * The {@link ISetupRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public ISetupRecipeFunction setupRecipe;
+    public ISetupRecipeFunction setupRecipeFunction;
     /**
      * The {@link ICompleteRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public ICompleteRecipeFunction completeRecipe;
+    public ICompleteRecipeFunction completeRecipeFunction;
     /**
      * The {@link ICheckRecipeFunction} this multiblock has.
      * <p>
