@@ -3,9 +3,11 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.brackethandler.MultiblockAbilityBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMultiblockAbility;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import stanhebben.zenscript.annotations.ZenCaster;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -22,10 +24,10 @@ import java.util.List;
 public interface IMultiblockAbility {
 
     /**
-     * Get a meta tile entity by its Name.
+     * Get a ability by its Name.
      *
      * @param name The Name of the meta block Ability.
-     * @return The meta tile entity referenced by the ID, or null.
+     * @return The ability by the Name, or null.
      */
     @ZenMethod
     @Nullable
@@ -39,6 +41,14 @@ public interface IMultiblockAbility {
     @NotNull
     MultiblockAbility<?> getInternal();
 
+    /**
+     * Get all meta tile entities with this ability.
+     *
+     * @return The meta tile entities.
+     */
     @ZenMethod
     List<IMetaTileEntity> getMetaTileEntities();
+
+    @ZenCaster
+    CTTraceabilityPredicate castCTPredicate();
 }

@@ -8,10 +8,10 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.mc1120.world.MCFacing;
+import eutros.multiblocktweaker.crafttweaker.brackethandler.CubeRendererBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantOverlayFace;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCICubeRenderer;
-import eutros.multiblocktweaker.gregtech.renderer.BasicCubeRenderer;
 import eutros.multiblocktweaker.gregtech.renderer.IBlockStateRenderer;
 import eutros.multiblocktweaker.gregtech.renderer.SidedCubeRenderer;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -42,7 +42,7 @@ import java.util.Map;
  * @zenClass mods.gregtech.render.ICubeRenderer
  * @see MultiblockBuilder
  */
-@ZenClass("mods.gregtech.render.IRenderer")
+@ZenClass("mods.gregtech.render.ICubeRenderer")
 @ZenRegister
 public interface IICubeRenderer extends ICubeRenderer {
 
@@ -74,13 +74,14 @@ public interface IICubeRenderer extends ICubeRenderer {
      * <p> Emissive texture (Optional):
      *     {@code format("blocks/%s_emissive", basePath)}
      * </p>
+     * @param key Searching key for bracket.
      * @param path The resource location pointing to the texture to use.
      * @return An {@link IICubeRenderer}.
      */
     @ZenMethod
-    static IICubeRenderer simpleOverlay(String path) {
-        IICubeRenderer renderer = byPath(path);
-        return renderer == null ? new BasicCubeRenderer(new SimpleOverlayRenderer(path)) : null;
+    static IICubeRenderer simpleOverlay(String key, String path) {
+        CubeRendererBracketHandler.cache.put(key, new MCICubeRenderer(new SimpleOverlayRenderer(path)));
+        return CubeRendererBracketHandler.cache.get(key);
     }
 
     /**
@@ -102,22 +103,25 @@ public interface IICubeRenderer extends ICubeRenderer {
      * it must be registered in preinit. Use {@code #loader preinit} in a separate script
      * and define it there first.
      *
+     * @param key Searching key for bracket.
      * @param map A mapping of sides to texture resource locations.
      * @return An {@link IICubeRenderer} with all sides showing the given texture.
      */
     @ZenMethod
-    static IICubeRenderer sidedOverlay(Map<IFacing, String> map) {
+    static IICubeRenderer sidedOverlay(String key, Map<IFacing, String> map) {
         EnumMap<EnumFacing, String> result = new EnumMap<>(EnumFacing.class);
         for (Map.Entry<IFacing, String> e : map.entrySet()) {
             if (result.put((EnumFacing) e.getKey().getInternal(), e.getValue()) != null) {
                 CraftTweakerAPI.logError("Duplicate key: " + e.getKey().getName());
             }
         }
-        return new SidedCubeRenderer(SidedCubeRenderer.fillBlanks(result));
+        CubeRendererBracketHandler.cache.put(key, new SidedCubeRenderer(key, SidedCubeRenderer.fillBlanks(result)));
+        return CubeRendererBracketHandler.cache.get(key);
     }
 
     /**
-     * same as the {@link IICubeRenderer#sidedOverlay(Map)}
+     * same as the {@link IICubeRenderer#sidedOverlay(String, Map)}
+     * @param key Searching key for bracket.
      * @param up    The texture to use for the top face.
      * @param north (Optional) The texture to use for the north face.
      * @param east  (Optional) The texture to use for the east face.
@@ -127,7 +131,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      * @return An {@link IICubeRenderer} with all sides showing the given texture.
      */
     @ZenMethod
-    static IICubeRenderer sidedOverlay(@Nonnull String up,
+    static IICubeRenderer sidedOverlay(String key, @Nonnull String up,
                                 @Optional String north,
                                 @Optional String east,
                                 @Optional String south,
@@ -143,7 +147,7 @@ public interface IICubeRenderer extends ICubeRenderer {
         if (south != null) builder.put(new MCFacing(EnumFacing.SOUTH), south);
         if (down != null) builder.put(new MCFacing(EnumFacing.DOWN), down);
 
-        return sidedOverlay(builder);
+        return sidedOverlay(key, builder);
     }
 
     /**
@@ -169,17 +173,18 @@ public interface IICubeRenderer extends ICubeRenderer {
      * If the texture is registered in the CEu, will use the default one.
      * Otherwise, this must be registered in preinit. Use {@code #loader preinit} in a separate script
      * and define it there first.
-
+     *
+     * @param key Searching key for bracket.
      * @param path The resource location pointing to the texture to use.
      * @param faces Available faces of the texture. {@link ConstantOverlayFace}
      * @return An {@link IICubeRenderer}.
      */
     @ZenMethod
-    static IICubeRenderer orientedOverlay(String path, ConstantOverlayFace... faces) {
-        IICubeRenderer renderer = byPath(path);
-        return renderer == null ? new BasicCubeRenderer(new OrientedOverlayRenderer(path, Arrays.stream(faces)
+    static IICubeRenderer orientedOverlay(String key, String path, ConstantOverlayFace... faces) {
+        CubeRendererBracketHandler.cache.put(key, new MCICubeRenderer(new OrientedOverlayRenderer(path, Arrays.stream(faces)
                 .map(f->f.val)
-                .toArray(OrientedOverlayRenderer.OverlayFace[]::new))) : null;
+                .toArray(OrientedOverlayRenderer.OverlayFace[]::new))));
+        return CubeRendererBracketHandler.cache.get(key);
     }
 
 

@@ -9,6 +9,7 @@ import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.crafttweaker.brackethandler.MetaTileEntityBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import gregtech.api.GregTechAPI;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntityHolder;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import stanhebben.zenscript.annotations.ZenCaster;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -66,7 +68,7 @@ public interface IMetaTileEntity {
      * @return mte;
      */
     @ZenMethod
-    default IMetaTileEntity fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
+    static IMetaTileEntity fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
         TileEntity te = CraftTweakerMC.getWorld(world).getTileEntity(CraftTweakerMC.getBlockPos(pos));
         if (te instanceof MetaTileEntityHolder && ((MetaTileEntityHolder) te).isValid()) {
             return new MCMetaTileEntity(((MetaTileEntityHolder) te).getMetaTileEntity());
@@ -121,24 +123,45 @@ public interface IMetaTileEntity {
     @ZenGetter("frontFacing")
     IFacing getFrontFacing();
 
+    /**
+     *
+     */
     @ZenMethod
     void markDirty();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isFirstTick();
 
+    /**
+     *
+     */
     @ZenMethod
     int getInputRedstoneSignal(IFacing side, boolean ignoreCover);
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isBlockRedstonePowered();
 
+    /**
+     *
+     */
     @ZenMethod
     int getActualLightValue();
 
+    /**
+     *
+     */
     @ZenMethod
     void update();
 
+    /**
+     *
+     */
     @ZenMethod
     IItemStack getStackForm(int amount);
 
@@ -150,6 +173,9 @@ public interface IMetaTileEntity {
     @ZenMethod
     boolean isOpaqueCube();
 
+    /**
+     *
+     */
     @ZenMethod
     int getLightOpacity();
 
@@ -165,72 +191,144 @@ public interface IMetaTileEntity {
     @ZenMethod
     int getHarvestLevel();
 
+    /**
+     *
+     */
     @ZenMethod
     int getOutputRedstoneSignal(IFacing side);
 
+    /**
+     *
+     */
     @ZenMethod
     void setOutputRedstoneSignal(IFacing side, int strength);
 
+    /**
+     *
+     */
     @ZenMethod
     void notifyBlockUpdate();
 
+    /**
+     *
+     */
     @ZenMethod
     void scheduleRenderUpdate();
 
+    /**
+     *
+     */
     @ZenMethod
     void setFrontFacing(IFacing frontFacing);
 
+    /**
+     *
+     */
     @ZenMethod
     void setPaintingColor(int paintingColor);
 
+    /**
+     *
+     */
     @ZenMethod
     void setFragile(boolean fragile);
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isValidFrontFacing(IFacing facing);
 
+    /**
+     *
+     */
     @ZenMethod
     boolean hasFrontFacing();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isValid();
 
+    /**
+     *
+     */
     @ZenMethod
     int getPaintingColor();
 
+    /**
+     *
+     */
     @ZenMethod
     IIItemHandlerModifiable getImportItems();
 
+    /**
+     *
+     */
     @ZenMethod
     IIItemHandlerModifiable getExportItems();
 
+    /**
+     *
+     */
     @ZenMethod
     IIFluidHandler getImportFluids();
 
+    /**
+     *
+     */
     @ZenMethod
     IIFluidHandler getExportFluids();
 
+    /**
+     *
+     */
     @ZenMethod
     List<IIItemHandlerModifiable> getNotifiedItemOutputList();
 
+    /**
+     *
+     */
     @ZenMethod
     List<IIItemHandlerModifiable> getNotifiedItemInputList();
 
+    /**
+     *
+     */
     @ZenMethod
     List<IIFluidHandler> getNotifiedFluidInputList();
 
+    /**
+     *
+     */
     @ZenMethod
     List<IIFluidHandler> getNotifiedFluidOutputList();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isFragile();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean shouldDropWhenDestroyed();
 
+    /**
+     *
+     */
     @ZenMethod
     void toggleMuffled();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean isMuffled();
+
+    @ZenCaster
+    CTTraceabilityPredicate castCTPredicate();
 }

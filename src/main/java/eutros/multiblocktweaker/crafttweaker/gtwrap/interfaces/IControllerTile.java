@@ -53,49 +53,91 @@ public interface IControllerTile extends IMetaTileEntity {
     }
 
     // **********************MultiblockControllerBase
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("multiblockParts")
     List<IIMultiblockPart> getMultiblockParts();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("canShare")
     boolean canShare();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("matchingShapes")
     List<IMultiblockShapeInfo> getMatchingShapes();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("frontOverlay")
     IICubeRenderer getFrontOverlay();
 
+    /**
+     *
+     */
     @ZenMethod
     IBlockPattern createStructurePattern();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean shouldRenderOverlay(IIMultiblockPart sourcePart);
 
+    /**
+     *
+     */
     @ZenMethod
     IICubeRenderer getBaseTexture(IIMultiblockPart part);
 
+    /**
+     *
+     */
     @ZenMethod
     void checkStructurePattern();
 
+    /**
+     *
+     */
     @ZenMethod
     void formStructure(IPatternMatchContext context);
 
+    /**
+     *
+     */
     @ZenMethod
     int getLightValueForPart(IIMultiblockPart sourcePart);
 
+    /**
+     *
+     */
     @ZenMethod
     void invalidateStructure();
 
+    /**
+     *
+     */
     @ZenMethod
     void updateFormedValid();
 
+    /**
+     *
+     */
     @ZenMethod
     Object[] getAbilities(IMultiblockAbility ability);
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter
     boolean isStructureFormed();
@@ -114,6 +156,9 @@ public interface IControllerTile extends IMetaTileEntity {
     void setExtraData(IData data);
 
     /**
+     *
+     */
+    /**
      * Retrieve extra data stored with {@link #setExtraData(IData)}
      *
      * @return The extra data stored on this controller.
@@ -122,10 +167,16 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenGetter("extraData")
     IData getExtraData();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("autoAbilities")
     CTTraceabilityPredicate autoAbilities();
 
+    /**
+     *
+     */
     @ZenMethod
     CTTraceabilityPredicate autoAbilities(boolean checkEnergyIn,
                                         boolean checkMaintainer,
@@ -217,63 +268,114 @@ public interface IControllerTile extends IMetaTileEntity {
 
     // **********************************RecipeMapMultiblockController
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("energyContainer")
     IIEnergyContainer getEnergyContainer();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("inputInventory")
     IIItemHandlerModifiable getInputInventory();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("outputInventory")
     IIItemHandlerModifiable getOutputInventory();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("inputFluidInventory")
     IIMultipleTankHandler getInputFluidInventory();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("outputFluidInventory")
     IIMultipleTankHandler getOutputFluidInventory();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("recipeLogic")
     IRecipeLogic getRecipeLogic();
 
+    /**
+     *
+     */
     @ZenMethod
     boolean checkRecipe(IRecipe recipe, boolean consumeIfSuccess);
 
+    /**
+     *
+     */
     @ZenMethod
     void replaceVariantBlocksActive(boolean isActive);
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter
     boolean canBeDistinct();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter
     boolean isDistinct();
 
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter
     boolean canCreateSound();
 
+    /**
+     *
+     */
     @ZenMethod
     RecipeMap<?>[] getAvailableRecipeMaps();
 
+    /**
+     *
+     */
     @ZenGetter("reipeMapIndex")
     int getRecipeMapIndex();
 
+    /**
+     *
+     */
     @ZenSetter("recipeMapIndex")
     void setRecipeMapIndex(int index);
 
+    /**
+     *
+     */
     @ZenMethod
     void addRecipeMaps(RecipeMap<?>... recipeMaps);
 
+    /**
+     *
+     */
     @ZenGetter("currentRecipeMap")
     RecipeMap<?> getCurrentRecipeMap();
 
+    /**
+     *
+     */
     @ZenGetter("variantActiveBlocks")
     List<IBlockPos> getVariantActiveBlocks();
 }

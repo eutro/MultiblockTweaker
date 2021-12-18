@@ -29,6 +29,6 @@ public interface IGetBaseTextureFunction {
      * @return the texture of the controller and parts.
      */
     @ZenMethod
-    IICubeRenderer get(@Nullable IIMultiblockPart part);
+    IICubeRenderer get(IControllerTile controllerTile, @Nullable IIMultiblockPart part);
 
 }

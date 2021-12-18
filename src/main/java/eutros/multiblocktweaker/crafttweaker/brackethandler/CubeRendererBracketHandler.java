@@ -23,7 +23,7 @@ import java.util.Map;
 @BracketHandler
 @ZenRegister
 public class CubeRendererBracketHandler implements IBracketHandler {
-    private final static Map<String, IICubeRenderer> cache = new HashMap<>();
+    public final static Map<String, IICubeRenderer> cache = new HashMap<>();
     private final IJavaMethod method;
 
     public CubeRendererBracketHandler() {

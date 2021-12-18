@@ -14,6 +14,7 @@ import gregtech.api.recipes.Recipe;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -195,24 +196,30 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public List<ILiquidStack> fluidOutputs() {
-        return this.fluidOutputs.stream().map(CraftTweakerMC::getILiquidStack).collect(Collectors.toList());
+    public ILiquidStack[] fluidOutputs() {
+        return this.fluidOutputs == null ? null : this.fluidOutputs.stream().map(CraftTweakerMC::getILiquidStack).toArray(ILiquidStack[]::new);
     }
 
     @Override
-    public void fluidOutputs(List<ILiquidStack> fluidOutputs) {
-        this.fluidOutputs = fluidOutputs.stream().map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
+    public void fluidOutputs(ILiquidStack[] fluidOutputs) {
+        if (fluidOutputs == null) this.fluidOutputs = null;
+        else {
+            this.fluidOutputs = Arrays.stream(fluidOutputs).map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
+        }
     }
 
     @Override
-    public List<IItemStack> itemOutputs() {
-        return this.itemOutputs.stream().map(CraftTweakerMC::getIItemStack).collect(Collectors.toList());
+    public IItemStack[] itemOutputs() {
+        return this.itemOutputs == null ? null : this.itemOutputs.stream().map(CraftTweakerMC::getIItemStack).toArray(IItemStack[]::new);
     }
 
     @Override
-    public void itemOutputs(List<IItemStack> itemOutputs) {
-        this.itemOutputs = NonNullList.create();
-        itemOutputs.stream().map(CraftTweakerMC::getItemStack).forEach(this.itemOutputs::add);
+    public void itemOutputs(IItemStack[] itemOutputs) {
+        if (itemOutputs == null) this.itemOutputs = null;
+        else {
+            this.itemOutputs = NonNullList.create();
+            Arrays.stream(itemOutputs).map(CraftTweakerMC::getItemStack).forEach(this.itemOutputs::add);
+        }
     }
 
     @Override
@@ -257,12 +264,12 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     public IRecipe getPreviousIRecipe() {
-        return new MCRecipe(previousRecipe);
+        return previousRecipe == null ? null : new MCRecipe(previousRecipe);
     }
 
     @Override
     public void setPreviousIRecipe(IRecipe previousRecipe) {
-        this.previousRecipe = previousRecipe.getInner();
+        this.previousRecipe = previousRecipe == null ? null : previousRecipe.getInner();
     }
 
     @Override

@@ -11,6 +11,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -18,6 +19,7 @@ import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
@@ -67,16 +69,25 @@ public class CTTraceabilityPredicate {
         this(new TraceabilityPredicate());
     }
 
+    /**
+     * can be any block.
+     */
     @ZenMethod
     public static CTTraceabilityPredicate ANY() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
     }
 
+    /**
+     * Only the air block.
+     */
     @ZenMethod
     public static CTTraceabilityPredicate AIR() {
         return new CTTraceabilityPredicate(TraceabilityPredicate.AIR);
     }
 
+    /**
+     * The Wire Coils block. with the same type. will also write its temperature to the context("coils_temperature").
+     */
     @ZenMethod
     public static CTTraceabilityPredicate COILS() {
         return new CTTraceabilityPredicate(new TraceabilityPredicate(blockWorldState -> {
@@ -99,6 +110,9 @@ public class CTTraceabilityPredicate {
                 .addTooltips("gregtech.multiblock.pattern.error.coils"));
     }
 
+    /**
+     * MetaTileEntity checking. will try to cast to the mte.
+     */
     @ZenMethod
     public static CTTraceabilityPredicate mtePredicate(IMTEPredicate predicate, ICandidates candidates) {
         return new CTTraceabilityPredicate(blockWorldState -> {
@@ -212,12 +226,21 @@ public class CTTraceabilityPredicate {
                 getCandidates(abilities.stream().flatMap(ability -> MultiblockAbility.REGISTRY.get(ability).stream()).toArray(MetaTileEntity[]::new)));
     }
 
+    /**
+     * Match any block that has one of the given {@link IMetaTileEntity}-es.
+     *
+     * @param allowedMTEs One or multiple {@link IMetaTileEntity}-es to match for.
+     * @return An {@link CTTraceabilityPredicate} that matches any blocks with one of the given {@link IMetaTileEntity}-es.
+     */
     @ZenMethod
     public static CTTraceabilityPredicate metaTileEntities(IMetaTileEntity... allowedMTEs) {
         return mtePredicate((state, mte) -> Arrays.stream(allowedMTEs).anyMatch(mte2->mte2.getInternal().metaTileEntityId == mte.getInternal().metaTileEntityId),
                 getCandidates(Arrays.stream(allowedMTEs).map(IMetaTileEntity::getInternal).toArray(MetaTileEntity[]::new)));
     }
 
+    /**
+     * use | for convenient.
+     */
     @ZenMethod
     @ZenOperator(OperatorType.OR)
     public CTTraceabilityPredicate or(CTTraceabilityPredicate predicate) {
@@ -225,6 +248,10 @@ public class CTTraceabilityPredicate {
         return this;
     }
 
+    /**
+     * Mark it as the controller of this multi. Normally you won't call it yourself.
+     * Use {@link IControllerTile#SELF()} plz.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setCenter() {
         internal = internal.setCenter();
@@ -237,24 +264,36 @@ public class CTTraceabilityPredicate {
         return this;
     }
 
+    /**
+     * Add tooltips for candidates. They are shown in JEI Pages.
+     */
     @ZenMethod
     public CTTraceabilityPredicate addTooltips(String... tips) {
         internal = internal.addTooltips(tips);
         return this;
     }
 
+    /**
+     * Set the minimum number of predicate blocks.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMinGlobalLimited(int min) {
         internal = internal.setMinGlobalLimited(min);
         return this;
     }
 
+    /**
+     * Set the minimum number of predicate blocks. and number of previews.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMinGlobalLimited(int min, int previewCount) {
         internal = internal.setMinGlobalLimited(min, previewCount);
         return this;
     }
 
+    /**
+     * Set the maximum number of predicate blocks.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMaxGlobalLimited(int max) {
         internal = internal.setMaxGlobalLimited(max);
@@ -262,36 +301,54 @@ public class CTTraceabilityPredicate {
         return this;
     }
 
+    /**
+     * Set the maximum number of predicate blocks. and number of previews.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMaxGlobalLimited(int max, int previewCount) {
         internal = internal.setMaxGlobalLimited(max, previewCount);
         return this;
     }
 
+    /**
+     * Set the minimum number of predicate blocks for each aisle layer.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMinLayerLimited(int min) {
         internal = internal.setMinLayerLimited(min);
         return this;
     }
 
+    /**
+     * Set the minimum number of predicate blocks for each aisle layer. and number of previews.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMinLayerLimited(int min, int previewCount) {
         internal = internal.setMinLayerLimited(min, previewCount);
         return this;
     }
 
+    /**
+     * Set the maximum number of predicate blocks for each aisle layer.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMaxLayerLimited(int max) {
         internal = internal.setMaxLayerLimited(max);
         return this;
     }
 
+    /**
+     * Set the maximum number of predicate blocks for each aisle layer. and number of previews.
+     */
     @ZenMethod
     public CTTraceabilityPredicate setMaxLayerLimited(int max, int previewCount) {
         internal = internal.setMaxLayerLimited(max, previewCount);
         return this;
     }
 
+    /**
+     * Set the number of it appears in JEI pages. It only affects JEI preview. (The specific number)
+     */
     @ZenMethod
     public CTTraceabilityPredicate setPreviewCount(int count) {
         internal = internal.setPreviewCount(count);

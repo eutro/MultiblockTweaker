@@ -23,7 +23,7 @@ import java.util.Map;
 @BracketHandler
 @ZenRegister
 public class GuiTextureBracketHandler implements IBracketHandler {
-    private final static Map<String, ITextureArea> cache = new HashMap<>();
+    public final static Map<String, ITextureArea> cache = new HashMap<>();
 
     private final IJavaMethod method;
 

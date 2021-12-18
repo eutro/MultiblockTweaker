@@ -43,6 +43,10 @@ public interface IIMultiblockPart extends IMetaTileEntity{
     @ZenMethod
     boolean isAttachedToMultiBlock();
 
+
+    /**
+     * tier of this part.
+     */
     @ZenMethod
     @ZenGetter("tier")
     int getTier();

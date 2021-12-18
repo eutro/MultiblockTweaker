@@ -25,6 +25,7 @@ public interface ISetupRecipeFunction {
      *
      * @param logic  The {@link IRecipeLogic} of the multiblock from which this is run.
      * @param recipe The recipe about to be run.
+     * @return Whether to perform the rest of the update logic.
      */
     @ZenMethod
     boolean run(@Nonnull IRecipeLogic logic, @Nonnull IRecipe recipe);

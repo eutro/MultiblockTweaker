@@ -37,8 +37,8 @@ import mods.gregtech.recipe.CustomRecipeProperty;
 
 /** 
 // This example is one of the most difficult to customize. We learn how to build a machine exactly like CEu's EBF.
-// Sounds easy, just a simple multi-block with I/O buses hand hatches?
-// In fact, the complete EBF is quite complex. We need to implement pattern predicates, previews of different coils, temperature logic.....
+// Sounds easy, just a simple multi-block with some I/O buses and hatches?
+// In fact, the complete EBF is quite complicated. We need to implement pattern predicates, previews of different coils, temperature logic.....
 // Don't worry, let's take it one step at a time. 
 // Once you get this example, I believe you have basically mastered the custom multi-block in MBT.
 **/
@@ -56,7 +56,7 @@ val wire_coil_temperature_map = {
     "gregtech:wire_coil:7" : 10800,
 } as int[string];
 
-//********** patter + shaps builder **********//
+//********** pattern + shaps builder **********//
 val multiblockBuild = Builder.start(loc) // automatic allocation ID
     .withPattern(function(controller as IControllerTile) as IBlockPattern {
                     // block pos checking + write temperature to context
@@ -73,7 +73,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             }
                             // Some blocks that extends of {@link VariantActiveBlock} can change texture based on the multi-block working state.
                             // If you want to keep this effect (e.g., emissive active blocks), their position need to be collected during pattern checking.
-                            // VBBlock in CEu: <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:transparent_casing> <gregtech:fusion_casing> <gregtech:multiblock_casing> <gregtech:wire_coil>
+                            // VBBlock in CEu: <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:multiblock_casing> <gregtech:wire_coil>
                             blockWorldState.matchContext.addVBBlock(blockWorldState.pos);
                             return true;
                         }
@@ -102,15 +102,14 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             .where('S', controller.SELF())
                             .where('X', CTPredicate.states(<metastate:gregtech:metal_casing:2>).setMinGlobalLimited(9)
                                     | controller.autoAbilities(true, true, true, true, true, true, false))
-                            .where('M', CTPredicate.abilities(<mte_ability:MUFFLER_HATCH>))
+                            .where('M', <mte_ability:MUFFLER_HATCH>)
                             // .where('C', CTPredicate.COILS()) 
-                            // In fact, you can directly use the code commented above, which is the preset predicate for the coils.
-                            // In order to demonstrate the powerful extensibility of MBT, we implement it in zs.
+                            // In fact, you can directly use the code commented above, which is the built-in predicate for the coils.
+                            // In order to demonstrate the power of MBT, we implement it in zs.
                             .where('C', COILS)
                             .where('#', CTPredicate.AIR())
                             .build();
                  } as IPatternBuilderFunction)
-    // .withRecipeMap(<recipemap:electric_blast_furnace>) 
     .withRecipeMap(
         FactoryRecipeMap.start("copy_electric_blast_furnace", <recipe_property:ebf_temperature>) // define our own RecipeMap. And define a recipe property with the key tempurature (<recipe_property:key>).
             // .setDefaultRecipe(<recipemap:electric_blast_furnace>.recipeBuilder) // Set the default recipe builder, that will be copied in order to add new recipes.
@@ -125,7 +124,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
             .build())
     .withBaseTexture(<metastate:gregtech:metal_casing:2>);
 
-// add custom jei previews for different coils pages
+// add custom jei previews for different coils pages, tho CEu will automatically create previews, but you may want to add them yourself. 
 val shapeBuilder = FactoryMultiblockShapeInfo.start()
     .aisle("XEM", "CCC", "CCC", "XXX")
     .aisle("FXD", "C#C", "C#C", "XHX")
@@ -183,7 +182,7 @@ copy_electric_blast_furnace.invalidateStructureFunction = function (controller a
    controller.setExtraData((0 as IData)); // IData: blastFurnaceTemperature = 0
 } as IInvalidateStructureFunction;
 
-// check current recipe available
+// check current recipe available according to the temperature.
 copy_electric_blast_furnace.checkRecipeFunction = function(controller as IControllerTile, recipe as IRecipe, consumeIfSuccess as bool) as bool {
     val blastFurnaceTemperature as int = controller.getExtraData().asInt();
     val recipeTemperature = recipe.getIntegerProperty("ebf_temperature"); // read temperature from <recipe_property:ebf_temperature>

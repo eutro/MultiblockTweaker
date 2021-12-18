@@ -247,7 +247,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
     public ICubeRenderer getBaseTexture(IMultiblockPart part) {
         if (multiblock.getBaseTextureFunction != null) {
             try {
-                return multiblock.getBaseTextureFunction.get(part instanceof MetaTileEntityMultiblockPart ? new MCIMultiblockPart((MetaTileEntityMultiblockPart) part) : null);
+                return multiblock.getBaseTextureFunction.get(new MCControllerTile(this), part instanceof MetaTileEntityMultiblockPart ? new MCIMultiblockPart((MetaTileEntityMultiblockPart) part) : null);
             } catch (RuntimeException e) {
                 logFailure("getBaseTextureFunction", e);
                 multiblock.getBaseTextureFunction = null;

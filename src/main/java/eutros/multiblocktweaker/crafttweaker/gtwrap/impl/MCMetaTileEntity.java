@@ -8,6 +8,7 @@ import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIFluidHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import gregtech.api.metatileentity.MetaTileEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -230,6 +231,11 @@ public class MCMetaTileEntity implements IMetaTileEntity {
     @Override
     public boolean isMuffled() {
         return inner.isMuffled();
+    }
+
+    @Override
+    public CTTraceabilityPredicate castCTPredicate() {
+        return CTTraceabilityPredicate.metaTileEntities(this);
     }
 
 }

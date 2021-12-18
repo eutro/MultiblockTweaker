@@ -62,14 +62,26 @@ public interface IIMaintenanceHatch {
     @ZenMethod
     int[] readMaintenanceData();
 
+
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("durationMultiplier")
     double getDurationMultiplier();
 
+
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("timeMultiplier")
     double getTimeMultiplier();
 
+
+    /**
+     *
+     */
     @ZenMethod
     @ZenGetter("startWithoutProblems")
     boolean startWithoutProblems();

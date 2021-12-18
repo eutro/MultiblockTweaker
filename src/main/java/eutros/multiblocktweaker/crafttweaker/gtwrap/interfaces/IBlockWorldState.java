@@ -28,6 +28,9 @@ public interface IBlockWorldState {
     @ZenGetter("hasError")
     boolean hasError();
 
+    /**
+     * Set Error info for tips. if predicate checking failed.
+     */
     @ZenMethod
     void setError(String error);
 

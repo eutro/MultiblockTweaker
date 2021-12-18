@@ -10,5 +10,9 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.gregtech.predicate.ICandidates")
 @ZenRegister
 public interface ICandidates {
+    /**
+     * get candidates of the predicate.
+     * @return available candidates.
+     */
     IBlockInfo[] get();
 }

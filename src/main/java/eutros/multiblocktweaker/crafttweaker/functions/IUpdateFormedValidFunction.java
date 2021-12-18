@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 public interface IUpdateFormedValidFunction {
 
     /**
-     * Called every time the worktable updates.
+     * Called every time the mte updates (formed).
      * <p>
      * Implement this with a function.
      *

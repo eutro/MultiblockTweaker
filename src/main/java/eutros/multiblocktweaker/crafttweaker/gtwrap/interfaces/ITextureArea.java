@@ -1,6 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
+import eutros.multiblocktweaker.crafttweaker.brackethandler.GuiTextureBracketHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCTextureArea;
 import gregtech.api.gui.resources.TextureArea;
 import net.minecraft.util.ResourceLocation;
@@ -34,9 +35,23 @@ public interface ITextureArea {
     }
 
     /**
-     * Get an area of an image at a location.
+     * Get the full image at a location.
      * <p>
      * You will most likely wish to define this in a script with {@code #loader preinit}, so the texture actually gets loaded.
+     *
+     * @param key Searching key for bracket.
+     * @param imageLocation The full location of the image.
+     * @return An {@link ITextureArea} of the given image.
+     */
+    @ZenMethod
+    static ITextureArea fullImage(String key, String imageLocation) {
+        GuiTextureBracketHandler.cache.put(key, fullImage(imageLocation));
+        return GuiTextureBracketHandler.cache.get(key);
+    }
+
+    /**
+     * Get an area of an image at a location.
+     * <p>
      *
      * @param imageLocation The full location of the image.
      * @param imageSizeX    The X size of the image itself, in pixels.

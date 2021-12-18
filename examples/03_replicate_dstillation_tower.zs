@@ -29,11 +29,11 @@ val copy_distillation_tower = Builder.start(loc) // automatic allocation ID
                               .aisle("XXX", "X#X", "XXX").setRepeatable(1, 11)
                               .aisle("XXX", "XXX", "XXX")
                               .where('S', controller.SELF())
-                              .where('F', CTPredicate.abilities(<mte_ability:IMPORT_FLUIDS>))
-                              .where('Y', CTPredicate.states(<metastate:gregtech:metal_casing:5>)
-                                      | CTPredicate.abilities(<mte_ability:EXPORT_ITEMS>).setMinGlobalLimited(1)
-                                      | CTPredicate.abilities(<mte_ability:INPUT_ENERGY>).setMinGlobalLimited(1))
-                              .where('X', CTPredicate.states(<metastate:gregtech:metal_casing:5>)
+                              .where('F', <mte_ability:IMPORT_FLUIDS>) // same as CTPredicate.abilities(<mte_ability:IMPORT_FLUIDS>)
+                              .where('Y', (<metastate:gregtech:metal_casing:5> as CTPredicate) // same as CTPredicate.states(<mte_ability:IMPORT_FLUIDS>)
+                                      | (<mte_ability:EXPORT_ITEMS> as CTPredicate).setMinGlobalLimited(1) // or
+                                      | (<mte_ability:INPUT_ENERGY> as CTPredicate).setMinGlobalLimited(1)) // or
+                              .where('X', (<metastate:gregtech:metal_casing:5> as CTPredicate)
                                       | CTPredicate.metaTileEntities(export_fluids_mtes).setMinLayerLimited(1).setMaxLayerLimited(1)
                                       | controller.autoAbilities(false, true, false, false, false, false, false))
                               .where('#', CTPredicate.AIR())
@@ -55,4 +55,5 @@ game.setLocalization(
     "multiblocktweaker.multiblock.copy_distillation_tower.description",
     "The Copy Distillation Tower is a multiblock that copy from dt"
 );
-// Don't forget to add a recipe!
+
+// Don't forget to add a recipe! ...

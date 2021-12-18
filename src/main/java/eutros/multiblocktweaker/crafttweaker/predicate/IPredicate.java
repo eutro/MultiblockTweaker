@@ -9,5 +9,10 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.gregtech.predicate.IPredicate")
 @ZenRegister
 public interface IPredicate {
+    /**
+     * Whether the block at that position pass checking {@link eutros.multiblocktweaker.gregtech.renderer.IBlockStateRenderer}.
+     * @param blockWorldState block world state.
+     * @return checking result.
+     */
     boolean test(IBlockWorldState blockWorldState);
 }

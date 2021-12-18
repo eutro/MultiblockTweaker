@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +26,11 @@ public class MCMultiblockAbility<T> implements IMultiblockAbility {
     @Override
     public List<IMetaTileEntity> getMetaTileEntities() {
         return MultiblockAbility.REGISTRY.get(inner).stream().map(MCMetaTileEntity::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public CTTraceabilityPredicate castCTPredicate() {
+        return CTTraceabilityPredicate.abilities(this);
     }
 
 }

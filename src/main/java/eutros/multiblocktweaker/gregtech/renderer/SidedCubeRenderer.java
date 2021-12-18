@@ -21,10 +21,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
@@ -41,11 +38,14 @@ import java.util.stream.Stream;
 public class SidedCubeRenderer implements IICubeRenderer {
 
     private Map<EnumFacing, String> paths;
+    @SideOnly(Side.CLIENT)
     private Map<EnumFacing, TextureAtlasSprite> sprites;
+    @SideOnly(Side.CLIENT)
     private Map<EnumFacing, TextureAtlasSprite> spritesEmissive;
+    @SideOnly(Side.CLIENT)
     private TextureAtlasSprite particles;
 
-    public SidedCubeRenderer(Map<EnumFacing, String> paths) {
+    public SidedCubeRenderer(String key, Map<EnumFacing, String> paths) {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             this.paths = paths;
             this.sprites = new EnumMap<>(EnumFacing.class);
@@ -60,10 +60,10 @@ public class SidedCubeRenderer implements IICubeRenderer {
                     spritesEmissive.put(facing, emissiveSprite);
                 }
                 particles = sprites.get(EnumFacing.UP);
-            } else {
-                MinecraftForge.EVENT_BUS.register(this);
             }
         }
+        Textures.CUBE_RENDERER_REGISTRY.put(key, this);
+        Textures.iconRegisters.add(this);
     }
 
     public static <T> EnumMap<EnumFacing, T> fillBlanks(Map<EnumFacing, T> map) {
@@ -105,12 +105,6 @@ public class SidedCubeRenderer implements IICubeRenderer {
                         .collect(Collectors.toMap(BakedQuad::getFace, BakedQuad::getSprite))
         );
         this.spritesEmissive = new EnumMap<>(EnumFacing.class);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void preStitch(TextureStitchEvent.Pre evt) {
-        registerIcons(evt.getMap());
     }
 
     @SideOnly(Side.CLIENT)

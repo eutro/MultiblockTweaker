@@ -15,6 +15,7 @@ import crafttweaker.world.IBlockPos;
 import crafttweaker.world.IFacing;
 import crafttweaker.world.IWorld;
 import crafttweaker.item.IItemStack;
+import crafttweaker.item.IIngredient;
 
 import mods.gregtech.multiblock.functions.ICheckRecipeFunction;
 import mods.gregtech.multiblock.functions.IUpdateFormedValidFunction;
@@ -25,7 +26,14 @@ import mods.gregtech.recipe.IRecipe;
 
 var loc = "midas_implosion_compressor";
 
-//********** patter + shaps builder **********//
+/** 
+// As the previous examples go from simple to advanced, I'm sure you've mastered the MBT. 
+// In fact, there are many APIs not shown in the examples, please refer to wiki.
+// We want you to use your imagination, and MBT can actually do a lot of interesting things.
+// As an appendix page, we'll implement a Midas touch implosion compressor. See how it works in the game.
+**/
+
+//********** pattern builder **********//
 val midas_implosion_compressor = Builder.start(loc) // automatic allocation ID
     .withPattern(function(controller as IControllerTile) as IBlockPattern {
                     return FactoryBlockPattern.start()
@@ -74,31 +82,35 @@ val getSurround = function (pos as IBlockPos, facing as IFacing) as IBlockPos[] 
     ] as IBlockPos[];
 };
 
-// check current recipe available
+// check current recipe available, and place inputs bocks.
 midas_implosion_compressor.checkRecipeFunction = function(controller as IControllerTile, recipe as IRecipe, consumeIfSuccess as bool) as bool {
     val world as IWorld = controller.world;
     for pos in getSurround(controller.pos, controller.frontFacing) {
-        if (world.getBlock(pos).definition.id != "minecraft:air") {
+        if (!world.isAirBlock(pos)) {
             return false;
         }
     }
+    val inputs = (recipe.getInputs() as IIngredient[])[0].items as IItemStack[];
+    val blockstate as IBlockState = inputs[0].asBlock().definition.getStateFromMeta(inputs[0].metadata);
     for pos in getSurround(controller.pos, controller.frontFacing) {
-        world.setBlockState(<blockstate:minecraft:stone>, pos);
+        world.setBlockState(blockstate, pos);
     }
     return true;
 } as ICheckRecipeFunction;
 
+// if the machine is working --- explosion. if the machine is not working and not active (have a recipe but not working, e.g. hasEnergyProblem) --- collect outputs.
 midas_implosion_compressor.updateFormedValidFunction = function(controller as IControllerTile) {
     val world as IWorld = controller.world;
     if (controller.offsetTimer % 20 == 0) {
         if (controller.recipeLogic.isWorking) { // EXPLOSION!!!!!!
             val explosionPos as IBlockPos = controller.pos.getOffset(controller.frontFacing.opposite, 2).getOffset(IFacing.up(), 2);
             world.performExplosion(null, explosionPos.x, explosionPos.y, explosionPos.z, 3, true, false);
-        } else { // colect outputs
+        } else if (!controller.recipeLogic.isActive) { // collect outputs
             for pos in getSurround(controller.pos, controller.frontFacing) {
-                if (world.getBlock(pos).definition.id == "minecraft:gold_block") {
+                if (!world.isAirBlock(pos)) {
+                    val item = world.getPickedBlock(pos, null, null) as IItemStack;
                     world.setBlockState(<blockstate:minecraft:air>, pos);
-                    controller.outputInventory.addItems(false, [<minecraft:gold_block>] as IItemStack[]);
+                    controller.outputInventory.addItems(false, [item] as IItemStack[]);
                     return;
                 }
             }
@@ -106,14 +118,16 @@ midas_implosion_compressor.updateFormedValidFunction = function(controller as IC
     }
 } as IUpdateFormedValidFunction;
 
-midas_implosion_compressor.completeRecipeFunction = function (recipe as IRecipeLogic) as bool {
-    val controller as IControllerTile = recipe.metaTileEntity;
+// When the recipe is complete, place the block according to the recipe output.
+midas_implosion_compressor.completeRecipeFunction = function (recipeLogic as IRecipeLogic) as bool {
+    val controller as IControllerTile = recipeLogic.metaTileEntity;
     val world as IWorld = controller.world;
+    val outputs = recipeLogic.itemOutputs as IItemStack[];
+    val blockstate as IBlockState = outputs[0].asBlock().definition.getStateFromMeta(outputs[0].metadata);
     for pos in getSurround(controller.pos, controller.frontFacing) {
-        if (world.getBlock(pos).definition.id == "minecraft:stone") {
-            world.setBlockState(<blockstate:minecraft:gold_block>, pos);
-        }
+         world.setBlockState(blockstate, pos);
     }
+    recipeLogic.itemOutputs = ([] as IItemStack[]); // we have collected outputs ourselves, so remove the recipe outputs.
     return true;
 } as ICompleteRecipeFunction;
 
@@ -122,13 +136,13 @@ midas_implosion_compressor.completeRecipeFunction = function (recipe as IRecipeL
 
 
 //********** add recipes **********//
-// add a simple recipe for midas_implosion_compressor.
+// add some recipes for midas_implosion_compressor.
 midas_implosion_compressor
     .recipeMap 
 	.recipeBuilder()
     .duration(180)
     .EUt(30)
-    .inputs(<minecraft:stone>*8, <minecraft:tnt>)
+    .inputs(<minecraft:stone>*9, <minecraft:tnt>)
     .outputs(<minecraft:gold_block>)
     .buildAndRegister();
 
@@ -137,7 +151,7 @@ midas_implosion_compressor
 	.recipeBuilder()
     .duration(180)
     .EUt(30)
-    .inputs(<minecraft:dirt>*8, <minecraft:tnt>)
+    .inputs(<minecraft:dirt>*9, <minecraft:tnt>)
     .outputs(<minecraft:grass>)
     .buildAndRegister();
 

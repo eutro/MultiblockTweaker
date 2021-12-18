@@ -19,6 +19,12 @@ import javax.annotation.Nonnull;
 @ZenRegister
 public interface IRunOverclockingLogicFunction {
 
+    /**
+     * converts the recipe's values into ones used for overclocking
+     * @param recipe the recipe to overclock
+     * @param maxOverclocks the maximum amount of overclocks to perform
+     * @return an int array of {OverclockedEUt, OverclockedDuration}
+     */
     @ZenMethod
     int[] run(@Nonnull IRecipeLogic recipeLogic, @Nonnull IRecipe recipe, boolean negativeEU, int maxOverclocks);
 

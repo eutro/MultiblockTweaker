@@ -18,9 +18,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public interface IGetRealValueFunction {
 
     /**
-     * Implement this with a function.
+     * Implement this with a function. mapping Recipe Property tips.
      *
-     * @param recipeProperty The Recipe Property.
      */
     @ZenMethod
     IFormattedText map(CustomRecipeProperty recipeProperty, String value);
