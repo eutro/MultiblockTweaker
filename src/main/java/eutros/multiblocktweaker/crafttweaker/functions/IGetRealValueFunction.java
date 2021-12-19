@@ -10,7 +10,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 /**
  * Called when drawing info for Recipe Property
  *
- * @zenClass mods.gregtech.recipe.functions.IDrawInfoFunction
+ * @zenClass mods.gregtech.recipe.functions.IGetRealValueFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IGetRealValueFunction")

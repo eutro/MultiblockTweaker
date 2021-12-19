@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 /**
  * Called every tick if the multiblock is structure formed.
  *
- * @zenClass mods.gregtech.recipe.functions.IUpdateFunction
+ * @zenClass mods.gregtech.recipe.functions.IUpdateFormedValidFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.functions.IUpdateFormedValidFunction")

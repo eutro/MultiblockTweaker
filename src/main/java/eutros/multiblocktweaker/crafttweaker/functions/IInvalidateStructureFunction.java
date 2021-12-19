@@ -9,9 +9,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 /**
- * Called every time the worktable updates.
+ * Called once when the sturcture is invalidated.
  *
- * @zenClass mods.gregtech.recipe.functions.IUpdateFunction
+ * @zenClass mods.gregtech.recipe.functions.IInvalidateStructureFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.functions.IInvalidateStructureFunction")

@@ -10,9 +10,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * Called when adding text to the multiblock UI.
+ * Called when adding text to the ItemStack of this controller.
  *
- * @zenClass mods.gregtech.multiblock.functions.IDisplayTextFunction
+ * @zenClass mods.gregtech.multiblock.functions.IAddInformationFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.multiblock.functions.IAddInformationFunction")

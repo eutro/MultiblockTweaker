@@ -10,9 +10,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 /**
- * Called every time a recipe completes.
+ * Called to get the overclocking of the setup recipe.
  *
- * @zenClass mods.gregtech.recipe.functions.ICompleteRecipeFunction
+ * @zenClass mods.gregtech.recipe.functions.IRunOverclockingLogicFunction
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.recipe.functions.IRunOverclockingLogicFunction")
