@@ -10,9 +10,9 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nullable;
 
 /**
- * Used for interacting with fluid tanks.
+ * Used for interacting with fluid handler.
  *
- * @zenClass mods.forge.fluids.IFluidTank
+ * @zenClass mods.forge.fluids.IIFluidHandler
  */
 @ZenClass("mods.forge.fluids.IIFluidHandler")
 @ZenRegister

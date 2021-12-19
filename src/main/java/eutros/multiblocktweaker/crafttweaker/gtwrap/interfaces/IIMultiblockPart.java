@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 /**
  * A IMultiblockPart block.
  *
- * @zenClass mods.gregtech.IMetaTileEntity
+ * @zenClass mods.gregtech.multiblock.IIMultiblockPart
  * @see gregtech.api.metatileentity.multiblock.IMultiblockPart
  */
 @ZenClass("mods.gregtech.multiblock.IIMultiblockPart")

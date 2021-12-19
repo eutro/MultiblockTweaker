@@ -10,7 +10,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**
- * Can be used for defining a custom recipe arrow.
+ * Can be used for defining a custom TextureArea.
  *
  * @zenClass mods.gregtech.render.ITextureArea
  */

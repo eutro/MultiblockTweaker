@@ -15,12 +15,12 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * A IMultiblockPart block.
+ * A tile entity with maintenance hatch.
  *
- * @zenClass mods.gregtech.IMetaTileEntity
+ * @zenClass mods.gregtech.multiblock.IIMaintenanceHatch
  * @see IMultiblockPart
  */
-@ZenClass("mods.gregtech.multiblock.IIMaintenanceHatchI")
+@ZenClass("mods.gregtech.multiblock.IIMaintenanceHatch")
 @ZenRegister
 public interface IIMaintenanceHatch {
 

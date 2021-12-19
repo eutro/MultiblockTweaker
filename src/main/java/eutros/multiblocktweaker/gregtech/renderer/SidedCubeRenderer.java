@@ -11,11 +11,6 @@ import gregtech.client.renderer.cclop.LightMapOperation;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.BloomEffectUtil;
 import gregtech.common.ConfigHolder;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.BlockRenderLayer;
@@ -26,14 +21,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SidedCubeRenderer implements IICubeRenderer {
 
@@ -50,17 +39,6 @@ public class SidedCubeRenderer implements IICubeRenderer {
             this.paths = paths;
             this.sprites = new EnumMap<>(EnumFacing.class);
             this.spritesEmissive = new EnumMap<>(EnumFacing.class);
-            if (MapHolder.map != null) {
-                for (EnumFacing facing : EnumFacing.values()) {
-                    sprites.put(facing, MapHolder.map.getAtlasSprite(new ResourceLocation(paths.get(facing)).toString()));
-                    TextureAtlasSprite emissiveSprite = MapHolder.map.getAtlasSprite(new ResourceLocation(paths.get(facing) + "_emissive").toString());
-                    if (emissiveSprite == MapHolder.map.getMissingSprite()) {
-                        emissiveSprite = null;
-                    }
-                    spritesEmissive.put(facing, emissiveSprite);
-                }
-                particles = sprites.get(EnumFacing.UP);
-            }
         }
         Textures.CUBE_RENDERER_REGISTRY.put(key, this);
         Textures.iconRegisters.add(this);
@@ -85,26 +63,6 @@ public class SidedCubeRenderer implements IICubeRenderer {
         retMap.computeIfAbsent(EnumFacing.SOUTH, k -> retMap.get(EnumFacing.NORTH));
         retMap.computeIfAbsent(EnumFacing.EAST, k -> retMap.get(EnumFacing.NORTH));
         return retMap;
-    }
-
-    public SidedCubeRenderer(IBlockState state) {
-        if (FMLCommonHandler.instance().getSide().isServer())
-            return;
-        BlockRendererDispatcher brd = Minecraft.getMinecraft().getBlockRendererDispatcher();
-        IBakedModel model = brd.getModelForState(state);
-        long rand = new Random().nextLong();
-        particles = model.getParticleTexture();
-        sprites = fillBlanks(
-                Stream.concat(Stream.of(new EnumFacing[] { null }),
-                        Arrays.stream(EnumFacing.values()))
-                        .map(f -> model.getQuads(state, f, rand))
-                        .map(List::stream)
-                        .map(Stream::findFirst)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toMap(BakedQuad::getFace, BakedQuad::getSprite))
-        );
-        this.spritesEmissive = new EnumMap<>(EnumFacing.class);
     }
 
     @SideOnly(Side.CLIENT)

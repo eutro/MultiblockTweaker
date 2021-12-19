@@ -103,11 +103,11 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             .where('X', (<metastate:gregtech:metal_casing:2> as CTPredicate).setMinGlobalLimited(9) // same as CTPredicate.states(<metastate:gregtech:metal_casing:2>).setMinGlobalLimited(9)
                                     | controller.autoAbilities(true, true, true, true, true, true, false))
                             .where('M', <mte_ability:MUFFLER_HATCH>)
-                            // .where('C', CTPredicate.COILS()) 
+                            // .where('C', CTPredicate.getCoils()) 
                             // In fact, you can directly use the code commented above, which is the built-in predicate for the coils.
                             // In order to demonstrate the power of MBT, we implement it in zs.
                             .where('C', COILS)
-                            .where('#', CTPredicate.AIR)
+                            .where('#', CTPredicate.getAir())
                             .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(

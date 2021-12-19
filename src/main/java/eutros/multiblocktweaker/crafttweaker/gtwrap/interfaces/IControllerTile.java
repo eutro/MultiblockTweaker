@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * A IControllerTile block of the multiblock controller.
  *
- * @zenClass mods.gregtech.render.ICubeRenderer
+ * @zenClass mods.gregtech.IControllerTile
  */
 @ZenClass("mods.gregtech.IControllerTile")
 @ZenRegister

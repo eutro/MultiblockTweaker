@@ -48,6 +48,7 @@ val midas_implosion_compressor = Builder.start(loc) // automatic allocation ID
                             .where('E', CTPredicate.abilities(<mte_ability:INPUT_ENERGY>))
                             .where('C', <metastate:gregtech:transparent_casing:1>)
                             .where('X', <blockstate:minecraft:obsidian>)
+                            // .where(' ', CTPredicate.getAny()) // this can be omitted. The ' ' is default of Any. 
                             .build();
                  } as IPatternBuilderFunction)
     // .withRecipeMap(<recipemap:electric_blast_furnace>) 

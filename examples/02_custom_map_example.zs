@@ -32,7 +32,7 @@ val magic_miner = Builder.start(loc) // automatic allocation ID
                           .where("C", CTPredicate.states(<metastate:gregtech:metal_casing:3>) | controller.autoAbilities(true, false, true, true, true, false, false))
                                       */
                           .where('M', controller.autoAbilities(false, false, false, false, false, false, true)) // same as CTPredicate.abilities(<mte_ability:MUFFLER_HATCH>)
-                          .where(' ', CTPredicate.AIR)
+                          .where(' ', CTPredicate.getAir())
                           .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(

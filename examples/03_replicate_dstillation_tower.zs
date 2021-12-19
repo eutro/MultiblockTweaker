@@ -36,7 +36,7 @@ val copy_distillation_tower = Builder.start(loc) // automatic allocation ID
                               .where('X', (<metastate:gregtech:metal_casing:5> as CTPredicate)
                                       | CTPredicate.metaTileEntities(export_fluids_mtes).setMinLayerLimited(1).setMaxLayerLimited(1)
                                       | controller.autoAbilities(false, true, false, false, false, false, false))
-                              .where('#', CTPredicate.AIR)
+                              .where('#', CTPredicate.getAir())
                               .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(<recipemap:distillation_tower>)

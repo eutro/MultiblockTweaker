@@ -3,11 +3,15 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.world.IFacing;
 import gregtech.api.capability.IEnergyContainer;
-import net.minecraft.util.EnumFacing;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+/**
+ * Used for interacting with IEnergyContainer.
+ *
+ * @zenClass mods.gregtech.energy.IEnergyContainer
+ */
 @ZenClass("mods.gregtech.energy.IEnergyContainer")
 @ZenRegister
 public interface IIEnergyContainer {

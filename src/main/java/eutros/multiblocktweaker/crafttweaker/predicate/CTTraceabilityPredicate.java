@@ -46,13 +46,17 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * Candidate for multiblock structure pattern.
+ *
+ * @zenClass mods.gregtech.multiblock.CTPredicate
+ * @see eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder
+ */
 @ZenClass("mods.gregtech.multiblock.CTPredicate")
 @ZenRegister
 public class CTTraceabilityPredicate {
     TraceabilityPredicate internal;
-    @ZenProperty
     public static CTTraceabilityPredicate ANY = new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
-    @ZenProperty
     public static CTTraceabilityPredicate AIR = new CTTraceabilityPredicate(TraceabilityPredicate.AIR);
 
     public CTTraceabilityPredicate(TraceabilityPredicate internal) {
@@ -80,7 +84,7 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given ANY predicate.
      */
     @ZenMethod
-    public CTTraceabilityPredicate getANY() {
+    public static CTTraceabilityPredicate getAny() {
         return ANY;
     }
 
@@ -90,7 +94,7 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given AIR predicate.
      */
     @ZenMethod
-    public CTTraceabilityPredicate getAIR() {
+    public static CTTraceabilityPredicate getAir() {
         return AIR;
     }
 
@@ -100,7 +104,6 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given coils predicate.
      */
     @ZenMethod
-    @ZenGetter("COILS")
     public static CTTraceabilityPredicate getCoils() {
         return new CTTraceabilityPredicate(new TraceabilityPredicate(blockWorldState -> {
             net.minecraft.block.state.IBlockState blockState = blockWorldState.getBlockState();

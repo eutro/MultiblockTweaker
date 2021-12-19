@@ -35,7 +35,7 @@ Builder.start(loc) // automatic allocation ID
                            .where("L", CTPredicate.liquids(<liquid:lava>)) // same as CTPredicate.blocks(<block:minecraft:lava>) == CTPredicate.states(<blockstate:minecraft:lava>) == <blockstate:minecraft:lava>
                            .where("S", controller.self())
                            .where("D", <blockstate:minecraft:fence>)
-                           .where(" ", CTPredicate.ANY)
+                           .where(" ", CTPredicate.getAny())
                            .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(RecipeMap.getByName("bender")) // Just use an already existing recipe map. same as <recipemap:bender>
