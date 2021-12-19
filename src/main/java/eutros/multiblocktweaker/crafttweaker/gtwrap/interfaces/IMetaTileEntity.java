@@ -125,43 +125,53 @@ public interface IMetaTileEntity {
     IFacing getFrontFacing();
 
     /**
-     *
+     * Mark dirty.
      */
     @ZenMethod
     void markDirty();
 
     /**
      *
+     * @return is the first tick of this tile entity.
      */
     @ZenMethod
     boolean isFirstTick();
 
     /**
-     *
+     * Get input redstone signal.
+     * 
+     * @param side input side.
+     * @param ignoreCover ignore the Cover at this side.
+     * @return redstone signal.
      */
     @ZenMethod
     int getInputRedstoneSignal(IFacing side, boolean ignoreCover);
 
     /**
-     *
+     * 
+     * @return is block redstone powered.
      */
     @ZenMethod
     boolean isBlockRedstonePowered();
 
     /**
-     *
+     * 
+     * @return get actual light value.
      */
     @ZenMethod
     int getActualLightValue();
 
     /**
-     *
+     * Called every tick.
      */
     @ZenMethod
     void update();
 
     /**
-     *
+     * Get an IItemStack of this tile entity with specific amount.
+     * 
+     * @param amount amount.
+     * @return IItemStack of it.
      */
     @ZenMethod
     IItemStack getStackForm(int amount);
@@ -175,7 +185,8 @@ public interface IMetaTileEntity {
     boolean isOpaqueCube();
 
     /**
-     *
+     * 
+     * @return get light opacity of it.
      */
     @ZenMethod
     int getLightOpacity();
@@ -193,139 +204,168 @@ public interface IMetaTileEntity {
     int getHarvestLevel();
 
     /**
+     * Get output redstone signal.
      *
+     * @param side output side.
+     * @return redstone signal.
      */
     @ZenMethod
     int getOutputRedstoneSignal(IFacing side);
 
     /**
+     * Set output redstone signal.
      *
+     * @param side output side.
+     * @param strength singal strength.
      */
     @ZenMethod
     void setOutputRedstoneSignal(IFacing side, int strength);
 
     /**
-     *
+     * Should be called on server side. Notify surround blocks update.
      */
     @ZenMethod
     void notifyBlockUpdate();
 
     /**
-     *
+     * Should be called on client side. Schedule chunk rebuilt.
      */
     @ZenMethod
     void scheduleRenderUpdate();
 
     /**
+     * Set the front facing of it.
      *
+     * @param frontFacing front side.
      */
     @ZenMethod
     void setFrontFacing(IFacing frontFacing);
 
     /**
+     * Set painting color of it.
      *
+     * @param paintingColor painting color.
      */
     @ZenMethod
     void setPaintingColor(int paintingColor);
 
     /**
+     * Set fragile. Affects the render animation when destroyed.
      *
+     * @param fragile is fragile.
      */
     @ZenMethod
     void setFragile(boolean fragile);
 
     /**
+     * Is the facing side a valid side as the front.
      *
+     * @param facing facing side.
+     * @return is valid.
      */
     @ZenMethod
     boolean isValidFrontFacing(IFacing facing);
 
     /**
      *
+     * @return has front facing side.
      */
     @ZenMethod
     boolean hasFrontFacing();
 
     /**
      *
+     * @return is tile entity valid.
      */
     @ZenMethod
     boolean isValid();
 
     /**
      *
+     * @return get painting color.
      */
     @ZenMethod
     int getPaintingColor();
 
     /**
      *
+     * @return get import items.
      */
     @ZenMethod
     IIItemHandlerModifiable getImportItems();
 
     /**
      *
+     * @return get export items.
      */
     @ZenMethod
     IIItemHandlerModifiable getExportItems();
 
     /**
      *
+     * @return get import fluids.
      */
     @ZenMethod
     IIFluidHandler getImportFluids();
 
     /**
      *
+     * @return get export fluids.
      */
     @ZenMethod
     IIFluidHandler getExportFluids();
 
     /**
      *
+     * @return get notified item output list.
      */
     @ZenMethod
     List<IIItemHandlerModifiable> getNotifiedItemOutputList();
 
     /**
      *
+     * @return get notified item input list.
      */
     @ZenMethod
     List<IIItemHandlerModifiable> getNotifiedItemInputList();
 
     /**
      *
+     * @return get notified fluid input list.
      */
     @ZenMethod
     List<IIFluidHandler> getNotifiedFluidInputList();
 
     /**
      *
+     * @return get notified fluid output list.
      */
     @ZenMethod
     List<IIFluidHandler> getNotifiedFluidOutputList();
 
     /**
      *
+     * @return is fragile.
      */
     @ZenMethod
     boolean isFragile();
 
     /**
      *
+     * @return should drop when destroyed.
      */
     @ZenMethod
     boolean shouldDropWhenDestroyed();
 
     /**
-     *
+     * Toggle muffled.
      */
     @ZenMethod
     void toggleMuffled();
 
     /**
      *
+     * @return is muffled
      */
     @ZenMethod
     boolean isMuffled();
