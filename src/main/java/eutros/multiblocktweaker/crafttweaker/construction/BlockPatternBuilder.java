@@ -10,6 +10,8 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.util.Arrays;
+
 /**
  * Used to construct an {@link IBlockPattern}.
  *
@@ -130,6 +132,25 @@ public class BlockPatternBuilder {
             return this;
         }
         delegate = delegate.where(symbol.charAt(0), predicate.toInternal());
+        return this;
+    }
+
+
+    /**
+     * Define a symbol. Any of the given predicates may be satisfied.
+     *
+     * @param symbol   The character that will represent this predicate in {@link #aisle(String...)} and the other aisle methods.
+     * @param first    The first matcher.
+     * @param predicates The rest of the predicates.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public BlockPatternBuilder whereOr(String symbol, CTTraceabilityPredicate first, CTTraceabilityPredicate... predicates) {
+        if (symbol.length() != 1) {
+            CraftTweakerAPI.logError("Symbol given is not a single character!");
+            return this;
+        }
+        delegate = delegate.where(symbol.charAt(0), Arrays.stream(predicates).reduce(first, CTTraceabilityPredicate::or).toInternal());
         return this;
     }
 

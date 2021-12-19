@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 /**
- * Called every time the worktable updates.
+ * Called every tick if the multiblock is structure formed.
  *
  * @zenClass mods.gregtech.recipe.functions.IUpdateFunction
  */
@@ -19,10 +19,9 @@ import javax.annotation.Nonnull;
 public interface IUpdateFormedValidFunction {
 
     /**
-     * Called every time the mte updates (formed).
-     * <p>
-     * Implement this with a function.
+     * Called every tick if the multiblock is structure formed.
      *
+     * @param controller The multiblock controller.
      */
     @ZenMethod
     void run(@Nonnull IControllerTile controller);

@@ -19,7 +19,6 @@ import gregtech.api.metatileentity.MetaTileEntityHolder;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.pattern.BlockWorldState;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.pattern.TraceabilityPredicate;
@@ -34,6 +33,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import stanhebben.zenscript.annotations.OperatorType;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenConstructor;
+import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenOperator;
 
@@ -49,6 +49,8 @@ import java.util.stream.Collectors;
 @ZenRegister
 public class CTTraceabilityPredicate {
     TraceabilityPredicate internal;
+    public static CTTraceabilityPredicate ANY = new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
+    public static CTTraceabilityPredicate AIR = new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
 
     public CTTraceabilityPredicate(TraceabilityPredicate internal) {
         this.internal = internal;
@@ -73,22 +75,25 @@ public class CTTraceabilityPredicate {
      * can be any block.
      */
     @ZenMethod
+    @ZenGetter
     public static CTTraceabilityPredicate ANY() {
-        return new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
+        return ANY;
     }
 
     /**
      * Only the air block.
      */
     @ZenMethod
+    @ZenGetter
     public static CTTraceabilityPredicate AIR() {
-        return new CTTraceabilityPredicate(TraceabilityPredicate.AIR);
+        return AIR;
     }
 
     /**
      * The Wire Coils block. with the same type. will also write its temperature to the context("coils_temperature").
      */
     @ZenMethod
+    @ZenGetter
     public static CTTraceabilityPredicate COILS() {
         return new CTTraceabilityPredicate(new TraceabilityPredicate(blockWorldState -> {
             net.minecraft.block.state.IBlockState blockState = blockWorldState.getBlockState();
@@ -111,7 +116,11 @@ public class CTTraceabilityPredicate {
     }
 
     /**
-     * MetaTileEntity checking. will try to cast to the mte.
+     * MetaTileEntity checking. will try to cast to the meta tile entity.
+     * 
+     * @param predicate Matching logic of meta tile entity. {@link IMTEPredicate}
+     * @param candidates Get candidates of this predicate. {@link ICandidates}
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given MTEs predicate.
      */
     @ZenMethod
     public static CTTraceabilityPredicate mtePredicate(IMTEPredicate predicate, ICandidates candidates) {
@@ -120,7 +129,7 @@ public class CTTraceabilityPredicate {
             if (!(tileEntity instanceof MetaTileEntityHolder))
                 return false;
             MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tileEntity).getMetaTileEntity();
-            if (predicate.apply(blockWorldState, new MCMetaTileEntity(metaTileEntity))) {
+            if (predicate.test(blockWorldState, new MCMetaTileEntity(metaTileEntity))) {
                 if (metaTileEntity instanceof IMultiblockPart) {
                     Set<IMultiblockPart> partsFound = blockWorldState.getInternal().getMatchContext().getOrCreate("MultiblockParts", HashSet::new);
                     partsFound.add((IMultiblockPart) metaTileEntity);
@@ -239,7 +248,7 @@ public class CTTraceabilityPredicate {
     }
 
     /**
-     * use | for convenient.
+     * Use | for convenience. You also can use the {@link eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder#whereOr(String, CTTraceabilityPredicate, CTTraceabilityPredicate...)
      */
     @ZenMethod
     @ZenOperator(OperatorType.OR)
@@ -250,7 +259,7 @@ public class CTTraceabilityPredicate {
 
     /**
      * Mark it as the controller of this multi. Normally you won't call it yourself.
-     * Use {@link IControllerTile#SELF()} plz.
+     * Use {@link IControllerTile#self()} ()} please.
      */
     @ZenMethod
     public CTTraceabilityPredicate setCenter() {

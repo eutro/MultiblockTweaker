@@ -62,10 +62,11 @@ public interface IMetaTileEntity {
     }
 
     /**
-     * get {@link IMetaTileEntity} from world.
-     * @param world world
-     * @param pos blockpos
-     * @return mte;
+     * Get an {@link IMetaTileEntity} from the world.
+     *
+     * @param world The world to get from.
+     * @param pos The position to get from.
+     * @return The meta tile entity at that position in the world.
      */
     @ZenMethod
     static IMetaTileEntity fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
@@ -77,7 +78,7 @@ public interface IMetaTileEntity {
     }
 
     /**
-     * @return The meta id of this mte.
+     * @return The meta id of this meta tile entity.
      */
     @ZenMethod
     @ZenGetter("metaTileEntityId")

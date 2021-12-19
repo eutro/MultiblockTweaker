@@ -137,6 +137,7 @@ javadoc.apply {
     }
     setDestinationDir(file("docs"))
     (options as StandardJavadocDocletOptions).run {
+        locale("en")
         tags!!.addAll(listOf(
                 "zenClass:a:ZenClass:",
                 "zenGetter:a:ZenGetter:",

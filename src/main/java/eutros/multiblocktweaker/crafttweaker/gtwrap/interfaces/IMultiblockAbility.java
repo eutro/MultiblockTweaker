@@ -24,7 +24,7 @@ import java.util.List;
 public interface IMultiblockAbility {
 
     /**
-     * Get a ability by its Name.
+     * Get an ability by its name.
      *
      * @param name The Name of the meta block Ability.
      * @return The ability by the Name, or null.

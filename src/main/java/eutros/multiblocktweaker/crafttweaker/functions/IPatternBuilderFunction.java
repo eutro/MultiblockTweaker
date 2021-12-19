@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * Called when create the pattern structure.
+ * Called to create the pattern structure.
  *
  * @zenClass mods.gregtech.multiblock.functions.IPatternBuilderFunction
  */

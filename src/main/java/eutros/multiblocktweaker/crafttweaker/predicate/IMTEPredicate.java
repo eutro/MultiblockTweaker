@@ -5,15 +5,20 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMetaTileEntity;
 import stanhebben.zenscript.annotations.ZenClass;
 
+/**
+ * A predicate for meta tile entities.
+ *
+ * @zenClass mods.gregtech.predicate.IMTEPredicate
+ */
 @FunctionalInterface
-@ZenClass("mods.gregtech.energy.IMTEPredicate")
+@ZenClass("mods.gregtech.predicate.IMTEPredicate")
 @ZenRegister
 public interface IMTEPredicate {
     /**
-     * similar to the {@link IPredicate}.
+     * Check the tile at a given position.
      * @param state block world state
      * @param mte will be null if the block not the {@link IMetaTileEntity}
      * @return checking result;
      */
-    boolean apply(IBlockWorldState state, IMetaTileEntity mte);
+    boolean test(IBlockWorldState state, IMetaTileEntity mte);
 }

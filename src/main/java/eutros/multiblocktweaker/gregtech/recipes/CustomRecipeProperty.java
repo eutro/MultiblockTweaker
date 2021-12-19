@@ -13,14 +13,34 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
 
+/**
+ * The custom RecipeProperty for recipes.
+ *
+ * @zenClass mods.gregtech.recipe.CustomRecipeProperty
+ */
 @ZenClass("mods.gregtech.recipe.CustomRecipeProperty")
 @ZenRegister
 public class CustomRecipeProperty extends RecipeProperty<Object> {
 
+    /**
+     * The {@link IGetRealValueFunction} this RecipeProperty has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
     @ZenProperty
     public IGetRealValueFunction getRealValueFunction;
+    /**
+     * The color of tooltips when it's shown in JEI.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
     @ZenProperty
     public Integer color;
+    /**
+     * Are tooltips hidden in JEI.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
     @ZenProperty
     public boolean isHidden;
 
@@ -28,6 +48,11 @@ public class CustomRecipeProperty extends RecipeProperty<Object> {
         super(key, Object.class);
     }
 
+    /**
+     * Get the key of this RecipeProperty.
+     *
+     * @return The key of this RecipeProperty.
+     */
     @Override
     @ZenMethod
     @ZenGetter("key")

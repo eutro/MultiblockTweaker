@@ -101,19 +101,19 @@ public class MCRecipe implements IRecipe {
     @Override
     public int getIntegerProperty(String key) {
         Object value = inner.getPropertyRaw(key);
-        return value instanceof Number ? ((Number) value).intValue() : -1;
+        return value instanceof Number ? ((Number) value).intValue() : 0;
     }
 
     @Override
     public long getLongProperty(String key) {
         Object value = inner.getPropertyRaw(key);
-        return value instanceof Number ? ((Number) value).longValue() : -1;
+        return value instanceof Number ? ((Number) value).longValue() : 0;
     }
 
     @Override
     public float getFloatProperty(String key) {
         Object value = inner.getPropertyRaw(key);
-        return value instanceof Number ? ((Number) value).floatValue() : -1;
+        return value instanceof Number ? ((Number) value).floatValue() : 0;
     }
 
     @Override

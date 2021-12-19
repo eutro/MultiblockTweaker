@@ -32,7 +32,7 @@ public interface ISound {
     /**
      * Register and Get the sound at a location.
      * <p>
-     * You will most likely wish to define this in a script with {@code #loader preinit}, so the texture actually gets loaded.
+     * You will most likely wish to define this in a script with {@code #loader preinit}, so the sound actually gets loaded.
      *
      * @param soundLocation The full location of the sound.
      * @return An {@link ISound} of the given sound.

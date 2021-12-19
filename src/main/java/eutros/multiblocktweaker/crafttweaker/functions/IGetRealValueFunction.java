@@ -20,6 +20,9 @@ public interface IGetRealValueFunction {
     /**
      * Implement this with a function. mapping Recipe Property tips.
      *
+     * @param recipeProperty Recipe Property of this recipe.
+     * @param value the value stored for this Recipe Property. (will be cast to string)
+     * @return formatted text results.
      */
     @ZenMethod
     IFormattedText map(CustomRecipeProperty recipeProperty, String value);

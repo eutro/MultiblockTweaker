@@ -49,8 +49,8 @@ public interface IICubeRenderer extends ICubeRenderer {
     /**
      * Get a ICubeRenderer by path from original CEu.
      *
-     * @param path The PATH of the cube renderer.
-     * @return The cube renderer referenced by the PATH, or null.
+     * @param path The path of the cube renderer.
+     * @return The cube renderer referenced by the path, or null.
      */
     @ZenMethod
     @Nullable
@@ -63,7 +63,7 @@ public interface IICubeRenderer extends ICubeRenderer {
     }
 
     /**
-     * Create a {@link gregtech.client.renderer.texture.cube.SimpleOverlayRenderer} with all sides showing the given texture
+     * Create a {@link gregtech.client.renderer.texture.cube.SimpleOverlayRenderer} with all sides showing the given texture.
      * <p>
      * If the texture is registered in the CEu, will use the default one.
      * Otherwise, this must be registered in preinit. Use {@code #loader preinit} in a separate script
@@ -80,8 +80,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer simpleOverlay(String key, String path) {
-        CubeRendererBracketHandler.cache.put(key, new MCICubeRenderer(new SimpleOverlayRenderer(path)));
-        return CubeRendererBracketHandler.cache.get(key);
+        return CubeRendererBracketHandler.cache.computeIfAbsent(key, $ -> new MCICubeRenderer(new SimpleOverlayRenderer(path)));
     }
 
     /**
@@ -115,8 +114,7 @@ public interface IICubeRenderer extends ICubeRenderer {
                 CraftTweakerAPI.logError("Duplicate key: " + e.getKey().getName());
             }
         }
-        CubeRendererBracketHandler.cache.put(key, new SidedCubeRenderer(key, SidedCubeRenderer.fillBlanks(result)));
-        return CubeRendererBracketHandler.cache.get(key);
+        return CubeRendererBracketHandler.cache.computeIfAbsent(key, $ -> new MCICubeRenderer(new SidedCubeRenderer(key, SidedCubeRenderer.fillBlanks(result))));
     }
 
     /**
@@ -181,13 +179,11 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer orientedOverlay(String key, String path, ConstantOverlayFace... faces) {
-        CubeRendererBracketHandler.cache.put(key, new MCICubeRenderer(new OrientedOverlayRenderer(path, Arrays.stream(faces)
+        return CubeRendererBracketHandler.cache.computeIfAbsent(key, $ -> new MCICubeRenderer(new OrientedOverlayRenderer(path, Arrays.stream(faces)
                 .map(f->f.val)
                 .toArray(OrientedOverlayRenderer.OverlayFace[]::new))));
-        return CubeRendererBracketHandler.cache.get(key);
+
     }
-
-
 
     /**
      * Get an {@link IBlockStateRenderer} from a block.

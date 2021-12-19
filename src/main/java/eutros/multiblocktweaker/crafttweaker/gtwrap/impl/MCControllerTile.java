@@ -240,7 +240,7 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     }
 
     @Override
-    public CTTraceabilityPredicate SELF() {
+    public CTTraceabilityPredicate self() {
         return new CTTraceabilityPredicate(getInternal().selfPredicate());
     }
 
@@ -278,7 +278,6 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     public boolean hasMufflerMechanics() {
         return getInternal().hasMufflerMechanics();
     }
-
 
     @Override
     public void storeTaped(boolean isTaped) {

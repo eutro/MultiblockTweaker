@@ -20,7 +20,8 @@ import javax.annotation.Nonnull;
 public interface IRunOverclockingLogicFunction {
 
     /**
-     * converts the recipe's values into ones used for overclocking
+     * Converts the recipe's values into ones used for overclocking.
+     *
      * @param recipe the recipe to overclock
      * @param maxOverclocks the maximum amount of overclocks to perform
      * @return an int array of {OverclockedEUt, OverclockedDuration}

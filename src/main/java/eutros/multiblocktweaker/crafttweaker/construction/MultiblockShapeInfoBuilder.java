@@ -35,11 +35,11 @@ import java.util.Map;
 public class MultiblockShapeInfoBuilder {
 
     private MultiblockShapeInfo.Builder inner;
-    private final Map<Character, MCBlockInfo.ControllerInfo> proxy_mte;
+    private final Map<Character, MCBlockInfo.ControllerInfo> proxyMetaTileEntity;
 
     public MultiblockShapeInfoBuilder() {
         inner = MultiblockShapeInfo.builder();
-        proxy_mte = new Char2ObjectOpenHashMap<>();
+        proxyMetaTileEntity = new Char2ObjectOpenHashMap<>();
     }
 
     /**
@@ -93,7 +93,7 @@ public class MultiblockShapeInfoBuilder {
         char c = getSymbol(symbol);
         if (c != '\0') {
             if (value instanceof MCBlockInfo.ControllerInfo) {
-                proxy_mte.put(c, (MCBlockInfo.ControllerInfo) value);
+                proxyMetaTileEntity.put(c, (MCBlockInfo.ControllerInfo) value);
             } else {
                 inner = inner.where(c, value.getInternal());
             }
@@ -179,7 +179,7 @@ public class MultiblockShapeInfoBuilder {
      */
     @ZenMethod
     public IMultiblockShapeInfo build() {
-        proxy_mte.forEach((k, v)-> inner.where(k, v.copy().getInternal()));
+        proxyMetaTileEntity.forEach((k, v)-> inner.where(k, v.copy().getInternal()));
         return new MCMultiblockShapeInfo(inner.build());
     }
 

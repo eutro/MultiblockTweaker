@@ -62,7 +62,6 @@ public class RecipeMapBuilder {
     /**
      * Start construction, with the given name. This will be used for localisation and later referencing.
      * <p>
-     * Equivalent to {@code start(name, 0, 0, 0, 0, 0, 0, 0, 0)}.
      *
      * @param name The unlocalized name for the recipe map.
      * @return The initialized builder.
@@ -76,7 +75,6 @@ public class RecipeMapBuilder {
     /**
      * Start construction, with the given name. This will be used for localisation and later referencing.
      * <p>
-     * Equivalent to {@code start(name, 0, 0, 0, 0, 0, 0, 0, 0)}.
      *
      * @param name The unlocalized name for the recipe map.
      * @return The initialized builder.

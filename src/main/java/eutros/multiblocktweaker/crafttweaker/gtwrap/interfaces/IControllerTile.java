@@ -22,6 +22,11 @@ import stanhebben.zenscript.annotations.ZenSetter;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * A IControllerTile block of the multiblock controller.
+ *
+ * @zenClass mods.gregtech.render.ICubeRenderer
+ */
 @ZenClass("mods.gregtech.IControllerTile")
 @ZenRegister
 public interface IControllerTile extends IMetaTileEntity {
@@ -37,10 +42,11 @@ public interface IControllerTile extends IMetaTileEntity {
     CustomMultiblock getMultiblock();
 
     /**
-     * get {@link IControllerTile} from world.
-     * @param world world
-     * @param pos blockpos
-     * @return mte;
+     * Get {@link IControllerTile} from world.
+     *
+     * @param world The world to get from.
+     * @param pos The position to get from.
+     * @return The controller at that position in the world.
      */
     @ZenMethod
     default IControllerTile fromWorldPos(@Nonnull IWorld world, @Nonnull IBlockPos pos){
@@ -52,7 +58,9 @@ public interface IControllerTile extends IMetaTileEntity {
         return null;
     }
 
-    // **********************MultiblockControllerBase
+    // --- MultiblockControllerBase
+    //TODO javadocs
+    
     /**
      *
      */
@@ -156,9 +164,6 @@ public interface IControllerTile extends IMetaTileEntity {
     void setExtraData(IData data);
 
     /**
-     *
-     */
-    /**
      * Retrieve extra data stored with {@link #setExtraData(IData)}
      *
      * @return The extra data stored on this controller.
@@ -186,10 +191,11 @@ public interface IControllerTile extends IMetaTileEntity {
                                         boolean checkFluidOut,
                                         boolean checkMuffler);
     @ZenMethod
-    CTTraceabilityPredicate SELF();
+    @ZenGetter("SELF")
+    CTTraceabilityPredicate self();
 
-    // ***********************************MultiblockWithDisplayBase
-
+    // --- MultiblockWithDisplayBase
+    //TODO javadocs
 
     /**
      * Sets the maintenance problem corresponding to index to fixed
@@ -266,7 +272,8 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenGetter
     boolean isActive();
 
-    // **********************************RecipeMapMultiblockController
+    // --- RecipeMapMultiblockController
+    //TODO javadocs
 
     /**
      *

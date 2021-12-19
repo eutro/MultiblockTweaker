@@ -97,9 +97,10 @@ public interface IPatternMatchContext {
      *     Below are the blocks in CEu that have this feature, and don't forget to collect them when you manually set the predicate:
      * </p>
      * <p>
-     * {@code <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:transparent_casing> <gregtech:fusion_casing> <gregtech:multiblock_casing> <gregtech:wire_coil> <gregtech:wire_coil2>}
+     *     
+     * {@code <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:multiblock_casing> <gregtech:wire_coil>}
      * @param pos blockpos
      */
     @ZenMethod
-    void addVBBlock(IBlockPos pos);
+    void addVABlock(IBlockPos pos);
 }

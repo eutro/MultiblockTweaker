@@ -124,7 +124,7 @@ public class MultiblockBuilder {
     /**
      * Add a design to be shown in JEI or structure previews. Can be called multiple times.
      * <p>
-     * If none are defined, the multiblock will use the auto way.
+     * If none are defined, one will be generated automatically.
      *
      * @param designs The designs to add and show in JEI.
      * @return This builder, for convenience.
@@ -132,7 +132,9 @@ public class MultiblockBuilder {
     @ZenMethod
     public MultiblockBuilder addDesign(@NotNull IMultiblockShapeInfo... designs) {
         if (this.designs == null) this.designs = new ArrayList<>();
-        Arrays.stream(designs).map(IMultiblockShapeInfo::getInternal).forEach(this.designs::add);
+        for (IMultiblockShapeInfo design : designs) {
+            this.designs.add(design.getInternal());
+        }
         return this;
     }
 

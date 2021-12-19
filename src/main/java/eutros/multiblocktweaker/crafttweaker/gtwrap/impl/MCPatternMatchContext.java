@@ -64,7 +64,7 @@ public class MCPatternMatchContext implements IPatternMatchContext {
     }
 
     @Override
-    public void addVBBlock(IBlockPos pos) {
+    public void addVABlock(IBlockPos pos) {
         inner.getOrPut("VABlock", new LinkedList<>()).add(CraftTweakerMC.getBlockPos(pos));
     }
 }
