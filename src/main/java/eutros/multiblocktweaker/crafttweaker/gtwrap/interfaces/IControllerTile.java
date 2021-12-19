@@ -59,10 +59,10 @@ public interface IControllerTile extends IMetaTileEntity {
     }
 
     // --- MultiblockControllerBase
-    //TODO javadocs
-    
+
     /**
-     *
+     * Get parts of this multiblock controller.
+     * @return Parts list of this controller.
      */
     @ZenMethod
     @ZenGetter("multiblockParts")
@@ -70,6 +70,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return Can parts of this controller be shared.
      */
     @ZenMethod
     @ZenGetter("canShare")
@@ -77,6 +78,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return The shapes demo of this controller.
      */
     @ZenMethod
     @ZenGetter("matchingShapes")
@@ -84,6 +86,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return FrontOverlay renderer.
      */
     @ZenMethod
     @ZenGetter("frontOverlay")
@@ -91,60 +94,73 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return The structure pattern of this controller.
      */
     @ZenMethod
     IBlockPattern createStructurePattern();
 
     /**
-     *
+     * Should render base texture for specific part.
+     * @param sourcePart The part block of this controller.
+     * @return result.
      */
     @ZenMethod
     boolean shouldRenderOverlay(IIMultiblockPart sourcePart);
 
     /**
-     *
+     * Get base texture of specific part.
+     * @param part The part block of this controller.
+     * @return Texture renderer.
      */
     @ZenMethod
     IICubeRenderer getBaseTexture(IIMultiblockPart part);
 
     /**
-     *
+     * Check structure is formed.
      */
     @ZenMethod
     void checkStructurePattern();
 
     /**
+     * Called when the structure is formed.
      *
+     * @param context Pattern context.
      */
     @ZenMethod
     void formStructure(IPatternMatchContext context);
 
     /**
-     *
+     * Get the light value of a specific part.
+     * @param sourcePart The part block of this controller.
+     * @return Light value.
      */
     @ZenMethod
     int getLightValueForPart(IIMultiblockPart sourcePart);
 
     /**
-     *
+     * Called when the structure is invalidated.
      */
     @ZenMethod
     void invalidateStructure();
 
     /**
-     *
+     * Called every tick, when the structure is formed.
      */
     @ZenMethod
     void updateFormedValid();
 
     /**
-     *
+     * //TODO unavailable.
+     * @param ability ability.
+     * @return IAny is un available.
      */
     @ZenMethod
     Object[] getAbilities(IMultiblockAbility ability);
 
     /**
+     * Is structure formed.
      *
+     * @return result.
      */
     @ZenMethod
     @ZenGetter
@@ -173,14 +189,25 @@ public interface IControllerTile extends IMetaTileEntity {
     IData getExtraData();
 
     /**
+     * Automatically generate ability predicates according to the RecipeMap.
      *
+     * @return Predicate according to the RecipeMap.
      */
     @ZenMethod
     @ZenGetter("autoAbilities")
     CTTraceabilityPredicate autoAbilities();
 
     /**
+     * Automatically generate (optional) ability predicates according to the RecipeMap.
      *
+     * @param checkEnergyIn Should check Energy Input.
+     * @param checkMaintainer Should check Maintainer.
+     * @param checkItemIn Should check Item Input.
+     * @param checkItemOut Should check Item Output.
+     * @param checkFluidIn Should check Fluid Input.
+     * @param checkFluidOut Should check Fluid Output.
+     * @param checkMuffler Should check Muffler.
+     * @return Predicate according to the RecipeMap.
      */
     @ZenMethod
     CTTraceabilityPredicate autoAbilities(boolean checkEnergyIn,
@@ -190,12 +217,17 @@ public interface IControllerTile extends IMetaTileEntity {
                                         boolean checkFluidIn,
                                         boolean checkFluidOut,
                                         boolean checkMuffler);
+
+    /**
+     * Predicate of this controller. You should always use this to define the controller of the mltiblock.
+     *
+     * @return Predicate of this controller.
+     */
     @ZenMethod
     @ZenGetter("SELF")
     CTTraceabilityPredicate self();
 
     // --- MultiblockWithDisplayBase
-    //TODO javadocs
 
     /**
      * Sets the maintenance problem corresponding to index to fixed
@@ -237,6 +269,10 @@ public interface IControllerTile extends IMetaTileEntity {
     @ZenGetter
     boolean hasMaintenanceMechanics();
 
+    /**
+     *
+     * @return whether this multiblock has muffler mechanics
+     */
     @ZenMethod
     @ZenGetter
     boolean hasMufflerMechanics();
@@ -273,10 +309,10 @@ public interface IControllerTile extends IMetaTileEntity {
     boolean isActive();
 
     // --- RecipeMapMultiblockController
-    //TODO javadocs
 
     /**
      *
+     * @return Energy container.
      */
     @ZenMethod
     @ZenGetter("energyContainer")
@@ -284,6 +320,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return Input inventory.
      */
     @ZenMethod
     @ZenGetter("inputInventory")
@@ -291,6 +328,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return Output inventory.
      */
     @ZenMethod
     @ZenGetter("outputInventory")
@@ -298,6 +336,7 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return Input fluid inventory.
      */
     @ZenMethod
     @ZenGetter("inputFluidInventory")
@@ -305,83 +344,103 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @return Output fluid inventory.
      */
     @ZenMethod
     @ZenGetter("outputFluidInventory")
     IIMultipleTankHandler getOutputFluidInventory();
 
     /**
-     *
+     * The recipe logic handler of this multiblock.
+     * 
+     * @return Recipe logic.
      */
     @ZenMethod
     @ZenGetter("recipeLogic")
     IRecipeLogic getRecipeLogic();
 
     /**
-     *
+     * Checking whether the found recipe is available.
+     * 
+     * @param recipe recipe be found.
+     * @param consumeIfSuccess is consume if success
+     * @return result
      */
     @ZenMethod
     boolean checkRecipe(IRecipe recipe, boolean consumeIfSuccess);
 
     /**
-     *
+     * Change active state for all VariantBlock {@link gregtech.common.blocks.VariantActiveBlock#ACTIVE} blocks. 
+     * which are blocks of this multiblock.
+     * 
+     * @param isActive New state.
      */
     @ZenMethod
     void replaceVariantBlocksActive(boolean isActive);
 
     /**
-     *
+     * 
+     * @return Can input buses be distinct.
      */
     @ZenMethod
     @ZenGetter
     boolean canBeDistinct();
 
     /**
-     *
+     * 
+     * @return Is distinct.
      */
     @ZenMethod
     @ZenGetter
     boolean isDistinct();
 
     /**
-     *
+     * 
+     * @return Can create sound.
      */
     @ZenMethod
     @ZenGetter
     boolean canCreateSound();
 
     /**
-     *
+     * 
+     * @return Get all available RecipeMaps.
      */
     @ZenMethod
     RecipeMap<?>[] getAvailableRecipeMaps();
 
     /**
-     *
+     * 
+     * @return Get current RecipeMap Index.
      */
     @ZenGetter("reipeMapIndex")
     int getRecipeMapIndex();
 
     /**
-     *
+     * Set current RecipeMap index.
+     * 
+     * @param index index
      */
     @ZenSetter("recipeMapIndex")
     void setRecipeMapIndex(int index);
 
     /**
-     *
+     * Add new RecipeMaps to this multiblock.
+     * 
+     * @param recipeMaps added recipe maps
      */
     @ZenMethod
     void addRecipeMaps(RecipeMap<?>... recipeMaps);
 
     /**
-     *
+     * 
+     * @return Get current RecipeMap
      */
     @ZenGetter("currentRecipeMap")
     RecipeMap<?> getCurrentRecipeMap();
 
     /**
-     *
+     * @return Get position list of all variant active blocks
      */
     @ZenGetter("variantActiveBlocks")
     List<IBlockPos> getVariantActiveBlocks();
