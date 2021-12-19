@@ -80,7 +80,7 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given ANY predicate.
      */
     @ZenMethod
-    public CTTraceabilityPredicate ANY() {
+    public CTTraceabilityPredicate getANY() {
         return ANY;
     }
 
@@ -90,7 +90,7 @@ public class CTTraceabilityPredicate {
      * @return An {@link CTTraceabilityPredicate} that returns true for any of the given AIR predicate.
      */
     @ZenMethod
-    public CTTraceabilityPredicate AIR() {
+    public CTTraceabilityPredicate getAIR() {
         return AIR;
     }
 

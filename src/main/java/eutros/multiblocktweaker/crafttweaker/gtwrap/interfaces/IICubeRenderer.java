@@ -118,7 +118,7 @@ public interface IICubeRenderer extends ICubeRenderer {
     }
 
     /**
-     * same as the {@link IICubeRenderer#sidedOverlay(String, Map)}
+     * same as {@link IICubeRenderer#sidedOverlay(String, Map)}
      * @param key Searching key for bracket.
      * @param up    The texture to use for the top face.
      * @param north (Optional) The texture to use for the north face.
