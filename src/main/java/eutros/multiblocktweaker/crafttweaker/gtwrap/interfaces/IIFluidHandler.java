@@ -40,7 +40,7 @@ public interface IIFluidHandler {
 
     /**
      * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
-     * <p/>
+     * <p>
      * This method is not Fluid-sensitive.
      *
      * @param maxDrain Maximum amount of fluid to drain.

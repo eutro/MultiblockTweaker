@@ -22,7 +22,9 @@ public interface IRunOverclockingLogicFunction {
     /**
      * Converts the recipe's values into ones used for overclocking.
      *
-     * @param recipe the recipe to overclock
+     * @param recipeLogic the recipe logic
+     * @param recipe the current recipe
+     * @param negativeEU the negative of Eu to perform
      * @param maxOverclocks the maximum amount of overclocks to perform
      * @return an int array of {OverclockedEUt, OverclockedDuration}
      */

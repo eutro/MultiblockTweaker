@@ -95,7 +95,7 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
 
     /**
      * Simulates the insertion of items into a target inventory, then optionally performs the insertion.
-     * <br /><br />
+     * <p>
      * Simulating will not modify any of the input parameters. Insertion will either succeed completely, or fail
      * without modifying anything.
      * This method should be called with {@code simulate} {@code true} first, then {@code simulate} {@code false},

@@ -25,6 +25,7 @@ public interface IGetBaseTextureFunction {
     /**
      * Implement this with a function.
      *
+     * @param controllerTile The multiblock controller.
      * @param part asking for the texture of the controller if the part is null.
      * @return the texture of the controller and parts.
      */

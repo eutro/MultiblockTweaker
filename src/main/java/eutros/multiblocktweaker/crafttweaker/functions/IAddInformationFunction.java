@@ -23,7 +23,7 @@ public interface IAddInformationFunction {
      * Implement this with a function.
      *
      * @param controller The multiblock controller.
-     * @return A list of tips {@link List<String>} to add to the item.
+     * @return A list of tips sting to add to the item.
      */
     @ZenMethod
     String[] addTips(@Nonnull IControllerTile controller);

@@ -65,6 +65,7 @@ public interface IIMaintenanceHatch {
 
     /**
      *
+     * @return //TODO
      */
     @ZenMethod
     @ZenGetter("durationMultiplier")
@@ -73,6 +74,7 @@ public interface IIMaintenanceHatch {
 
     /**
      *
+     * @return //TODO
      */
     @ZenMethod
     @ZenGetter("timeMultiplier")
@@ -81,6 +83,7 @@ public interface IIMaintenanceHatch {
 
     /**
      *
+     * @return //TODO
      */
     @ZenMethod
     @ZenGetter("startWithoutProblems")

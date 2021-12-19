@@ -75,7 +75,9 @@ public class CTTraceabilityPredicate {
     }
 
     /**
-     * can be any block.
+     * Can be any block.
+     *
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given ANY predicate.
      */
     @ZenMethod
     public CTTraceabilityPredicate ANY() {
@@ -84,6 +86,8 @@ public class CTTraceabilityPredicate {
 
     /**
      * Only the air block.
+     * 
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given AIR predicate.
      */
     @ZenMethod
     public CTTraceabilityPredicate AIR() {
@@ -92,10 +96,12 @@ public class CTTraceabilityPredicate {
 
     /**
      * The Wire Coils block. with the same type. will also write its temperature to the context("coils_temperature").
+     *
+     * @return An {@link CTTraceabilityPredicate} that returns true for any of the given coils predicate.
      */
     @ZenMethod
-    @ZenGetter
-    public static CTTraceabilityPredicate COILS() {
+    @ZenGetter("COILS")
+    public static CTTraceabilityPredicate getCoils() {
         return new CTTraceabilityPredicate(new TraceabilityPredicate(blockWorldState -> {
             net.minecraft.block.state.IBlockState blockState = blockWorldState.getBlockState();
             if ((blockState.getBlock() instanceof BlockWireCoil)) {
@@ -249,7 +255,10 @@ public class CTTraceabilityPredicate {
     }
 
     /**
-     * Use | for convenience. You also can use the {@link eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder#whereOr(String, CTTraceabilityPredicate, CTTraceabilityPredicate...)
+     * Use | for convenience. You can also use the {@link eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder#whereOr(String, CTTraceabilityPredicate, CTTraceabilityPredicate...)}
+     *
+     * @param predicate predicate.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     @ZenOperator(OperatorType.OR)
@@ -261,6 +270,8 @@ public class CTTraceabilityPredicate {
     /**
      * Mark it as the controller of this multi. Normally you won't call it yourself.
      * Use {@link IControllerTile#self()} ()} please.
+     *
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setCenter() {
@@ -268,6 +279,11 @@ public class CTTraceabilityPredicate {
         return this;
     }
 
+    /**
+     * No need to call it in general.
+     *
+     * @return An {@link CTTraceabilityPredicate}.
+     */
     @ZenMethod
     public CTTraceabilityPredicate sort() {
         internal = internal.sort();
@@ -276,6 +292,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Add tooltips for candidates. They are shown in JEI Pages.
+     *
+     * @param tips Tooltips string.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate addTooltips(String... tips) {
@@ -285,6 +304,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the minimum number of predicate blocks.
+     *
+     * @param min minimum number.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMinGlobalLimited(int min) {
@@ -294,6 +316,10 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the minimum number of predicate blocks. and number of previews.
+     *
+     * @param min minimum number.
+     * @param previewCount count.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMinGlobalLimited(int min, int previewCount) {
@@ -303,6 +329,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the maximum number of predicate blocks.
+     *
+     * @param max minimum number.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMaxGlobalLimited(int max) {
@@ -313,6 +342,10 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the maximum number of predicate blocks. and number of previews.
+     *
+     * @param max minimum number.
+     * @param previewCount count.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMaxGlobalLimited(int max, int previewCount) {
@@ -322,6 +355,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the minimum number of predicate blocks for each aisle layer.
+     *
+     * @param min minimum number.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMinLayerLimited(int min) {
@@ -331,6 +367,10 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the minimum number of predicate blocks for each aisle layer. and number of previews.
+     *
+     * @param min minimum number.
+     * @param previewCount count.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMinLayerLimited(int min, int previewCount) {
@@ -340,6 +380,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the maximum number of predicate blocks for each aisle layer.
+     *
+     * @param max minimum number.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMaxLayerLimited(int max) {
@@ -349,6 +392,10 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the maximum number of predicate blocks for each aisle layer. and number of previews.
+     *
+     * @param max minimum number.
+     * @param previewCount count.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setMaxLayerLimited(int max, int previewCount) {
@@ -358,6 +405,9 @@ public class CTTraceabilityPredicate {
 
     /**
      * Set the number of it appears in JEI pages. It only affects JEI preview. (The specific number)
+     *
+     * @param count count.
+     * @return An {@link CTTraceabilityPredicate}.
      */
     @ZenMethod
     public CTTraceabilityPredicate setPreviewCount(int count) {

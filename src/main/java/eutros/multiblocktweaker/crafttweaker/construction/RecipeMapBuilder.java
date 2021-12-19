@@ -47,6 +47,7 @@ public class RecipeMapBuilder {
     /**
      * Create a new, blank {@link CTRecipeBuilder} that will be the base recipe for any new ones.
      *
+     * @param recipeProperties RecipeProperty keys fot the recipe map.
      * @return A blank {@link CTRecipeBuilder}.
      */
     @ZenMethod
@@ -63,6 +64,7 @@ public class RecipeMapBuilder {
      * Start construction, with the given name. This will be used for localisation and later referencing.
      * <p>
      *
+     * @param recipeProperties RecipeProperty keys fot the recipe map.
      * @param name The unlocalized name for the recipe map.
      * @return The initialized builder.
      */
@@ -246,9 +248,10 @@ public class RecipeMapBuilder {
     }
 
     /**
-     *
-     * @param sound
-     * @return
+     * Set sound for the recipe map.
+     * 
+     * @param sound sound
+     * @return This builder, for convenience.
      */
     @ZenMethod
     public RecipeMapBuilder setSound(ISound sound) {

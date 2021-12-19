@@ -31,21 +31,24 @@ public interface IIMultiblockPart extends IMetaTileEntity{
     IMultiblockAbility getAbility();
 
     /**
-     * Can part be shared between different multi-blocks.
+     *
+     * @return Can part be shared between different multi-blocks.
      */
     @ZenMethod
     boolean canPartShare();
 
 
     /**
-     * Is the part attached to the multi-block.
+     *
+     * @return  Is the part attached to the multi-block.
      */
     @ZenMethod
     boolean isAttachedToMultiBlock();
 
 
     /**
-     * tier of this part.
+     *
+     * @return  tier of this part.
      */
     @ZenMethod
     @ZenGetter("tier")
