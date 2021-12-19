@@ -74,7 +74,7 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             // Some blocks that extends of {@link VariantActiveBlock} can change texture based on the multi-block working state.
                             // If you want to keep this effect (e.g., emissive active blocks), their position need to be collected during pattern checking.
                             // VBBlock in CEu: <gregtech:boiler_casing> <gregtech:fusion_casing> <gregtech:transparent_casing> <gregtech:multiblock_casing> <gregtech:wire_coil>
-                            blockWorldState.matchContext.addVBBlock(blockWorldState.pos);
+                            blockWorldState.matchContext.addVABlock(blockWorldState.pos);
                             return true;
                         }
                         return false;
@@ -99,15 +99,15 @@ val multiblockBuild = Builder.start(loc) // automatic allocation ID
                             .aisle("XXX", "CCC", "CCC", "XXX")
                             .aisle("XXX", "C#C", "C#C", "XMX")
                             .aisle("XSX", "CCC", "CCC", "XXX")
-                            .where('S', controller.SELF())
-                            .where('X', CTPredicate.states(<metastate:gregtech:metal_casing:2>).setMinGlobalLimited(9)
+                            .where('S', controller.self())
+                            .where('X', (<metastate:gregtech:metal_casing:2> as CTPredicate).setMinGlobalLimited(9) // same as CTPredicate.states(<metastate:gregtech:metal_casing:2>).setMinGlobalLimited(9)
                                     | controller.autoAbilities(true, true, true, true, true, true, false))
                             .where('M', <mte_ability:MUFFLER_HATCH>)
                             // .where('C', CTPredicate.COILS()) 
                             // In fact, you can directly use the code commented above, which is the built-in predicate for the coils.
                             // In order to demonstrate the power of MBT, we implement it in zs.
                             .where('C', COILS)
-                            .where('#', CTPredicate.AIR())
+                            .where('#', CTPredicate.AIR)
                             .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(

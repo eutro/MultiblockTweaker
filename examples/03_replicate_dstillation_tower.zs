@@ -28,7 +28,7 @@ val copy_distillation_tower = Builder.start(loc) // automatic allocation ID
                               .aisle("YSY", "YFY", "YYY")
                               .aisle("XXX", "X#X", "XXX").setRepeatable(1, 11)
                               .aisle("XXX", "XXX", "XXX")
-                              .where('S', controller.SELF())
+                              .where('S', controller.self())
                               .where('F', <mte_ability:IMPORT_FLUIDS>) // same as CTPredicate.abilities(<mte_ability:IMPORT_FLUIDS>)
                               .where('Y', (<metastate:gregtech:metal_casing:5> as CTPredicate) // same as CTPredicate.states(<mte_ability:IMPORT_FLUIDS>)
                                       | (<mte_ability:EXPORT_ITEMS> as CTPredicate).setMinGlobalLimited(1) // or
@@ -36,7 +36,7 @@ val copy_distillation_tower = Builder.start(loc) // automatic allocation ID
                               .where('X', (<metastate:gregtech:metal_casing:5> as CTPredicate)
                                       | CTPredicate.metaTileEntities(export_fluids_mtes).setMinLayerLimited(1).setMaxLayerLimited(1)
                                       | controller.autoAbilities(false, true, false, false, false, false, false))
-                              .where('#', CTPredicate.AIR())
+                              .where('#', CTPredicate.AIR)
                               .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(<recipemap:distillation_tower>)

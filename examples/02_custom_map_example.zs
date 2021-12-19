@@ -18,7 +18,7 @@ val magic_miner = Builder.start(loc) // automatic allocation ID
                           .aisle("CCC", "CCC", "CCC")
                           .aisle("CCC", "C C", "CMC")
                           .aisle("CSC", "CCC", "CCC")
-                          .where('S', controller.SELF())
+                          .where('S', controller.self())
                           .where("C", CTPredicate.states(<metastate:gregtech:metal_casing:3>)
                                       | CTPredicate.abilities(<mte_ability:IMPORT_ITEMS>).setMinGlobalLimited(1).setPreviewCount(1) // There is at least one IMPORT_ITEMS bus. JEI preview shows only one.
                                       | CTPredicate.abilities(<mte_ability:EXPORT_ITEMS>).setMinGlobalLimited(1).setPreviewCount(1)
@@ -29,10 +29,10 @@ val magic_miner = Builder.start(loc) // automatic allocation ID
                                         Although the above predicate matcher works well, we recommend using controller.autoAbilities() to automatically generate ability predicates according to the RecipeMap.
                                         Besides, If you want to generate separate predicates you can also use it. autoAbilities(boolean checkEnergyIn, boolean checkMaintainer, boolean checkItemIn, boolean checkItemOut, boolean checkFluidIn, boolean checkFluidOut, boolean checkMuffler);
                                         So anyway, this predicate can be simplified like this:
-                                            .where("C", CTPredicate.states(<metastate:gregtech:metal_casing:3>) | controller.autoAbilities(true, false, true, true, true, false, false))
+                          .where("C", CTPredicate.states(<metastate:gregtech:metal_casing:3>) | controller.autoAbilities(true, false, true, true, true, false, false))
                                       */
                           .where('M', controller.autoAbilities(false, false, false, false, false, false, true)) // same as CTPredicate.abilities(<mte_ability:MUFFLER_HATCH>)
-                          .where(' ', CTPredicate.AIR())
+                          .where(' ', CTPredicate.AIR)
                           .build();
                  } as IPatternBuilderFunction)
     .withRecipeMap(
@@ -76,11 +76,12 @@ game.setLocalization(
     "Magic Miner"
 );
 game.setLocalization(
-    "kilabash.multiblock.multiblock_dt.description",
+    "mbt.multiblock.multiblock_dt.description",
     "The Magic Miner is a multiblock that mines ores from nothing."
 );
 game.setLocalization(
     "recipemap.magic_miner.name",
     "Magic Miner"
 );
+
 // Don't forget to add a recipe!

@@ -36,6 +36,7 @@ import stanhebben.zenscript.annotations.ZenConstructor;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenOperator;
+import stanhebben.zenscript.annotations.ZenProperty;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -49,8 +50,10 @@ import java.util.stream.Collectors;
 @ZenRegister
 public class CTTraceabilityPredicate {
     TraceabilityPredicate internal;
+    @ZenProperty
     public static CTTraceabilityPredicate ANY = new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
-    public static CTTraceabilityPredicate AIR = new CTTraceabilityPredicate(TraceabilityPredicate.ANY);
+    @ZenProperty
+    public static CTTraceabilityPredicate AIR = new CTTraceabilityPredicate(TraceabilityPredicate.AIR);
 
     public CTTraceabilityPredicate(TraceabilityPredicate internal) {
         this.internal = internal;
@@ -75,8 +78,7 @@ public class CTTraceabilityPredicate {
      * can be any block.
      */
     @ZenMethod
-    @ZenGetter
-    public static CTTraceabilityPredicate ANY() {
+    public CTTraceabilityPredicate ANY() {
         return ANY;
     }
 
@@ -84,8 +86,7 @@ public class CTTraceabilityPredicate {
      * Only the air block.
      */
     @ZenMethod
-    @ZenGetter
-    public static CTTraceabilityPredicate AIR() {
+    public CTTraceabilityPredicate AIR() {
         return AIR;
     }
 

@@ -42,7 +42,7 @@ val midas_implosion_compressor = Builder.start(loc) // automatic allocation ID
                             .aisle("XXXXX", "C   C", "C   C", "CCCCC")
                             .aisle("XXXXX", "C   C", "C   C", "CCCCC")
                             .aisle("XISOX", "CCCCC", "CCCCC", "CCCCC")
-                            .where('S', controller.SELF())
+                            .where('S', controller.self())
                             .where('I', CTPredicate.abilities(<mte_ability:IMPORT_ITEMS>))
                             .where('O', CTPredicate.abilities(<mte_ability:EXPORT_ITEMS>))
                             .where('E', CTPredicate.abilities(<mte_ability:INPUT_ENERGY>))
