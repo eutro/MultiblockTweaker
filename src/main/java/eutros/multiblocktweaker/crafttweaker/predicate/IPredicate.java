@@ -7,7 +7,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 /**
  * A predicate for a block at a specific position.
  *
- * @zenClass mods.gregtech.predicate.ICandidates
+ * @zenClass mods.gregtech.predicate.IPredicate
  */
 @FunctionalInterface
 @ZenClass("mods.gregtech.predicate.IPredicate")
