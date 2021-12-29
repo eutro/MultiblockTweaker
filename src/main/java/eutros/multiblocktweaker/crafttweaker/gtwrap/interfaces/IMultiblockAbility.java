@@ -33,7 +33,7 @@ public interface IMultiblockAbility {
     @Nullable
     static IMultiblockAbility byName(@NotNull String name) {
         if (MultiblockAbility.NAME_REGISTRY.containsKey(name)) {
-            return new MCMultiblockAbility<>(MultiblockAbility.NAME_REGISTRY.get(name));
+            return new MCMultiblockAbility<>(MultiblockAbility.NAME_REGISTRY.get(name.toLowerCase()));
         }
         return null;
     }

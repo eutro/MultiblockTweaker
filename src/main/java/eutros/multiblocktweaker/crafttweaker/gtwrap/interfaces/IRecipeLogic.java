@@ -571,9 +571,9 @@ public interface IRecipeLogic {
 
     /**
      *
-     * @return evergyHatchr
+     * @return evergyHatch
      */
-    @ZenGetter("evergyHatchr")
+    @ZenGetter("evergyHatch")
     IIEnergyContainer getEnergyHatch();
 
 }
