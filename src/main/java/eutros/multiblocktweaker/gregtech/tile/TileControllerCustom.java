@@ -29,7 +29,7 @@ import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.PatternStringError;
 import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

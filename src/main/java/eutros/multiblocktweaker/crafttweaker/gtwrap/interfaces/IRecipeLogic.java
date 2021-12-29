@@ -432,10 +432,11 @@ public interface IRecipeLogic {
      * Draw energy from the energy container.
      *
      * @param recipeEUt recipe eu cost
+     * @param simulate is simulate
      * @return actual eu consumption
      */
     @ZenMethod
-    boolean drawEnergy(int recipeEUt);
+    boolean drawEnergy(int recipeEUt, boolean simulate);
 
     /**
      * Called every tick

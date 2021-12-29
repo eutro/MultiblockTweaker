@@ -1,18 +1,11 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import gregtech.api.capability.IMaintenanceHatch;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
-import net.minecraft.util.Tuple;
-import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * A tile entity with maintenance hatch.

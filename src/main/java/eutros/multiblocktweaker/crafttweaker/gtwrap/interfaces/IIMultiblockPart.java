@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
-import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;

@@ -62,8 +62,6 @@ magic_miner // The Bracket Handler can also be used to refer to it. (<multiblock
     .outputs(<gregtech:ore_cassiterite_0:3> * 64,
              <gregtech:ore_redstone_0> * 64,
              <gregtech:ore_nickel_0> * 64,
-             <gregtech:ore_rutile_0> * 64,
-             <gregtech:ore_rutile_0> * 64,
              <gregtech:ore_uraninite_0:3> * 64,
              <gregtech:ore_galena_0> * 64,
              <gregtech:ore_galena_0> * 64,

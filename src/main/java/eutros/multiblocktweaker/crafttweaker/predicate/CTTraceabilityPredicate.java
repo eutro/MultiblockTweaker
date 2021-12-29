@@ -139,6 +139,7 @@ public class CTTraceabilityPredicate {
             if (!(tileEntity instanceof MetaTileEntityHolder))
                 return false;
             MetaTileEntity metaTileEntity = ((MetaTileEntityHolder) tileEntity).getMetaTileEntity();
+            if (metaTileEntity == null) return false;
             if (predicate.test(blockWorldState, new MCMetaTileEntity(metaTileEntity))) {
                 if (metaTileEntity instanceof IMultiblockPart) {
                     Set<IMultiblockPart> partsFound = blockWorldState.getInternal().getMatchContext().getOrCreate("MultiblockParts", HashSet::new);

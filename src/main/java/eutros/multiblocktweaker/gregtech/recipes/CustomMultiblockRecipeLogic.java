@@ -318,8 +318,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public boolean drawEnergy(int recipeEUt) {
-        return super.drawEnergy(recipeEUt);
+    public boolean drawEnergy(int recipeEUt, boolean simulate) {
+        return super.drawEnergy(recipeEUt, simulate);
     }
 
     @Override

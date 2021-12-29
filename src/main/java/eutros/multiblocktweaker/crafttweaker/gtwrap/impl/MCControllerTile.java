@@ -1,8 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import crafttweaker.api.data.IData;
-import crafttweaker.api.item.IItemStack;
-import crafttweaker.api.text.ITextComponent;
 import crafttweaker.api.world.IBlockPos;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -10,7 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIEnergyContainer;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMaintenanceHatch;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultiblockPart;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultipleTankHandler;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
@@ -20,9 +17,8 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
 import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.common.metatileentities.electric.multiblockpart.MetaTileEntityMultiblockPart;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
