@@ -7,7 +7,8 @@ import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockWorldState;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
-import gregtech.api.multiblock.BlockWorldState;
+import gregtech.api.pattern.BlockWorldState;
+import gregtech.api.pattern.PatternStringError;
 import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,8 +33,13 @@ public class MCBlockWorldState implements IBlockWorldState {
     }
 
     @Override
-    public IPatternMatchContext getLayerContext() {
-        return new MCPatternMatchContext(inner.getLayerContext());
+    public boolean hasError() {
+        return inner.hasError();
+    }
+
+    @Override
+    public void setError(String error) {
+        inner.setError(new PatternStringError(error));
     }
 
     @Override

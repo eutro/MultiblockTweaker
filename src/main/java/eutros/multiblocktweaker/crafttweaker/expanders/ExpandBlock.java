@@ -4,7 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlock;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockInfo;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.predicate.IBlockMatcher;
+import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import stanhebben.zenscript.annotations.ZenCaster;
 import stanhebben.zenscript.annotations.ZenExpansion;
 
@@ -13,8 +13,8 @@ import stanhebben.zenscript.annotations.ZenExpansion;
 public class ExpandBlock {
 
     @ZenCaster
-    public static IBlockMatcher asIBlockMatcher(IBlock self) {
-        return IBlockMatcher.blockPredicate(self);
+    public static CTTraceabilityPredicate asCTPredicate(IBlock self) {
+        return CTTraceabilityPredicate.blocks(self);
     }
 
     @ZenCaster

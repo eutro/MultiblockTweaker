@@ -5,7 +5,7 @@ import crafttweaker.api.block.IBlockState;
 import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
-import gregtech.api.multiblock.BlockWorldState;
+import gregtech.api.pattern.BlockWorldState;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -24,12 +24,16 @@ public interface IBlockWorldState {
     @NotNull
     BlockWorldState getInternal();
 
+    @ZenMethod
+    @ZenGetter("hasError")
+    boolean hasError();
+
     /**
-     * @return The match context of the current layer as opposed to that of the entire structure.
+     * Set error info for tips. if predicate checking failed.
+     * @param error Error tips.
      */
     @ZenMethod
-    @ZenGetter("layerContext")
-    IPatternMatchContext getLayerContext();
+    void setError(String error);
 
     /**
      * @return The match context of the entire structure as opposed to that of a single layer.

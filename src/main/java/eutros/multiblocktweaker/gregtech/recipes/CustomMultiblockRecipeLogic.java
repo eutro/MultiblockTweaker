@@ -2,27 +2,21 @@ package eutros.multiblocktweaker.gregtech.recipes;
 
 
 import crafttweaker.CraftTweakerAPI;
-import eutros.multiblocktweaker.crafttweaker.functions.ICompleteRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.ISetupRecipeFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateFunction;
-import eutros.multiblocktweaker.crafttweaker.functions.IUpdateWorktableFunction;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCControllerTile;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIItemHandlerModifiable;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCIMultipleTankHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.liquid.ILiquidStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.*;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
-import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.recipes.Recipe;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraft.util.NonNullList;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.Random;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implements IRecipeLogic {
@@ -30,75 +24,11 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     /**
      * This property will set the chance of the inputs being consumed when a recipe is started.
      */
-    public static final String CONSUME_CHANCE = "consumeChance";
-    @Nullable
-    private IUpdateFunction update;
-    @Nullable
-    private IUpdateWorktableFunction updateWorktable;
-    @Nullable
-    private ISetupRecipeFunction setupRecipe;
-    @Nullable
-    private ICompleteRecipeFunction completeRecipe;
+    public final CustomMultiblock multiblock;
 
-    public CustomMultiblockRecipeLogic(RecipeMapMultiblockController tileEntity,
-                                       @Nullable IUpdateFunction update,
-                                       @Nullable IUpdateWorktableFunction updateWorktable,
-                                       @Nullable ISetupRecipeFunction setupRecipe,
-                                       @Nullable ICompleteRecipeFunction completeRecipe) {
-        super(tileEntity);
-        this.update = update;
-        this.updateWorktable = updateWorktable;
-        this.setupRecipe = setupRecipe;
-        this.completeRecipe = completeRecipe;
-    }
-
-    @Override
-    protected boolean setupAndConsumeRecipeInputs(Recipe recipe) {
-        TileControllerCustom controller = (TileControllerCustom) this.metaTileEntity;
-        if (!controller.checkRecipe(recipe, false)) {
-            return false;
-        }
-
-        int[] resultOverclock = calculateOverclock(recipe.getEUt(), getMaxVoltage(), recipe.getDuration());
-        int totalEUt = resultOverclock[0] * resultOverclock[1];
-        IItemHandlerModifiable importInventory = getInputInventory();
-        IItemHandlerModifiable exportInventory = getOutputInventory();
-        IMultipleTankHandler importFluids = getInputTank();
-        IMultipleTankHandler exportFluids = getOutputTank();
-        boolean ret = (totalEUt >= 0 ?
-                getEnergyStored() >= (totalEUt > getEnergyCapacity() / 2 ? resultOverclock[0] : totalEUt) :
-                (getEnergyStored() - resultOverclock[0] <= getEnergyCapacity())) &&
-                      MetaTileEntity.addItemsToItemHandler(exportInventory, true, recipe.getAllItemOutputs(exportInventory.getSlots())) &&
-                      MetaTileEntity.addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
-                      recipe.matches(new Random().nextInt(100) <=
-                                     (recipe.getRecipePropertyStorage().getRecipePropertyKeys().contains(CONSUME_CHANCE) ?
-                                             recipe.getIntegerProperty(CONSUME_CHANCE) :
-                                             100),
-                              importInventory, importFluids);
-
-        if (ret) {
-            controller.checkRecipe(recipe, true);
-        }
-
-        return ret;
-    }
-
-    // FUNCTION GETTERS
-
-    public Optional<IUpdateFunction> getUpdate() {
-        return Optional.ofNullable(update);
-    }
-
-    public Optional<IUpdateWorktableFunction> getUpdateWorktable() {
-        return Optional.ofNullable(updateWorktable);
-    }
-
-    public Optional<ISetupRecipeFunction> getSetupRecipe() {
-        return Optional.ofNullable(setupRecipe);
-    }
-
-    public Optional<ICompleteRecipeFunction> getCompleteRecipe() {
-        return Optional.ofNullable(completeRecipe);
+    public CustomMultiblockRecipeLogic(TileControllerCustom controller) {
+        super(controller);
+        this.multiblock = controller.multiblock;
     }
 
     // FUNCTIONS
@@ -108,15 +38,16 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public void update() {
-        getUpdate().ifPresent(u -> {
+    protected int[] runOverclockingLogic(@NotNull Recipe recipe, boolean negativeEU, int maxOverclocks) {
+        if (multiblock.runOverclockingLogic != null) {
             try {
-                u.run(this);
+                return multiblock.runOverclockingLogic.run(this, new MCRecipe(recipe), negativeEU, maxOverclocks);
             } catch (RuntimeException t) {
-                logFailure("update", t);
-                update = null;
+                logFailure("runOverclockingLogic", t);
+                multiblock.runOverclockingLogic = null;
             }
-        });
+        }
+        return super.runOverclockingLogic(recipe, negativeEU, maxOverclocks);
     }
 
     @Override
@@ -125,63 +56,220 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
+    public void trySearchNewRecipeCombined() {
+        super.trySearchNewRecipeCombined();
+    }
+
+    @Override
+    public void trySearchNewRecipeDistinct() {
+        super.trySearchNewRecipeDistinct();
+    }
+
+    @Override
+    public boolean checkPreviousRecipeDistinct(IIItemHandlerModifiable previousBus) {
+        return super.checkPreviousRecipeDistinct(previousBus.getInner());
+    }
+
+    @Override
+    public boolean prepareRecipeDistinct(IRecipe recipe) {
+        return super.prepareRecipeDistinct(recipe.getInner());
+    }
+
+    @Override
+    public void performMaintenanceMufflerOperations() {
+        super.performMaintenanceMufflerOperations();
+    }
+
+    @Override
     public void updateWorkable() {
-        if (getUpdateWorktable().map(u -> {
+        boolean result = true;
+        if (multiblock.updateWorktableFunction != null) {
             try {
-                return u.run(this);
+                result = multiblock.updateWorktableFunction.run(this);
             } catch (RuntimeException t) {
                 logFailure("updateWorktable", t);
-                updateWorktable = null;
-                return true;
+                multiblock.updateWorktableFunction = null;
             }
-        }).orElse(true)) {
+        }
+        if (result) {
             super.updateWorkable();
         }
     }
 
     @Override
     protected void setupRecipe(Recipe recipe) {
-        super.setupRecipe(recipe);
-        getSetupRecipe().ifPresent(s -> {
+        boolean result = true;
+        if (multiblock.setupRecipeFunction != null) {
             try {
-                s.run(this, new MCRecipe(recipe));
+                result = multiblock.setupRecipeFunction.run(this, new MCRecipe(recipe));
             } catch (RuntimeException t) {
                 logFailure("setupRecipe", t);
-                setupRecipe = null;
+                multiblock.setupRecipeFunction = null;
             }
-        });
+        }
+        if (result) {
+            super.setupRecipe(recipe);
+        }
     }
 
     @Override
     protected void completeRecipe() {
-        super.completeRecipe();
-        getCompleteRecipe().ifPresent(c -> {
+        boolean result = true;
+        if (multiblock.completeRecipeFunction != null) {
             try {
-                c.run(this);
+                result = multiblock.completeRecipeFunction.run(this);
             } catch (RuntimeException t) {
                 logFailure("completeRecipe", t);
-                completeRecipe = null;
+                multiblock.completeRecipeFunction = null;
             }
-        });
-    }
-
-    @Override
-    protected boolean checkRecipeInputsDirty(IItemHandler inputs, IMultipleTankHandler fluidInputs) {
-        boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
-        if (ret) return true;
-
-        if (metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
-            // check every 20 ticks, if there is a recipe predicate, they may be checking different things
-            return ((TileControllerCustom) metaTileEntity).multiblock.recipePredicate != null;
         }
-        return false;
+        if (result) {
+            super.completeRecipe();
+        }
     }
 
     // CT EXPOSED
 
     @Override
-    public IRecipe getPreviousRecipe() {
-        return new MCRecipe(previousRecipe);
+    public void superSetupRecipe(IRecipe recipe) {
+        super.setupRecipe(recipe.getInner());
+    }
+
+    @Override
+    public void superCompleteRecipe() {
+        super.completeRecipe();
+    }
+
+    @Override
+    public void superUpdateWorkable() {
+        super.updateWorkable();
+    }
+
+    @Override
+    public int parallelRecipesPerformed() {
+        return parallelRecipesPerformed;
+    }
+
+    @Override
+    public void ParallelRecipesPerformed(int amount) {
+        setParallelRecipesPerformed(amount);
+    }
+
+    @Override
+    public long overclockVoltage() {
+        return getOverclockVoltage();
+    }
+
+    @Override
+    public void overclockVoltage(long overclockVoltage) {
+        setOverclockVoltage(overclockVoltage);
+    }
+
+    @Override
+    public int progressTime() {
+        return progressTime;
+    }
+
+    @Override
+    public void progressTime(int progressTime) {
+        this.progressTime = progressTime;
+    }
+
+    @Override
+    public int maxProgressTime() {
+        return getMaxProgress();
+    }
+
+    @Override
+    public void maxProgressTime(int maxProgressTime) {
+        setMaxProgress(maxProgressTime);
+    }
+
+    @Override
+    public int recipeEUt() {
+        return getRecipeEUt();
+    }
+
+    @Override
+    public void recipeEUt(int eut) {
+        this.recipeEUt = eut;
+    }
+
+    @Override
+    public ILiquidStack[] fluidOutputs() {
+        return this.fluidOutputs == null ? null : this.fluidOutputs.stream().map(CraftTweakerMC::getILiquidStack).toArray(ILiquidStack[]::new);
+    }
+
+    @Override
+    public void fluidOutputs(ILiquidStack[] fluidOutputs) {
+        if (fluidOutputs == null) this.fluidOutputs = null;
+        else {
+            this.fluidOutputs = Arrays.stream(fluidOutputs).map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
+        }
+    }
+
+    @Override
+    public IItemStack[] itemOutputs() {
+        return this.itemOutputs == null ? null : this.itemOutputs.stream().map(CraftTweakerMC::getIItemStack).toArray(IItemStack[]::new);
+    }
+
+    @Override
+    public void itemOutputs(IItemStack[] itemOutputs) {
+        if (itemOutputs == null) this.itemOutputs = null;
+        else {
+            this.itemOutputs = NonNullList.create();
+            Arrays.stream(itemOutputs).map(CraftTweakerMC::getItemStack).forEach(this.itemOutputs::add);
+        }
+    }
+
+    @Override
+    public boolean wasActiveAndNeedsUpdate() {
+        return wasActiveAndNeedsUpdate;
+    }
+
+    @Override
+    public void wasActiveAndNeedsUpdate(boolean wasActiveAndNeedsUpdate) {
+        this.wasActiveAndNeedsUpdate = wasActiveAndNeedsUpdate;
+    }
+
+    @Override
+    public boolean isOutputsFull() {
+        return this.isOutputsFull;
+    }
+
+    @Override
+    public void isOutputsFull(boolean isOutputsFull) {
+        this.isOutputsFull = isOutputsFull;
+    }
+
+    @Override
+    public boolean invalidInputsForRecipes() {
+        return this.invalidInputsForRecipes;
+    }
+
+    @Override
+    public void invalidInputsForRecipes(boolean invalidInputsForRecipes) {
+        this.invalidInputsForRecipes = invalidInputsForRecipes;
+    }
+
+    @Override
+    public int getLastRecipeIndex() {
+        return lastRecipeIndex;
+    }
+
+    @Override
+    public void setLstRecipeIndex(int index) {
+        this.lastRecipeIndex = index;
+    }
+
+    @Override
+    public IRecipe getPreviousIRecipe() {
+        return previousRecipe == null ? null : new MCRecipe(previousRecipe);
+    }
+
+    @Override
+    public void setPreviousIRecipe(IRecipe previousRecipe) {
+        this.previousRecipe = previousRecipe == null ? null : previousRecipe.getInner();
     }
 
     @Override
@@ -195,6 +283,26 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+    }
+
+    @Override
+    public boolean hasNotEnoughEnergy() {
+        return isHasNotEnoughEnergy();
+    }
+
+    @Override
+    public void hasNotEnoughEnergy(boolean hasNotEnoughEnergy) {
+        this.hasNotEnoughEnergy = hasNotEnoughEnergy;
+    }
+
+    @Override
+    public long getEnergyInputPerSecond() {
+        return super.getEnergyInputPerSecond();
+    }
+
+    @Override
     public long getEnergyStored() {
         return super.getEnergyStored();
     }
@@ -205,13 +313,33 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public boolean drawEnergy(int recipeEUt) {
-        return super.drawEnergy(recipeEUt);
+    public int[] calculateOverclock(IRecipe recipe) {
+        return super.calculateOverclock(recipe.getInner());
+    }
+
+    @Override
+    public boolean drawEnergy(int recipeEUt, boolean simulate) {
+        return super.drawEnergy(recipeEUt, simulate);
     }
 
     @Override
     public long getMaxVoltage() {
         return super.getMaxVoltage();
+    }
+
+    @Override
+    public IIItemHandlerModifiable getCurrentDistinctInputBus() {
+        return new MCIItemHandlerModifiable(super.currentDistinctInputBus);
+    }
+
+    @Override
+    public List<IIItemHandlerModifiable> getInvalidatedInputList() {
+        return super.invalidatedInputList.stream().map(MCIItemHandlerModifiable::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<IIItemHandlerModifiable> getInputBus() {
+        return super.getInputBuses().stream().map(MCIItemHandlerModifiable::new).collect(Collectors.toList());
     }
 
     @Override
@@ -234,4 +362,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         return new MCIMultipleTankHandler(super.getOutputTank());
     }
 
+    @Override
+    public IIEnergyContainer getEnergyHatch() {
+        return new MCIEnergyContainer(super.getEnergyContainer());
+    }
 }

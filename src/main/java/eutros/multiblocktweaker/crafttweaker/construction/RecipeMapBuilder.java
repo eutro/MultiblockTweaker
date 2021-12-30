@@ -2,8 +2,10 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMoveType;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ISound;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
 import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeBuilder;
+import eutros.multiblocktweaker.gregtech.recipes.CustomRecipeProperty;
 import eutros.multiblocktweaker.gregtech.recipes.RecipeMapMultiblock;
 import gnu.trove.map.TByteObjectMap;
 import gnu.trove.map.hash.TByteObjectHashMap;
@@ -11,7 +13,7 @@ import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.crafttweaker.CTRecipeBuilder;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraft.util.SoundEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -26,7 +28,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 public class RecipeMapBuilder {
 
-    private String name;
+    private final String name;
     private int minInputs = 0;
     private int maxInputs = 0;
     private int minOutputs = 0;
@@ -35,29 +37,46 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
-    public CTRecipeBuilder defaultRecipe = startBuilder();
-    private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
+    private boolean isHidden = false;
+    public CTRecipeBuilder defaultRecipe;
+    private final TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
+    private SoundEvent sound;
 
     /**
      * Create a new, blank {@link CTRecipeBuilder} that will be the base recipe for any new ones.
      *
+     * @param recipeProperties RecipeProperty keys fot the recipe map.
      * @return A blank {@link CTRecipeBuilder}.
      */
     @ZenMethod
-    public static CTRecipeBuilder startBuilder() {
-        return new CTRecipeBuilder(new CustomRecipeBuilder());
+    public static CTRecipeBuilder startBuilder(CustomRecipeProperty...recipeProperties) {
+        return new CTRecipeBuilder(new CustomRecipeBuilder(recipeProperties));
     }
 
-    public RecipeMapBuilder(String name) {
+    public RecipeMapBuilder(String name, CustomRecipeProperty...recipeProperties) {
         this.name = name;
+        this.defaultRecipe = startBuilder(recipeProperties);
     }
 
     /**
      * Start construction, with the given name. This will be used for localisation and later referencing.
      * <p>
-     * Equivalent to {@code start(name, 0, 0, 0, 0, 0, 0, 0, 0)}.
+     *
+     * @param recipeProperties RecipeProperty keys fot the recipe map.
+     * @param name The unlocalized name for the recipe map.
+     * @return The initialized builder.
+     */
+    @ZenMethod
+    public static RecipeMapBuilder start(String name, CustomRecipeProperty...recipeProperties) {
+        return new RecipeMapBuilder(name, recipeProperties);
+    }
+
+
+    /**
+     * Start construction, with the given name. This will be used for localisation and later referencing.
+     * <p>
      *
      * @param name The unlocalized name for the recipe map.
      * @return The initialized builder.
@@ -65,33 +84,6 @@ public class RecipeMapBuilder {
     @ZenMethod
     public static RecipeMapBuilder start(String name) {
         return new RecipeMapBuilder(name);
-    }
-
-    /**
-     * Start construction, setting all of the constructor values at the start.
-     *
-     * @param name            The unlocalized name for the recipe map.
-     * @param minInputs       The minimum item inputs a recipe can have.
-     * @param maxInputs       The maximum item inputs a recipe can have.
-     * @param minOutputs      The minimum item outputs a recipe can have.
-     * @param maxOutputs      The maximum item outputs a recipe can have.
-     * @param minFluidInputs  The minimum fluid inputs a recipe can have.
-     * @param maxFluidInputs  The maximum fluid inputs a recipe can have.
-     * @param minFluidOutputs The minimum fluid outputs a recipe can have.
-     * @param maxFluidOutputs The maximum fluid outputs a recipe can have.
-     * @return The initialized builder.
-     */
-    @ZenMethod
-    public static RecipeMapBuilder start(String name, int minInputs, int maxInputs, int minOutputs, int maxOutputs, int minFluidInputs, int maxFluidInputs, int minFluidOutputs, int maxFluidOutputs) {
-        return start(name)
-                .minInputs(minInputs)
-                .maxInputs(maxInputs)
-                .minOutputs(minOutputs)
-                .maxOutputs(maxOutputs)
-                .minFluidInputs(minFluidInputs)
-                .maxFluidInputs(maxFluidInputs)
-                .minFluidOutputs(minFluidOutputs)
-                .maxFluidOutputs(maxFluidOutputs);
     }
 
     /**
@@ -191,6 +183,17 @@ public class RecipeMapBuilder {
     }
 
     /**
+     * Should hide recipes.
+     * @param isHidden isHidden.
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public RecipeMapBuilder setHidden(boolean isHidden) {
+        this.isHidden = isHidden;
+        return this;
+    }
+
+    /**
      * Set the default recipe builder, that will be copied in order to add new recipes.
      *
      * @param builder The {@link CTRecipeBuilder} that holds the starting state for any new recipes.
@@ -245,6 +248,18 @@ public class RecipeMapBuilder {
     }
 
     /**
+     * Set sound for the recipe map.
+     * 
+     * @param sound sound
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public RecipeMapBuilder setSound(ISound sound) {
+        this.sound = sound == null ? null : sound.getInternal();
+        return this;
+    }
+
+    /**
      * Construct the {@link RecipeMap}.
      *
      * @return The built recipe map.
@@ -260,8 +275,11 @@ public class RecipeMapBuilder {
                 maxFluidInputs,
                 minFluidOutputs,
                 maxFluidOutputs,
-                ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"));
-
+                (CustomRecipeBuilder) defaultRecipe.backingBuilder,
+                isHidden);
+        if (sound != null) {
+            map.setSound(sound);
+        }
         for (byte key : slotOverlays.keys()) {
             map.setSlotOverlay((key & 2) != 0, (key & 1) != 0, (key & 4) != 0, slotOverlays.get(key));
         }

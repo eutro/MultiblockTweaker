@@ -2,19 +2,12 @@ package eutros.multiblocktweaker.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockBuilder;
 import eutros.multiblocktweaker.crafttweaker.functions.*;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCCubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
-import net.minecraft.item.ItemStack;
+import gregtech.client.renderer.ICubeRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -22,7 +15,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenProperty;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * A representation of a custom GregTech Multiblock.
@@ -33,11 +25,6 @@ import java.util.Map;
  *
  * @zenClass mods.gregtech.multiblock.Multiblock
  * @see MultiblockBuilder
- * @see IUpdateFunction
- * @see IUpdateWorktableFunction
- * @see ISetupRecipeFunction
- * @see ICompleteRecipeFunction
- * @see IRecipePredicate
  */
 @ZenClass("mods.gregtech.multiblock.Multiblock")
 @ZenRegister
@@ -48,76 +35,71 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public final int metaId;
+    @ZenProperty
+    public final ICubeRenderer baseTexture;
     /**
      * The recipe map the multiblock uses. Set in {@link MultiblockBuilder#withRecipeMap(RecipeMap)}.
      */
     @ZenProperty
     public final RecipeMap<?> recipeMap;
-
-    /**
-     * The default zoom level of the multiblock. Set in {@link MultiblockBuilder#withZoom(float)}
-     */
-    @ZenProperty
-    public final float zoom;
-
-    /**
-     * The Tooltip map for the multiblock components. Set in {@link MultiblockBuilder#withPartTooltip(IItemStack, crafttweaker.api.text.ITextComponent)}
-     */
-    @ZenProperty
-    public final Map<ItemStack, List<ITextComponent>> tooltipMap;
-
-    /**
-     * If the existing tooltip map for the multiblock should be cleared. Set in {@link MultiblockBuilder#clearTooltips(boolean)}
-     */
-    @ZenProperty
-    public final boolean clearTooltips;
-
-    /**
-     * Set to true if the multiblock should not check for energy inputs/outputs before forming.
-     */
-    @ZenProperty
-    public boolean noEnergy = false;
-
     public final ResourceLocation loc;
-    public final BlockPattern pattern;
-    public final gregtech.api.render.ICubeRenderer texture;
+    public final IPatternBuilderFunction pattern;
     public final List<MultiblockShapeInfo> designs;
 
     /**
-     * The {@link IUpdateFunction} this multiblock has.
-     * <p>
-     * Should be set using the ZenSetter.
+     * Set hasMaintenanceMechanics of the controller.
      */
     @ZenProperty
-    public IUpdateFunction update;
+    public Boolean hasMaintenanceMechanics;
+    /**
+     * Set hasMufflerMechanics of the controller.
+     */
+    @ZenProperty
+    public Boolean hasMufflerMechanics;
+    /**
+     * Set the overlay texture for the front of the controller.
+     */
+    @ZenProperty
+    public ICubeRenderer frontOverlay;
+    /**
+     * Set allow same fluid fill for outputs.
+     */
+    @ZenProperty
+    public Boolean allowSameFluidFillForOutputs;
+    /**
+     * Can be distinct.
+     */
+    @ZenProperty
+    public Boolean canBeDistinct;
+
     /**
      * The {@link IUpdateWorktableFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IUpdateWorktableFunction updateWorktable;
+    public IUpdateWorktableFunction updateWorktableFunction;
     /**
      * The {@link ISetupRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public ISetupRecipeFunction setupRecipe;
+    public ISetupRecipeFunction setupRecipeFunction;
     /**
      * The {@link ICompleteRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public ICompleteRecipeFunction completeRecipe;
+    public ICompleteRecipeFunction completeRecipeFunction;
     /**
-     * The {@link IRecipePredicate} this multiblock has.
+     * The {@link ICheckRecipeFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
      */
     @ZenProperty
-    public IRecipePredicate recipePredicate;
+    public ICheckRecipeFunction checkRecipeFunction;
     /**
      * The {@link IRemovalFunction} this multiblock has.
      * <p>
@@ -139,17 +121,49 @@ public class CustomMultiblock {
      */
     @ZenProperty
     public IFormStructureFunction formStructureFunction;
+    /**
+     * The {@link IAddInformationFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IAddInformationFunction addInformationFunction;
+    /**
+     * The {@link IGetBaseTextureFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IGetBaseTextureFunction getBaseTextureFunction;
+    /**
+     * The {@link IUpdateFormedValidFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IUpdateFormedValidFunction updateFormedValidFunction;
+    /**
+     * The {@link IInvalidateStructureFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IInvalidateStructureFunction invalidateStructureFunction;
+    /**
+     * The {@link IRunOverclockingLogicFunction} this multiblock has.
+     * <p>
+     * Should be set using the ZenSetter.
+     */
+    @ZenProperty
+    public IRunOverclockingLogicFunction runOverclockingLogic;
 
     public CustomMultiblock(MultiblockBuilder builder) {
         metaId = builder.metaId;
         loc = builder.loc;
-        zoom = builder.zoom;
-        tooltipMap = builder.tooltipMap;
-        clearTooltips = builder.clearTooltips;
         pattern = builder.pattern;
         recipeMap = builder.recipeMap;
-        texture = builder.texture;
         designs = builder.designs;
+        baseTexture = builder.baseTexture;
     }
 
     /**
@@ -161,28 +175,6 @@ public class CustomMultiblock {
     @ZenGetter("loc")
     public String getLocation() {
         return loc.toString();
-    }
-
-    /**
-     * @return The pattern of the multiblock. Set in {@link MultiblockBuilder#withPattern(IBlockPattern)}.
-     *
-     * @zenGetter pattern
-     */
-    @NotNull
-    @ZenGetter("pattern")
-    public IBlockPattern getPattern() {
-        return new MCBlockPattern(pattern);
-    }
-
-    /**
-     * @return The texture of the multiblock. Optionally set in {@link MultiblockBuilder#withTexture(IICubeRenderer)}.
-     *
-     * @zenGetter texture
-     */
-    @NotNull
-    @ZenGetter("texture")
-    public IICubeRenderer getTexture() {
-        return new MCCubeRenderer(texture);
     }
 
     /**

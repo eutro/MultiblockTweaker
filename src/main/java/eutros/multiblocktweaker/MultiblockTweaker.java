@@ -1,13 +1,12 @@
 package eutros.multiblocktweaker;
 
-import eutros.multiblocktweaker.client.PreviewHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 @Mod(modid = MultiblockTweaker.MOD_ID,
         name = "Multiblock Tweaker",
         version = "@GRADLE:VERSION@",
-        dependencies = "required-after:gregtech@[1.17.0.764,);")
+        dependencies = "required-after:gregtech@[2.0.0-beta,);")
 public class MultiblockTweaker {
 
     public static final String MOD_ID = "multiblocktweaker";
@@ -17,8 +16,6 @@ public class MultiblockTweaker {
 
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent evt) {
-        if (evt.getSide().isClient())
-            PreviewHandler.init();
     }
 
 }

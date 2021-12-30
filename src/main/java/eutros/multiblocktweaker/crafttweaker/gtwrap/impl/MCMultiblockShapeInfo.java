@@ -1,7 +1,7 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import org.jetbrains.annotations.NotNull;
 
 public class MCMultiblockShapeInfo implements IMultiblockShapeInfo {

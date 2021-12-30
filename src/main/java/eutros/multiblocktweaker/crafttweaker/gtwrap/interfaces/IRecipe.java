@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
+import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -16,6 +17,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.gregtech.recipe.IRecipe")
 @ZenRegister
 public interface IRecipe {
+
+    Recipe getInner();
 
     /**
      * Check whether the recipe matches the given ingredients.
@@ -135,6 +138,33 @@ public interface IRecipe {
      */
     @ZenMethod
     int getIntegerProperty(String key);
+
+    /**
+     * Get the long property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The integer property referenced by the given key.
+     */
+    @ZenMethod
+    long getLongProperty(String key);
+
+    /**
+     * Get the float property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The integer property referenced by the given key.
+     */
+    @ZenMethod
+    float getFloatProperty(String key);
+    
+    /**
+     * Get the itemStack property referenced by the given key.
+     *
+     * @param key The key to reference.
+     * @return The itemStack property referenced by the given key.
+     */
+    @ZenMethod
+    IItemStack getItemStackProperty(String key);
 
     /**
      * Get the string property referenced by the given key.

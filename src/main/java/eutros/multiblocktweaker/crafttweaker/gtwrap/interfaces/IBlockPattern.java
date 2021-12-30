@@ -5,7 +5,7 @@ import crafttweaker.api.world.IBlockPos;
 import crafttweaker.api.world.IFacing;
 import crafttweaker.api.world.IWorld;
 import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
-import gregtech.api.multiblock.BlockPattern;
+import gregtech.api.pattern.BlockPattern;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -23,27 +23,6 @@ public interface IBlockPattern {
 
     @NotNull
     BlockPattern getInternal();
-
-    /**
-     * @return The finger length of the pattern, which is along the Z axis.
-     */
-    @ZenMethod
-    @ZenGetter("fingerLength")
-    int getFingerLength();
-
-    /**
-     * @return The thumb length of the pattern, which is along the Y axis.
-     */
-    @ZenMethod
-    @ZenGetter("thumbLength")
-    int getThumbLength();
-
-    /**
-     * @return The palm length of the pattern, which is along the X axis.
-     */
-    @ZenMethod
-    @ZenGetter("palmLength")
-    int getPalmLength();
 
     /**
      * Check whether the pattern matches a structure.

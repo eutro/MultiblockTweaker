@@ -1,6 +1,5 @@
 package eutros.multiblocktweaker.gregtech.recipes;
 
-import com.google.common.collect.ImmutableMap;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.util.EnumValidationResult;
@@ -12,55 +11,60 @@ import java.util.Map;
 
 public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
 
-    private Map<String, Object> propertyMap = new HashMap<>();
+    Map<CustomRecipeProperty, Object> properties;
 
-    public CustomRecipeBuilder() {
-    }
-
-    public CustomRecipeBuilder(CustomRecipeBuilder builder) {
+    private CustomRecipeBuilder(CustomRecipeBuilder builder, Map<CustomRecipeProperty, Object> recipeProperties) {
         super(builder);
-        propertyMap = new HashMap<>(builder.propertyMap);
+        this.properties = recipeProperties;
     }
 
-    @Override
-    public boolean applyProperty(String key, Object value) {
-        propertyMap.put(key, value);
-        return true;
+    public CustomRecipeBuilder(CustomRecipeProperty[] recipeProperties) {
+        if (recipeProperties.length > 0) {
+            properties = new HashMap<>();
+            for (CustomRecipeProperty recipeProperty : recipeProperties) {
+                properties.put(recipeProperty, null);
+            }
+        }
     }
 
     @Override
     @NotNull
     public CustomRecipeBuilder copy() {
-        return new CustomRecipeBuilder(this);
-    }
-
-    @NotNull
-    protected EnumValidationResult validate() {
-        if (this.EUt == 0) {
-            int eUt = EUt;
-            EUt = 1;
-            super.validate();
-            EUt = eUt;
-        } else {
-            super.validate();
-        }
-
-        return this.recipeStatus;
+        return new CustomRecipeBuilder(this, properties);
     }
 
     @Override
     @NotNull
     public ValidationResult<Recipe> build() {
-        return ValidationResult.newResult(this.finalizeAndValidate(),
-                new Recipe(this.inputs,
-                        this.outputs,
-                        this.chancedOutputs,
-                        this.fluidInputs,
-                        this.fluidOutputs,
-                        ImmutableMap.copyOf(propertyMap),
-                        this.duration,
-                        this.EUt,
-                        this.hidden));
+        Recipe recipe = new Recipe(this.inputs,
+                this.outputs,
+                this.chancedOutputs,
+                this.fluidInputs,
+                this.fluidOutputs,
+                this.duration,
+                this.EUt,
+                this.hidden);
+        if (properties != null) {
+            for (Map.Entry<CustomRecipeProperty, Object> entry : properties.entrySet()) {
+                if (!recipe.setProperty(entry.getKey(), entry.getValue())) {
+                    return ValidationResult.newResult(EnumValidationResult.INVALID, recipe); 
+                }
+            }
+        }
+        return ValidationResult.newResult(finalizeAndValidate(), recipe);
+    }
+
+    @Override
+    public boolean applyProperty(String key, Object value) {
+        if (properties == null) {
+            return false;
+        }
+        CustomRecipeProperty property = properties.keySet().stream().filter(p->p.getKey().equals(key)).findFirst().orElse(null);
+        if (property == null) {
+            return false;
+        }
+        properties.put(property, value);
+        return true;
     }
 
 }

@@ -28,7 +28,7 @@ public class MCBlockInfo implements IBlockInfo {
         return internal;
     }
 
-    public static class ControllerInfo extends BlockInfo {
+    public static class ControllerInfo extends BlockInfo implements IBlockInfo {
 
         private final EnumFacing facing;
         private final String id;
@@ -38,6 +38,10 @@ public class MCBlockInfo implements IBlockInfo {
             super(MetaBlocks.MACHINE.getDefaultState());
             this.facing = facing;
             this.id = id;
+        }
+
+        public ControllerInfo copy() {
+            return new ControllerInfo(facing, id);
         }
 
         @Override
@@ -63,6 +67,10 @@ public class MCBlockInfo implements IBlockInfo {
             }
         }
 
+        @Override
+        public @NotNull BlockInfo getInternal() {
+            return this;
+        }
     }
 
 }

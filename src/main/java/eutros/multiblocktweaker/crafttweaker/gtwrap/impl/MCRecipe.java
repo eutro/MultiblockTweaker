@@ -7,6 +7,8 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
+import net.minecraft.item.ItemStack;
+import scala.Int;
 
 import java.util.Arrays;
 
@@ -16,6 +18,10 @@ public class MCRecipe implements IRecipe {
 
     public MCRecipe(Recipe inner) {
         this.inner = inner;
+    }
+
+    public Recipe getInner() {
+        return inner;
     }
 
     @Override
@@ -83,22 +89,43 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public String[] getPropertyKeys() {
-        return inner.getRecipePropertyStorage().getRecipePropertyKeys().toArray(new String[0]);
+        return inner.getPropertyKeys().toArray(new String[0]);
     }
 
     @Override
     public boolean getBooleanProperty(String key) {
-        return inner.getBooleanProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Boolean ? (Boolean) value : false;
     }
 
     @Override
     public int getIntegerProperty(String key) {
-        return inner.getIntegerProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Number ? ((Number) value).intValue() : 0;
+    }
+
+    @Override
+    public long getLongProperty(String key) {
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Number ? ((Number) value).longValue() : 0;
+    }
+
+    @Override
+    public float getFloatProperty(String key) {
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof Number ? ((Number) value).floatValue() : 0;
+    }
+
+    @Override
+    public IItemStack getItemStackProperty(String key) {
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof ItemStack ? CraftTweakerMC.getIItemStack((ItemStack) value) : null;
     }
 
     @Override
     public String getProperty(String key) {
-        return inner.getStringProperty(key);
+        Object value = inner.getPropertyRaw(key);
+        return value instanceof String ? (String) value : null;
     }
 
 }

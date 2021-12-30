@@ -19,6 +19,11 @@ public class MCIMultipleTankHandler implements IIMultipleTankHandler {
     }
 
     @Override
+    public IMultipleTankHandler getInner() {
+        return inner;
+    }
+
+    @Override
     public IIFluidTank[] getFluidTanks() {
         return inner.getFluidTanks().stream().map(MCFluidTank::new).toArray(IIFluidTank[]::new);
     }

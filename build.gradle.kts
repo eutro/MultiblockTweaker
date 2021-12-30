@@ -37,7 +37,7 @@ val minecraft = the<UserBaseExtension>()
 configure<UserBaseExtension> {
     version = properties["forge_ver"] as String
     runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings = "stable_39"
 
     makeObfSourceJar = false
     isUseDepAts = true
@@ -87,9 +87,11 @@ dependencies {
     deobfProvided("mezz.jei:jei_1.12.2:${properties["jei_ver"]}:api")
     runtime("mezz.jei:jei_1.12.2:${properties["jei_ver"]}")
 
-    deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
+//    deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
+    "provided"(files("libs/gregtech-1.12.2-2.0.1-beta.jar"))
 
-    deobfCompile("codechicken-lib-1-8:CodeChickenLib-1.12.2:${properties["ccl_ver"]}:universal")
+    "deobfCompile"("codechicken:ChickenASM:1.12-1.0.2.9")
+    "deobfCompile"("codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal")
 
     deobfCompile("team.chisel.ctm:CTM:${properties["ctm_ver"]}")
 
@@ -135,6 +137,7 @@ javadoc.apply {
     }
     setDestinationDir(file("docs"))
     (options as StandardJavadocDocletOptions).run {
+        locale("en")
         tags!!.addAll(listOf(
                 "zenClass:a:ZenClass:",
                 "zenGetter:a:ZenGetter:",

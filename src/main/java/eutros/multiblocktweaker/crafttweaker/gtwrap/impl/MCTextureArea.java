@@ -2,11 +2,6 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
 import gregtech.api.gui.resources.TextureArea;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 public class MCTextureArea implements ITextureArea {
@@ -16,7 +11,6 @@ public class MCTextureArea implements ITextureArea {
 
     public MCTextureArea(@NotNull TextureArea inner) {
         this.inner = inner;
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @NotNull
@@ -28,12 +22,6 @@ public class MCTextureArea implements ITextureArea {
     @Override
     public ITextureArea getSubArea(double offsetX, double offsetY, double width, double height) {
         return new MCTextureArea(inner.getSubArea(offsetX, offsetY, width, height));
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onStitch(TextureStitchEvent.Pre evt) {
-        evt.getMap().registerSprite(inner.imageLocation);
     }
 
 }

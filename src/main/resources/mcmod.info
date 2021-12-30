@@ -2,14 +2,14 @@
   {
     "modid": "multiblocktweaker",
     "name": "Multiblock Tweaker",
-    "description": "Add GregTech CE Multiblocks via CraftTweaker",
+    "description": "Add GregTech CEu Multiblocks via CraftTweaker",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://www.curseforge.com/minecraft/mc-mods/multiblocktweaker",
     "authorList": [
       "Eutros"
     ],
-    "credits": "ALongStringOfNumbers for testing.",
+    "credits": "KilaBash for CEu version porting, ALongStringOfNumbers for testing.",
     "dependencies": [
       "gregtech",
       "crafttweaker"

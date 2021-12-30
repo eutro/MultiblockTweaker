@@ -28,6 +28,20 @@ public class ReflectionHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T, C> T getStatic(Class<? super C> fieldClass, String fieldName) throws ClassCastException {
+        try {
+            return (T) handles
+                    .computeIfAbsent(fieldClass, c -> new HashMap<>())
+                    .computeIfAbsent(fieldName, computeHandle(fieldClass, fieldName))
+                    .invoke();
+        } catch (Error | RuntimeException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static <C> Function<String, MethodHandle> computeHandle(Class<? super C> fieldClass, String fieldName) {
         return p -> {
             try {

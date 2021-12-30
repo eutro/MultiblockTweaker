@@ -2,7 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.construction.MultiblockShapeInfoBuilder;
-import gregtech.integration.jei.multiblock.MultiblockShapeInfo;
+import gregtech.api.pattern.MultiblockShapeInfo;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 

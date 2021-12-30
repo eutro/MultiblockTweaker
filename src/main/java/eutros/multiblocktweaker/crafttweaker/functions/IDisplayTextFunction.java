@@ -26,6 +26,6 @@ public interface IDisplayTextFunction {
      * @return A list of {@link IFormattedText}s to add to the UI.
      */
     @ZenMethod
-    List<IFormattedText> addDisplayText(@Nonnull IControllerTile controller);
+    IFormattedText[] addDisplayText(@Nonnull IControllerTile controller);
 
 }

@@ -67,13 +67,13 @@ public interface IBlockInfo {
      */
     @ZenMethod
     static IBlockInfo controller(String id, @Optional @Nullable IFacing facing) {
-        return new MCBlockInfo(new MCBlockInfo.ControllerInfo(
+        return new MCBlockInfo.ControllerInfo(
                 java.util.Optional.ofNullable(facing)
                         .map(IFacing::getInternal)
                         .filter(EnumFacing.class::isInstance)
                         .map(EnumFacing.class::cast)
                         .orElse(EnumFacing.WEST),
-                id));
+                id);
     }
 
     /**
