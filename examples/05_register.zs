@@ -24,7 +24,7 @@ var sided_renderer = ICubeRenderer.sidedOverlay("sided_renderer",
 ) as ICubeRenderer;
 var working_state_renderer = ICubeRenderer.orientedOverlay("working_state_renderer", "multiblocktweaker:state", OverlayFace.FRONT) as ICubeRenderer; // assets/___/textures/blocks/___; (folder)
 
-print("register MBT ISound");
+print("register MBT ISound"); // NOTE!!!! also register sound info in the sound.json (modid/sounds.json)
 var sound = ISound.registerSound("multiblocktweaker:tick.sound") as ISound;
 
 // How to refer them?
