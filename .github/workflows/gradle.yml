@@ -39,9 +39,9 @@ jobs:
         project_id: 386188
         game_endpoint: minecraft
         file_path: ${{ steps.var.outputs.file_path }}
-        changelog: See recent commits [here](https://github.com/eutropius225/MultiblockTweaker/commits/${{ github.sha }}).
+        changelog: See recent commits [here](https://github.com/eutro/MultiblockTweaker/commits/${{ github.sha }}). This is only marked as a beta release so CurseForge shows it on the front page.
         changelog_type: markdown
         # 1.12.2, Java 8
         game_versions: 6756,4458
-        release_type: release
-        relations: jei:optionalDependency,crafttweaker:requiredDependency,gregtechce:requiredDependency
+        release_type: beta
+        relations: jei:optionalDependency,crafttweaker:requiredDependency,gregtech-ce-unofficial:requiredDependency
