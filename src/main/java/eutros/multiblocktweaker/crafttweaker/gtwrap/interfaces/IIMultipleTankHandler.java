@@ -13,7 +13,6 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -99,7 +98,7 @@ public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
         List<FluidStack> fluids = fluidStacks.stream().map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
         if (simulate) {
             OverlayedFluidHandler overlayedFluidHandler = new OverlayedFluidHandler(handler);
-            HashMap<FluidKey, Integer> fluidKeyMap = GTHashMaps.fromFluidCollection(fluids);
+            Map<FluidKey, Integer> fluidKeyMap = GTHashMaps.fromFluidCollection(fluids);
             for (Map.Entry<FluidKey, Integer> entry : fluidKeyMap.entrySet()) {
                 int amountToInsert = entry.getValue();
                 int inserted = overlayedFluidHandler.insertStackedFluidKey(entry.getKey(), amountToInsert);

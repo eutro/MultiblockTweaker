@@ -62,7 +62,7 @@ public interface IRecipe {
      * @return All the item outputs of the recipe.
      */
     @ZenMethod
-    IItemStack[] getAllItemOutputs(int maxOutputSlots);
+    IItemStack[] getAllItemOutputs();
 
     /**
      * Get the defined input fluids.

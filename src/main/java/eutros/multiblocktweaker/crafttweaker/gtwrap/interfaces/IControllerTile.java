@@ -396,48 +396,10 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      * 
-     * @return Can create sound.
-     */
-    @ZenMethod
-    @ZenGetter
-    boolean canCreateSound();
-
-    /**
-     * 
      * @return Get all available RecipeMaps.
      */
     @ZenMethod
-    RecipeMap<?>[] getAvailableRecipeMaps();
-
-    /**
-     * 
-     * @return Get current RecipeMap Index.
-     */
-    @ZenGetter("reipeMapIndex")
-    int getRecipeMapIndex();
-
-    /**
-     * Set current RecipeMap index.
-     * 
-     * @param index index
-     */
-    @ZenSetter("recipeMapIndex")
-    void setRecipeMapIndex(int index);
-
-    /**
-     * Add new RecipeMaps to this multiblock.
-     * 
-     * @param recipeMaps added recipe maps
-     */
-    @ZenMethod
-    void addRecipeMaps(RecipeMap<?>... recipeMaps);
-
-    /**
-     * 
-     * @return Get current RecipeMap
-     */
-    @ZenGetter("currentRecipeMap")
-    RecipeMap<?> getCurrentRecipeMap();
+    RecipeMap<?> getRecipeMap();
 
     /**
      * @return Get position list of all variant active blocks

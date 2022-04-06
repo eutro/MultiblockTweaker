@@ -43,7 +43,8 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
                 this.fluidOutputs,
                 this.duration,
                 this.EUt,
-                this.hidden);
+                this.hidden,
+                this.isCTRecipe);
         if (properties != null) {
             for (Map.Entry<CustomRecipeProperty, Object> entry : properties.entrySet()) {
                 if (!recipe.setProperty(entry.getKey(), entry.getValue())) {
