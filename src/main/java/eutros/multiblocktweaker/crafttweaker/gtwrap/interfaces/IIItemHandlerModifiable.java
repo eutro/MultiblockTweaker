@@ -13,7 +13,6 @@ import stanhebben.zenscript.annotations.IterableSimple;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -111,7 +110,7 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
         List<ItemStack> items = itemStacks.stream().map(CraftTweakerMC::getItemStack).collect(Collectors.toList());
         if (simulate) {
             OverlayedItemHandler overlayedItemHandler = new OverlayedItemHandler(handler);
-            HashMap<ItemStackKey, Integer> stackKeyMap = GTHashMaps.fromItemStackCollection(items);
+            Map<ItemStackKey, Integer> stackKeyMap = GTHashMaps.fromItemStackCollection(items);
 
             for (Map.Entry<ItemStackKey, Integer> entry : stackKeyMap.entrySet()) {
                 int amountToInsert = entry.getValue();

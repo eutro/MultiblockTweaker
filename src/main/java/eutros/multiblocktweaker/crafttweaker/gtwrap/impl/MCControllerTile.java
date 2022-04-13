@@ -93,33 +93,8 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     }
 
     @Override
-    public boolean canCreateSound() {
-        return getInternal().canCreateSound();
-    }
-
-    @Override
-    public RecipeMap<?>[] getAvailableRecipeMaps() {
-        return getInternal().getAvailableRecipeMaps();
-    }
-
-    @Override
-    public int getRecipeMapIndex() {
-        return getInternal().getRecipeMapIndex();
-    }
-
-    @Override
-    public void addRecipeMaps(RecipeMap<?>... recipeMaps) {
-        getInternal().addRecipeMaps(recipeMaps);
-    }
-
-    @Override
-    public void setRecipeMapIndex(int index) {
-        getInternal().setRecipeMapIndex(index);
-    }
-
-    @Override
-    public RecipeMap<?> getCurrentRecipeMap() {
-        return  getInternal().getCurrentRecipeMap();
+    public RecipeMap<?> getRecipeMap() {
+        return getInternal().getRecipeMap();
     }
 
     @Override

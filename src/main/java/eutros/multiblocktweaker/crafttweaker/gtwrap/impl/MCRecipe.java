@@ -8,7 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.crafttweaker.ChancedEntry;
 import net.minecraft.item.ItemStack;
-import scala.Int;
 
 import java.util.Arrays;
 
@@ -53,8 +52,8 @@ public class MCRecipe implements IRecipe {
     }
 
     @Override
-    public IItemStack[] getAllItemOutputs(int maxOutputSlots) {
-        return CraftTweakerMC.getIItemStacks(inner.getAllItemOutputs(maxOutputSlots));
+    public IItemStack[] getAllItemOutputs() {
+        return CraftTweakerMC.getIItemStacks(inner.getAllItemOutputs());
     }
 
     @Override
