@@ -5,7 +5,7 @@ Add GregTech CE Multiblocks via CraftTweaker
 ## Help
 
 For documentation, the best option is to
-[look at the JavaDocs](https://eutro.github.io/MultiblockTweaker/index.html)
+[look at the JavaDocs](https://eutro.github.io/MultiblockTweaker/main/)
 (or just [the source](https://github.com/eutro/MultiblockTweaker/tree/master/src/main/java/eutros/multiblocktweaker/crafttweaker)).
 
 There are examples
