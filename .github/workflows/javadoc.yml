@@ -28,7 +28,9 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew javadoc --no-daemon
+      run: |
+        rm -r ./docs
+        ./gradlew javadoc --no-daemon
     
     - name: Add and push
       run: |
