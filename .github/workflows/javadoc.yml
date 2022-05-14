@@ -29,7 +29,7 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        rm -r ./docs
+        rm -r ./docs/main
         ./gradlew javadoc --no-daemon
     
     - name: Add and push
