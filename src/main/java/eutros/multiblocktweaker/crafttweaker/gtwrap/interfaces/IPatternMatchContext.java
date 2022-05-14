@@ -91,7 +91,7 @@ public interface IPatternMatchContext {
     String getOrPut(String key, String initialValue);
 
     /**
-     * Some blocks that extends of {@link gregtech.api.blocks.VariantActiveBlock} can change texture based on the multi-block working state.
+     * Some blocks that extends of {@link gregtech.api.block.VariantActiveBlock} can change texture based on the multi-block working state.
      * Their position need to be collected during pattern checking.
      * <p>
      *     Below are the blocks in CEu that have this feature, and don't forget to collect them when you manually set the predicate:

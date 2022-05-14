@@ -370,7 +370,7 @@ public interface IControllerTile extends IMetaTileEntity {
     boolean checkRecipe(IRecipe recipe, boolean consumeIfSuccess);
 
     /**
-     * Change active state for all VariantBlock {@link gregtech.api.blocks.VariantActiveBlock#ACTIVE} blocks. 
+     * Change active state for all VariantBlock {@link gregtech.api.block.VariantActiveBlock#ACTIVE} blocks. 
      * which are blocks of this multiblock.
      * 
      * @param isActive New state.
