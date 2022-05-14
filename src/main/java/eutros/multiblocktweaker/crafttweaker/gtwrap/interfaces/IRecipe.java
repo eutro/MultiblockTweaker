@@ -56,9 +56,8 @@ public interface IRecipe {
     ChancedEntry[] getChancedOutputs();
 
     /**
-     * Get all the outputs of a recipe, limited to {@code maxOutputSlots}, including all chanced outputs possible.
+     * Get all the outputs of a recipe, including all chanced outputs possible.
      *
-     * @param maxOutputSlots The max outputs.
      * @return All the item outputs of the recipe.
      */
     @ZenMethod
