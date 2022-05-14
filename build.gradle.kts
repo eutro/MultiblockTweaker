@@ -135,7 +135,7 @@ javadoc.apply {
                 (el.file.name != "package-info.java" &&
                         el.file.useLines { lines -> !lines.contains("@ZenRegister") })
     }
-    setDestinationDir(file("docs"))
+    setDestinationDir(file("docs/gtceu"))
     (options as StandardJavadocDocletOptions).run {
         locale("en")
         tags!!.addAll(listOf(
