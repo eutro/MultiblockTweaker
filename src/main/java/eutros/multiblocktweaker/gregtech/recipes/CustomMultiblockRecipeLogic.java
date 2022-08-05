@@ -11,6 +11,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.recipeproperties.RecipePropertyStorage;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,6 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, getMetaTile().getMultiblock()), t);
     }
 
-    @Override
     protected int[] runOverclockingLogic(@NotNull Recipe recipe, boolean negativeEU, int maxOverclocks) {
         if (multiblock.runOverclockingLogic != null) {
             try {
@@ -47,7 +47,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
                 multiblock.runOverclockingLogic = null;
             }
         }
-        return super.runOverclockingLogic(recipe, negativeEU, maxOverclocks);
+        return super.runOverclockingLogic(recipe.getRecipePropertyStorage(), recipe.getEUt(), getMaxVoltage(), recipe.getDuration(), maxOverclocks);
     }
 
     @Override
@@ -157,12 +157,12 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
 
     @Override
     public long overclockVoltage() {
-        return getOverclockVoltage();
+        return getMaximumOverclockVoltage();
     }
 
     @Override
     public void overclockVoltage(long overclockVoltage) {
-        setOverclockVoltage(overclockVoltage);
+        setMaximumOverclockVoltage(overclockVoltage);
     }
 
     @Override

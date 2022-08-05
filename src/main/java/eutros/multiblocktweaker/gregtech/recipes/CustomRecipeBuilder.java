@@ -44,14 +44,8 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
                 this.duration,
                 this.EUt,
                 this.hidden,
-                this.isCTRecipe);
-        if (properties != null) {
-            for (Map.Entry<CustomRecipeProperty, Object> entry : properties.entrySet()) {
-                if (!recipe.setProperty(entry.getKey(), entry.getValue())) {
-                    return ValidationResult.newResult(EnumValidationResult.INVALID, recipe); 
-                }
-            }
-        }
+                this.isCTRecipe,
+                this.recipePropertyStorage);
         return ValidationResult.newResult(finalizeAndValidate(), recipe);
     }
 

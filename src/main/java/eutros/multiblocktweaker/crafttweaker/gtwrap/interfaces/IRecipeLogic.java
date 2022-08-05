@@ -6,6 +6,7 @@ import crafttweaker.api.liquid.ILiquidStack;
 import gregtech.api.capability.impl.AbstractRecipeLogic;
 import gregtech.api.capability.impl.HeatingCoilRecipeLogic;
 import gregtech.api.recipes.RecipeMap;
+import gregtech.api.recipes.logic.OverclockingLogic;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -35,7 +36,7 @@ public interface IRecipeLogic {
      */
     @ZenMethod
     static int[] heatingCoilOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, int maxOverclocks, int currentTemp, int recipeRequiredTemp) {
-        return HeatingCoilRecipeLogic.heatingCoilOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, currentTemp, recipeRequiredTemp);
+        return OverclockingLogic.heatingCoilOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, currentTemp, recipeRequiredTemp);
     }
 
     /**
@@ -51,7 +52,7 @@ public interface IRecipeLogic {
      */
     @ZenMethod
     static int[] standardOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, double durationDivisor, double voltageMultiplier, int maxOverclocks) {
-        return AbstractRecipeLogic.standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, durationDivisor, voltageMultiplier, maxOverclocks);
+        return OverclockingLogic.standardOverclockingLogic( recipeEUt, maximumVoltage, recipeDuration, durationDivisor, voltageMultiplier, maxOverclocks );
     }
 
     // super method

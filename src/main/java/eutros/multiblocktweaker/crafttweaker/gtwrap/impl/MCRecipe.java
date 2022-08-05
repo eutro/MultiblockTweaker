@@ -33,8 +33,8 @@ public class MCRecipe implements IRecipe {
     @Override
     public IIngredient[] getInputs() {
         return inner.getInputs().stream()
-                .map(ci -> CraftTweakerMC.getIIngredient(ci.getIngredient())
-                        .amount(ci.getCount()))
+                .map(ci -> CraftTweakerMC.getIIngredient(ci)
+                        .amount(ci.getAmount()))
                 .toArray(IIngredient[]::new);
     }
 
@@ -58,7 +58,7 @@ public class MCRecipe implements IRecipe {
 
     @Override
     public ILiquidStack[] getFluidInputs() {
-        return inner.getFluidInputs().stream().map(CraftTweakerMC::getILiquidStack).toArray(ILiquidStack[]::new);
+        return inner.getFluidInputs().stream().map(fi -> CraftTweakerMC.getILiquidStack(fi.getInputFluidStack())).toArray(ILiquidStack[]::new);
     }
 
     @Override
