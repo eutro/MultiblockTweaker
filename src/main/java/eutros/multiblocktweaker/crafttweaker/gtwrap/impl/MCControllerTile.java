@@ -112,12 +112,6 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     }
 
     @Override
-    public boolean canShare() {
-        //2.4.0 GTCEu changed sharing to be defined by the part
-        return true;
-    }
-
-    @Override
     public List<IMultiblockShapeInfo> getMatchingShapes() {
         return getInternal().getMatchingShapes().stream().map(MCMultiblockShapeInfo::new).collect(
                 Collectors.toList());
