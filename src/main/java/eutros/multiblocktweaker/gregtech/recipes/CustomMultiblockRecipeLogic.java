@@ -11,7 +11,7 @@ import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.recipeproperties.RecipePropertyStorage;
+import gregtech.api.util.GTUtility;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,22 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         CraftTweakerAPI.logError(String.format("Couldn't run %s function of %s.", func, getMetaTile().getMultiblock()), t);
     }
 
-    protected int[] runOverclockingLogic(@NotNull Recipe recipe, boolean negativeEU, int maxOverclocks) {
+    @Override
+    protected int[] performOverclocking( Recipe recipe )
+    {
+        // The maximum number of overclocks is determined by the difference between the tier the recipe is running at,
+        // and the maximum tier that the machine can overclock to.
+        int recipeTier = GTUtility.getTierByVoltage( recipe.getEUt() );
+        int maximumOverclockTier = getOverclockForTier(getMaximumOverclockVoltage());
+
+        // At this point, this value should not be negative or zero, as that is filtered out in CheckCanOverclock
+        // Subtract 1 to get the desired behavior instead of filtering out LV recipes earlier, as that does not work all the time
+        int maxOverclocks = maximumOverclockTier - recipeTier - 1;
+
+        return runOverclockingLogic(recipe, recipe.getEUt() < 0, maxOverclocks);
+    }
+
+    protected int[] runOverclockingLogic( @NotNull Recipe recipe, boolean negativeEU, int maxOverclocks ) {
         if (multiblock.runOverclockingLogic != null) {
             try {
                 return multiblock.runOverclockingLogic.run(this, new MCRecipe(recipe), negativeEU, maxOverclocks);
