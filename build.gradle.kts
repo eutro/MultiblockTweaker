@@ -92,7 +92,7 @@ dependencies {
 
 //    deobfCompile("gregtechce:gregtech:1.12.2:${properties["gt_ver"]}")
     "deobfCompile"("curse.maven:ae2-extended-life-570458:3649419")
-    "provided"(files("libs/gregtech-1.12.2-2.3.4-beta.jar"))
+    "provided"(files("libs/gregtech-1.12.2-2.4.0-beta.jar"))
 
     "deobfCompile"("codechicken:ChickenASM:1.12-1.0.2.9")
     "deobfCompile"("codechicken-lib-1-8:CodeChickenLib-1.12.2:3.2.3.358:universal")
