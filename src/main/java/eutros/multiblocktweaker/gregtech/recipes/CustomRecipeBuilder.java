@@ -2,7 +2,6 @@ package eutros.multiblocktweaker.gregtech.recipes;
 
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
-import gregtech.api.util.EnumValidationResult;
 import gregtech.api.util.ValidationResult;
 import org.jetbrains.annotations.NotNull;
 

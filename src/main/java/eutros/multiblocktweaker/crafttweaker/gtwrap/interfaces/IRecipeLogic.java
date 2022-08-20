@@ -3,8 +3,6 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
-import gregtech.api.capability.impl.AbstractRecipeLogic;
-import gregtech.api.capability.impl.HeatingCoilRecipeLogic;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.logic.OverclockingLogic;
 import stanhebben.zenscript.annotations.ZenClass;
