@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.data.IData;
 import crafttweaker.api.minecraft.CraftTweakerMC;
@@ -70,11 +71,16 @@ public interface IControllerTile extends IMetaTileEntity {
 
     /**
      *
+     * @deprecated
      * @return Can parts of this controller be shared.
      */
     @ZenMethod
     @ZenGetter("canShare")
-    boolean canShare();
+    @Deprecated
+    default boolean canShare(){
+        CraftTweakerAPI.logError("GTCEu 2.4.0 sharing of parts is determined by the part itself, not the multiblock.\n canShare is deprecated an will always return true");
+        return true;
+    }
 
     /**
      *

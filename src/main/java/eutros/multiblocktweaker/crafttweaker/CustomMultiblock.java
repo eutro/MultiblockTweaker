@@ -73,6 +73,12 @@ public class CustomMultiblock {
     public Boolean canBeDistinct;
 
     /**
+     * Should show voiding mode button.
+     */
+    @ZenProperty
+    public Boolean shouldShowVoidingModeButton;
+
+    /**
      * The {@link IUpdateWorktableFunction} this multiblock has.
      * <p>
      * Should be set using the ZenSetter.
