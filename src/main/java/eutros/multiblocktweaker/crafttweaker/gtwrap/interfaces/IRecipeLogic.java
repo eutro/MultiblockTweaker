@@ -49,8 +49,9 @@ public interface IRecipeLogic {
      * @return an int array of {OverclockedEUt, OverclockedDuration}
      */
     @ZenMethod
+    @Deprecated
     static int[] standardOverclockingLogic(int recipeEUt, long maximumVoltage, int recipeDuration, double durationDivisor, double voltageMultiplier, int maxOverclocks) {
-        return OverclockingLogic.standardOverclockingLogic( recipeEUt, maximumVoltage, recipeDuration, durationDivisor, voltageMultiplier, maxOverclocks );
+        return OverclockingLogic.standardOverclockingLogic(recipeEUt, maximumVoltage, recipeDuration, maxOverclocks, durationDivisor, voltageMultiplier);
     }
 
     // super method

@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.data.IData;
 import crafttweaker.api.world.IBlockPos;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
@@ -145,11 +146,6 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     @Override
     public void formStructure(IPatternMatchContext context) {
         getInternal().formStructure(context.getInternal());
-    }
-
-    @Override
-    public int getLightValueForPart(IIMultiblockPart sourcePart) {
-        return getInternal().getLightValueForPart(sourcePart.getInternal());
     }
 
     @Override

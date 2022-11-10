@@ -136,12 +136,17 @@ public interface IControllerTile extends IMetaTileEntity {
     void formStructure(IPatternMatchContext context);
 
     /**
+     * @deprecated
      * Get the light value of a specific part.
      * @param sourcePart The part block of this controller.
      * @return Light value.
      */
     @ZenMethod
-    int getLightValueForPart(IIMultiblockPart sourcePart);
+    @Deprecated
+    default int getLightValueForPart(IIMultiblockPart sourcePart) {
+        CraftTweakerAPI.logError("GTCEu 2.4.2 does no longer give light values to multiblocks parts.\n getLightValueForPart is deprecated an will always return 0.");
+        return 0;
+    }
 
     /**
      * Called when the structure is invalidated.
