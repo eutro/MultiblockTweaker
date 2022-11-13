@@ -3,18 +3,7 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 import crafttweaker.api.data.IData;
 import crafttweaker.api.world.IBlockPos;
 import eutros.multiblocktweaker.crafttweaker.CustomMultiblock;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IControllerTile;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IICubeRenderer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIEnergyContainer;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIItemHandlerModifiable;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultiblockPart;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIMultipleTankHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockAbility;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IMultiblockShapeInfo;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IPatternMatchContext;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipeLogic;
+import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.*;
 import eutros.multiblocktweaker.crafttweaker.predicate.CTTraceabilityPredicate;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
 import gregtech.api.recipes.RecipeMap;
@@ -145,11 +134,6 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     @Override
     public void formStructure(IPatternMatchContext context) {
         getInternal().formStructure(context.getInternal());
-    }
-
-    @Override
-    public int getLightValueForPart(IIMultiblockPart sourcePart) {
-        return getInternal().getLightValueForPart(sourcePart.getInternal());
     }
 
     @Override
