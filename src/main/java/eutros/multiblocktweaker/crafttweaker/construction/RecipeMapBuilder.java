@@ -26,7 +26,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 public class RecipeMapBuilder {
 
-    private String name;
+    private final String name;
     private int minInputs = 0;
     private int maxInputs = 0;
     private int minOutputs = 0;
@@ -35,13 +35,13 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
-    public CTRecipeBuilder defaultRecipe = startBuilder();
-    private TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
+    private CustomRecipeBuilder defaultRecipe;
+    private final TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
 
     /**
-     * Create a new, blank {@link CTRecipeBuilder} that will be the base recipe for any new ones.
+     * Create a new, blank {@link CTRecipeBuilder} that can be used with {@link #setDefaultRecipe(CTRecipeBuilder)}.
      *
      * @return A blank {@link CTRecipeBuilder}.
      */
@@ -198,7 +198,8 @@ public class RecipeMapBuilder {
      */
     @ZenMethod
     public RecipeMapBuilder setDefaultRecipe(CTRecipeBuilder builder) {
-        defaultRecipe = builder;
+        defaultRecipe = ObfuscationReflectionHelper
+                .getPrivateValue(CTRecipeBuilder.class, builder, "backingBuilder");
         return this;
     }
 
@@ -260,7 +261,8 @@ public class RecipeMapBuilder {
                 maxFluidInputs,
                 minFluidOutputs,
                 maxFluidOutputs,
-                ObfuscationReflectionHelper.getPrivateValue(CTRecipeBuilder.class, defaultRecipe, "backingBuilder"));
+                defaultRecipe
+        );
 
         for (byte key : slotOverlays.keys()) {
             map.setSlotOverlay((key & 2) != 0, (key & 1) != 0, (key & 4) != 0, slotOverlays.get(key));
