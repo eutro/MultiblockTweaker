@@ -170,7 +170,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
         boolean ret = super.checkRecipeInputsDirty(inputs, fluidInputs);
         if (ret) return true;
 
-        if (metaTileEntity.getWorld().getWorldTime() % 20 == 0) {
+        if (metaTileEntity.getOffsetTimer() % 20 == 0) {
             // check every 20 ticks, if there is a recipe predicate, they may be checking different things
             return ((TileControllerCustom) metaTileEntity).multiblock.recipePredicate != null;
         }
