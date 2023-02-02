@@ -45,7 +45,7 @@ public class RecipeMapBuilder {
     private SoundEvent sound;
 
     /**
-     * Create a new, blank {@link CTRecipeBuilder} that will be the base recipe for any new ones.
+     * Create a new, blank {@link CTRecipeBuilder} that can be used with {@link #setDefaultRecipe(CTRecipeBuilder)}.
      *
      * @param recipeProperties RecipeProperty keys fot the recipe map.
      * @return A blank {@link CTRecipeBuilder}.
@@ -72,7 +72,6 @@ public class RecipeMapBuilder {
     public static RecipeMapBuilder start(String name, CustomRecipeProperty...recipeProperties) {
         return new RecipeMapBuilder(name, recipeProperties);
     }
-
 
     /**
      * Start construction, with the given name. This will be used for localisation and later referencing.
@@ -249,7 +248,7 @@ public class RecipeMapBuilder {
 
     /**
      * Set sound for the recipe map.
-     * 
+     *
      * @param sound sound
      * @return This builder, for convenience.
      */

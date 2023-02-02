@@ -2,6 +2,7 @@ package eutros.multiblocktweaker.crafttweaker.construction;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
+import eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantRelativeDirection;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCBlockPattern;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IBlockPattern;
@@ -14,11 +15,11 @@ import java.util.Arrays;
 
 /**
  * Used to construct an {@link IBlockPattern}.
+ * <p>
+ * Used for {@link MultiblockBuilder#withPattern(IPatternBuilderFunction)}.
  *
  * @zenClass mods.gregtech.multiblock.FactoryBlockPattern
  * @see IBlockPattern
- * <p>
- * Used for {@link MultiblockBuilder#withPattern(eutros.multiblocktweaker.crafttweaker.functions.IPatternBuilderFunction)}.
  */
 @ZenClass("mods.gregtech.multiblock.FactoryBlockPattern")
 @ZenRegister
@@ -42,7 +43,6 @@ public class BlockPatternBuilder {
 
     /**
      * Start an empty builder, defining the directions of the aisle, the strings and the characters used when setting aisles.
-     * ![](https://raw.githubusercontent.com/eutropius225/MultiblockTweaker/master/src/main/resources/FactoryBuilderDiagram.png)
      *
      * @param charDir   The position of each character in a string relative to the one before.
      * @param stringDir The position of each string in an {@link #aisle(String...)} call relative to the one before.
