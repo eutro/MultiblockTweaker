@@ -35,7 +35,7 @@ public class RecipeMapBuilder {
     private int maxFluidInputs = 0;
     private int minFluidOutputs = 0;
     private int maxFluidOutputs = 0;
-    private CustomRecipeBuilder defaultRecipe;
+    private CustomRecipeBuilder defaultRecipe = new CustomRecipeBuilder();
     private final TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
