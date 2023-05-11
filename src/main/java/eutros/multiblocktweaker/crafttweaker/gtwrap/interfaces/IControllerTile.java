@@ -368,7 +368,7 @@ public interface IControllerTile extends IMetaTileEntity {
      */
     @ZenMethod
     @ZenGetter("recipeLogic")
-    IRecipeLogic getRecipeLogic();
+    IRecipeLogic getCustomRecipeLogic();
 
     /**
      * Checking whether the found recipe is available.

@@ -22,11 +22,7 @@ import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.MultiblockShapeInfo;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.PatternStringError;
+import gregtech.api.pattern.*;
 import gregtech.api.recipes.Recipe;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
@@ -64,7 +60,7 @@ public class TileControllerCustom extends RecipeMapMultiblockController {
         patternBuilderFunction = multiblock.pattern;
     }
 
-    public CustomMultiblockRecipeLogic getRecipeLogic(){
+    public CustomMultiblockRecipeLogic getCustomRecipeLogic(){
         return (CustomMultiblockRecipeLogic) recipeMapWorkable;
     }
 
