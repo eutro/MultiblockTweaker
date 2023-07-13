@@ -44,7 +44,8 @@ public class CustomRecipeBuilder extends RecipeBuilder<CustomRecipeBuilder> {
                 this.EUt,
                 this.hidden,
                 this.isCTRecipe,
-                this.recipePropertyStorage);
+                this.recipePropertyStorage,
+                this.category);
         return ValidationResult.newResult(finalizeAndValidate(), recipe);
     }
 

@@ -8,7 +8,6 @@ import eutros.multiblocktweaker.crafttweaker.construction.BlockPatternBuilder;
 import gregtech.api.pattern.BlockPattern;
 import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 /**

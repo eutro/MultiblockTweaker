@@ -85,8 +85,8 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
     }
 
     @Override
-    public void performMaintenanceMufflerOperations() {
-        super.performMaintenanceMufflerOperations();
+    public void performMufflerOperations() {
+        super.performMufflerOperations();
     }
 
     @Override

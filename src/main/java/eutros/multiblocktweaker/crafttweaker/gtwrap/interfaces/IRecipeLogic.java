@@ -494,7 +494,7 @@ public interface IRecipeLogic {
      * //TODO
      */
     @ZenMethod
-    void performMaintenanceMufflerOperations();
+    void performMufflerOperations();
 
     /**
      * Force recipe re-check.

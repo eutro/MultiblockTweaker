@@ -30,7 +30,6 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -179,9 +178,7 @@ public interface IICubeRenderer extends ICubeRenderer {
      */
     @ZenMethod
     static IICubeRenderer orientedOverlay(String key, String path, ConstantOverlayFace... faces) {
-        return CubeRendererBracketHandler.cache.computeIfAbsent(key, $ -> new MCICubeRenderer(new OrientedOverlayRenderer(path, Arrays.stream(faces)
-                .map(f->f.val)
-                .toArray(OrientedOverlayRenderer.OverlayFace[]::new))));
+        return CubeRendererBracketHandler.cache.computeIfAbsent(key, $ -> new MCICubeRenderer(new OrientedOverlayRenderer(path)));
 
     }
 

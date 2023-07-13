@@ -12,7 +12,7 @@ import gnu.trove.map.hash.TByteObjectHashMap;
 import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.crafttweaker.CTRecipeBuilder;
+import gregtech.integration.crafttweaker.recipe.CTRecipeBuilder;
 import net.minecraft.util.SoundEvent;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -266,13 +266,9 @@ public class RecipeMapBuilder {
     @ZenMethod
     public RecipeMap<?> build() {
         RecipeMapMultiblock map = new RecipeMapMultiblock(name,
-                minInputs,
                 maxInputs,
-                minOutputs,
                 maxOutputs,
-                minFluidInputs,
                 maxFluidInputs,
-                minFluidOutputs,
                 maxFluidOutputs,
                 (CustomRecipeBuilder) defaultRecipe.backingBuilder,
                 isHidden);

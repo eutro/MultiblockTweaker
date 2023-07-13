@@ -4,7 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.impl.MCRecipe;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import eutros.multiblocktweaker.helper.ReflectionHelper;
-import gregtech.api.recipes.crafttweaker.CTRecipe;
+import gregtech.integration.crafttweaker.recipe.CTRecipe;
 import stanhebben.zenscript.annotations.ZenCaster;
 import stanhebben.zenscript.annotations.ZenExpansion;
 

@@ -4,9 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import gregtech.api.capability.IMultipleTankHandler;
-import gregtech.api.recipes.FluidKey;
-import gregtech.api.util.GTHashMaps;
-import gregtech.api.util.OverlayedFluidHandler;
+import gregtech.api.util.GTTransferUtils;
 import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.IterableSimple;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -14,7 +12,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -96,20 +93,7 @@ public interface IIMultipleTankHandler extends Iterable<IIFluidTank> {
     default boolean addFluids(boolean simulate, List<ILiquidStack> fluidStacks) {
         IMultipleTankHandler handler = this.getInner();
         List<FluidStack> fluids = fluidStacks.stream().map(CraftTweakerMC::getLiquidStack).collect(Collectors.toList());
-        if (simulate) {
-            OverlayedFluidHandler overlayedFluidHandler = new OverlayedFluidHandler(handler);
-            Map<FluidKey, Integer> fluidKeyMap = GTHashMaps.fromFluidCollection(fluids);
-            for (Map.Entry<FluidKey, Integer> entry : fluidKeyMap.entrySet()) {
-                int amountToInsert = entry.getValue();
-                int inserted = overlayedFluidHandler.insertStackedFluidKey(entry.getKey(), amountToInsert);
-                if (inserted != amountToInsert) {
-                    return false;
-                }
-            }
-            return true;
-        }
 
-        fluids.forEach(fluidStack -> handler.fill(fluidStack, true));
-        return true;
+        return GTTransferUtils.addFluidsToFluidHandler(handler, simulate, fluids);
     }
 }
