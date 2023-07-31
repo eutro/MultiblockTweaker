@@ -4,8 +4,8 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import gregtech.api.util.GTHashMaps;
-import gregtech.api.util.ItemStackKey;
 import gregtech.api.util.OverlayedItemHandler;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -14,7 +14,6 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -108,13 +107,15 @@ public interface IIItemHandlerModifiable extends Iterable<IItemStack> {
     default boolean addItems(boolean simulate, List<IItemStack> itemStacks){
         IItemHandlerModifiable handler = this.getInner();
         List<ItemStack> items = itemStacks.stream().map(CraftTweakerMC::getItemStack).collect(Collectors.toList());
+
+        // determine if there is sufficient room to insert all items into the target inventory
         if (simulate) {
             OverlayedItemHandler overlayedItemHandler = new OverlayedItemHandler(handler);
-            Map<ItemStackKey, Integer> stackKeyMap = GTHashMaps.fromItemStackCollection(items);
+            Object2IntMap<ItemStack> stackKeyMap = GTHashMaps.fromItemStackCollection(items);
 
-            for (Map.Entry<ItemStackKey, Integer> entry : stackKeyMap.entrySet()) {
-                int amountToInsert = entry.getValue();
-                int amount = overlayedItemHandler.insertStackedItemStackKey(entry.getKey(), amountToInsert);
+            for (Object2IntMap.Entry<ItemStack> entry : stackKeyMap.object2IntEntrySet()) {
+                int amountToInsert = entry.getIntValue();
+                int amount = overlayedItemHandler.insertStackedItemStack(entry.getKey(), amountToInsert);
                 if (amount > 0) {
                     return false;
                 }

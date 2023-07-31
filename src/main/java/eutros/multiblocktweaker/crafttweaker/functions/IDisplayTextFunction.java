@@ -7,7 +7,6 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * Called when adding text to the multiblock UI.

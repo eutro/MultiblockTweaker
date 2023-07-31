@@ -57,8 +57,8 @@ public class MCControllerTile extends MCMetaTileEntity implements IControllerTil
     }
 
     @Override
-    public IRecipeLogic getRecipeLogic() {
-        return getInternal().getRecipeLogic();
+    public IRecipeLogic getCustomRecipeLogic() {
+        return getInternal().getCustomRecipeLogic();
     }
 
     @Override

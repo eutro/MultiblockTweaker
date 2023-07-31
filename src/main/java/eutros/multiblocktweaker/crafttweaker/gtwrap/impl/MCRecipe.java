@@ -6,7 +6,7 @@ import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IRecipe;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.crafttweaker.ChancedEntry;
+import gregtech.integration.crafttweaker.recipe.ChancedEntry;
 import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;

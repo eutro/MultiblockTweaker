@@ -30,3 +30,5 @@ forge*changelog.txt
 /.settings/
 /FactoryBuilderDiagram.xcf
 /examples/tests/
+
+logs/

@@ -5,9 +5,9 @@ import eutros.multiblocktweaker.helper.ReflectionHelper;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.crafttweaker.CTRecipe;
 import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.recipes.recipeproperties.RecipeProperty;
+import gregtech.integration.crafttweaker.recipe.CTRecipe;
 import stanhebben.zenscript.annotations.ZenExpansion;
 import stanhebben.zenscript.annotations.ZenMethod;
 

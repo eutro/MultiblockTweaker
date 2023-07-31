@@ -8,7 +8,6 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * Called to create the pattern structure.

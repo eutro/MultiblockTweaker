@@ -5,7 +5,7 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.crafttweaker.ChancedEntry;
+import gregtech.integration.crafttweaker.recipe.ChancedEntry;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 

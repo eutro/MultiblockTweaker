@@ -3,7 +3,6 @@ package eutros.multiblocktweaker.crafttweaker;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.MultiblockTweaker;
 import eutros.multiblocktweaker.gregtech.tile.TileControllerCustom;
-import gregtech.api.GregTechAPI;
 import gregtech.common.metatileentities.MetaTileEntities;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

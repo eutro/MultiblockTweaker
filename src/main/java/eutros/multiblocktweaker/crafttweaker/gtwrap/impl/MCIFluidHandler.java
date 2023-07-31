@@ -3,8 +3,6 @@ package eutros.multiblocktweaker.crafttweaker.gtwrap.impl;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIFluidHandler;
-import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.IIFluidTank;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
