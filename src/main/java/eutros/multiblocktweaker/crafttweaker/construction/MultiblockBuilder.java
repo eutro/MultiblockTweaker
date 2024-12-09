@@ -72,8 +72,8 @@ public class MultiblockBuilder {
     @ZenMethod
     public static MultiblockBuilder start(@NotNull String location, int metaId) {
         ResourceLocation loc = new ResourceLocation(location);
-        if (loc.getResourceDomain().equals("minecraft")) {
-            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getResourcePath());
+        if (loc.getNamespace().equals("minecraft")) {
+            loc = new ResourceLocation(MultiblockTweaker.MOD_ID, loc.getPath());
         }
         return new MultiblockBuilder(loc, metaId);
     }
