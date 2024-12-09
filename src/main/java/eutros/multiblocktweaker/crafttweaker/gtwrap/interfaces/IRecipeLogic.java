@@ -74,9 +74,6 @@ public interface IRecipeLogic {
     void trySearchNewRecipe();
 
     @ZenMethod
-    void forceRecipeRecheck();
-
-    @ZenMethod
     long getMaxVoltage();
 
     @ZenGetter("inputInventory")
