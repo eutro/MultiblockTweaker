@@ -39,7 +39,7 @@
  */
 dependencies {
     implementation rfg.deobf("curse.maven:codechicken-lib-1-8-242818:2779848")
-    implementation rfg.deobf("curse.maven:gregtech-nomifactory-edition-1019238:5411833") // GT Nomi 1.18.3
+    implementation rfg.deobf("curse.maven:gregtech-nomifactory-edition-1019238:6020404") // GT Nomi 1.18.5
 
     // Soft Dependencies
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.684"
