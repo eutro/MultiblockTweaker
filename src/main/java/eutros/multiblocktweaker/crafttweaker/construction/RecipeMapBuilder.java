@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.construction;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMoveType;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
@@ -291,8 +292,9 @@ public class RecipeMapBuilder {
         if (sound != null) {
             if(ForgeRegistries.SOUND_EVENTS.containsKey(sound))
                 map.setSound(ForgeRegistries.SOUND_EVENTS.getValue(sound));
+            else
+                CraftTweakerAPI.logError(String.format("Couldn't locate sound '%s'.", sound));
         }
-
         return map;
     }
 
