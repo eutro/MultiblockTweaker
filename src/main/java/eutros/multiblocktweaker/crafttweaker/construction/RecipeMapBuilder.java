@@ -1,5 +1,6 @@
 package eutros.multiblocktweaker.crafttweaker.construction;
 
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.constants.ConstantMoveType;
 import eutros.multiblocktweaker.crafttweaker.gtwrap.interfaces.ITextureArea;
@@ -11,7 +12,9 @@ import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.crafttweaker.CTRecipeBuilder;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -39,6 +42,7 @@ public class RecipeMapBuilder {
     private final TByteObjectMap<TextureArea> slotOverlays = new TByteObjectHashMap<>();
     private ProgressWidget.MoveType moveType = null;
     private TextureArea progressBarTexture = null;
+    private ResourceLocation sound = null;
 
     /**
      * Create a new, blank {@link CTRecipeBuilder} that can be used with {@link #setDefaultRecipe(CTRecipeBuilder)}.
@@ -246,6 +250,19 @@ public class RecipeMapBuilder {
     }
 
     /**
+     * Set the sound this machine will play while running. If the specified resource doesn't exist, it will not be
+     * applied.
+     *
+     * @param path the resource location of the sound to play, e.g. "gregtech:tick.macerator"
+     * @return This builder, for convenience.
+     */
+    @ZenMethod
+    public RecipeMapBuilder setSound(String path) {
+        sound = new ResourceLocation(path);
+        return this;
+    }
+
+    /**
      * Construct the {@link RecipeMap}.
      *
      * @return The built recipe map.
@@ -272,6 +289,12 @@ public class RecipeMapBuilder {
             map.setProgressBar(progressBarTexture, moveType);
         }
 
+        if (sound != null) {
+            if(ForgeRegistries.SOUND_EVENTS.containsKey(sound))
+                map.setSound(ForgeRegistries.SOUND_EVENTS.getValue(sound));
+            else
+                CraftTweakerAPI.logError(String.format("Couldn't locate sound '%s'.", sound));
+        }
         return map;
     }
 
