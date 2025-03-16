@@ -59,7 +59,7 @@ public class CustomMultiblockRecipeLogic extends MultiblockRecipeLogic implement
             return false;
         }
 
-        int[] resultOverclock = calculateOverclock(recipe.getEUt(), getMaxVoltage(), recipe.getDuration());
+        int[] resultOverclock = calculateOverclock(recipe);
         int totalEUt = resultOverclock[0] * resultOverclock[1];
         IItemHandlerModifiable importInventory = getInputInventory();
         IItemHandlerModifiable exportInventory = getOutputInventory();
