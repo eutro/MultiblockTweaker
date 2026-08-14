@@ -78,4 +78,8 @@ public class MultiblockRegistry {
         return metaIdMap.values();
     }
 
+    public static int[] getIDs() {
+        return metaIdMap.keySet().toIntArray();
+    }
+
 }
