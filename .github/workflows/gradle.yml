@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v2
+    - uses: actions/checkout@v7
+    - name: Set up JDK 21
+      uses: actions/setup-java@v5
       with:
         distribution: temurin
-        java-version: 8
+        java-version: 21
 
     - name: Cache
       uses: actions/cache@v3
@@ -41,7 +41,7 @@ jobs:
         project_id: 386188
         game_endpoint: minecraft
         file_path: ${{ steps.var.outputs.file_path }}
-        changelog: See recent commits [here](https://github.com/eutropius225/MultiblockTweaker/commits/${{ github.sha }}).
+        changelog: See recent commits [here](https://github.com/eutro/MultiblockTweaker/commits/${{ github.sha }}).
         changelog_type: markdown
         # 1.12.2, Java 8
         game_versions: 6756,4458
